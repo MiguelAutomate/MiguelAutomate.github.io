@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julia Ecosystem | Curated Learning Resources</title>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        :root {
+            --julia-purple: #9558b2;
+            --julia-green: #389826;
+            --julia-red: #cb3c33;
+            --julia-blue: #4063d8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f9fafb;
+        }
+
+        .julia-gradient {
+            background: linear-gradient(135deg, var(--julia-blue), var(--julia-purple));
+        }
+
+        .resource-card:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link.active {
+            border-right: 4px solid var(--julia-blue);
+            background-color: #eff6ff;
+            color: var(--julia-blue);
+        }
+
+        code { font-family: 'Fira Code', monospace; }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <!-- Header / Hero Section -->
+    <header class="julia-gradient text-white py-12 px-6 shadow-lg">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-bold mb-2 flex items-center gap-3">
+                    <i data-lucide="terminal"></i> Julia Learning Ecosystem
+                </h1>
+                <p class="text-sm font-medium tracking-wide uppercase opacity-80 mb-3">
+                    Created by Miguel Ocampo
+                </p>
+                <p class="text-lg opacity-90 max-w-2xl">
+                    A comprehensive, curated collection of Julia language resources: from beginner tutorials to high-performance scientific modules.
+                </p>
+            </div>
+            <div class="mt-8 md:mt-0 flex flex-col sm:flex-row gap-4">
+                <a href="https://github.com/JuliaLang/julia" target="_blank" class="bg-white/20 hover:bg-white/30 px-5 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors border border-white/10">
+                    <i data-lucide="github"></i> Star Julia
+                </a>
+                <a href="https://github.com/MiguelAutomate" target="_blank" class="bg-white/20 hover:bg-white/30 px-5 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors border border-white/10">
+                    <i data-lucide="star"></i> Star MiguelAutomate
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-8 py-10 px-6">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="sticky top-10 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <nav class="flex flex-col p-2 space-y-1">
+                    <h3 class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Navigation</h3>
+                    <a href="#official" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Official & Hub
+                    </a>
+                    <a href="#courses" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="book-open" class="w-4 h-4"></i> Courses & Books
+                    </a>
+                    <a href="#videos" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="youtube" class="w-4 h-4 text-red-500"></i> Video Content
+                    </a>
+                    <a href="#ai-ml" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="brain-circuit" class="w-4 h-4 text-purple-600"></i> AI / ML / Agentic
+                    </a>
+                    <a href="#scientific" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="microscope" class="w-4 h-4 text-emerald-600"></i> Scientific Orgs
+                    </a>
+                    <a href="#specialized" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors">
+                        <i data-lucide="layers" class="w-4 h-4 text-orange-600"></i> Specialized Libs
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 space-y-16">
+
+            <!-- Official & JuliaHub Resources -->
+            <section id="official">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-blue-100 text-blue-600 rounded-lg"><i data-lucide="globe"></i></div>
+                    <h2 class="text-2xl font-bold">Official Hubs & Community</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="resource-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">JuliaHub Central</h4>
+                        <p class="text-gray-600 text-sm mb-4">Access Case Studies, White Papers, Data Sheets, and premium courses.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <a href="https://juliahub.com/case-studies" target="_blank" class="text-xs text-blue-600 hover:underline">Case Studies</a>
+                            <a href="https://juliahub.com/white-papers" target="_blank" class="text-xs text-blue-600 hover:underline">White Papers</a>
+                        </div>
+                    </div>
+                    <div class="resource-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">Julia Discourse</h4>
+                        <p class="text-gray-600 text-sm mb-4">The primary forum for asking questions and technical discussions.</p>
+                        <a href="https://discourse.julialang.org/" target="_blank" class="text-blue-600 font-semibold text-sm flex items-center gap-1">Join Community <i data-lucide="external-link" class="w-3 h-3"></i></a>
+                    </div>
+                    <div class="resource-card bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                        <h4 class="font-bold text-lg mb-2">Cheat Sheet</h4>
+                        <p class="text-gray-600 text-sm mb-4">Quick reference for Julia syntax and common functions.</p>
+                        <a href="https://cheatsheet.juliadocs.org/" target="_blank" class="text-blue-600 font-semibold text-sm flex items-center gap-1">View Sheet <i data-lucide="external-link" class="w-3 h-3"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Courses & Learning Platforms -->
+            <section id="courses">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-purple-100 text-purple-600 rounded-lg"><i data-lucide="book-open"></i></div>
+                    <h2 class="text-2xl font-bold">Learning Platforms</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                        <h4 class="text-xl font-bold mb-3">Foundational Resources</h4>
+                        <ul class="space-y-3">
+                            <li>
+                                <a href="https://benlauwens.github.io/ThinkJulia.jl/latest/book.html" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">Think Julia (Full Book)</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://exercism.org/tracks/julia" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">Exercism Julia Track</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://julialang.org/learning/" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">Official Learning Hub</span>
+                                    <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white border border-gray-100 rounded-xl p-6 shadow-sm">
+                        <h4 class="text-xl font-bold mb-3">External Platforms</h4>
+                        <ul class="space-y-3">
+                            <li>
+                                <a href="https://www.datacamp.com/courses/introduction-to-julia" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">DataCamp: Intro to Julia</span>
+                                    <i data-lucide="graduation-cap" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.freecodecamp.org/news/search/?query=julia" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">freeCodeCamp Guides</span>
+                                    <i data-lucide="graduation-cap" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://learn.genieframework.com/" class="flex justify-between items-center p-2 hover:bg-gray-50 rounded border border-transparent hover:border-gray-200">
+                                    <span class="text-sm font-medium">Genie Web Framework Training</span>
+                                    <i data-lucide="graduation-cap" class="w-4 h-4 opacity-30"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Content -->
+            <section id="videos">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-red-100 text-red-600 rounded-lg"><i data-lucide="youtube"></i></div>
+                    <h2 class="text-2xl font-bold">In-Depth Video Guides</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="https://www.youtube.com/watch?v=lZskxdMpYfE" target="_blank" class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:border-red-200 transition-all group">
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                             <img src="https://img.youtube.com/vi/lZskxdMpYfE/mqdefault.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        </div>
+                        <h4 class="font-bold text-sm">Full Programming Course</h4>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=8QoFf6x8qjw" target="_blank" class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:border-red-200 transition-all group">
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
+                             <img src="https://img.youtube.com/vi/8QoFf6x8qjw/mqdefault.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        </div>
+                        <h4 class="font-bold text-sm">Dyad Agentic AI Tutorial</h4>
+                    </a>
+                    <a href="https://www.youtube.com/playlist?list=PLP8iPy9hna6SCcFv3FvY_qjAmtTsNYHQE" target="_blank" class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:border-red-200 transition-all group text-center flex flex-col justify-center items-center">
+                        <i data-lucide="play-circle" class="w-10 h-10 mb-2 text-red-500"></i>
+                        <h4 class="font-bold text-sm">Julia Basics Playlist</h4>
+                    </a>
+                </div>
+            </section>
+
+            <!-- AI / ML / Agentic -->
+            <section id="ai-ml">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-purple-100 text-purple-600 rounded-lg"><i data-lucide="brain-circuit"></i></div>
+                    <h2 class="text-2xl font-bold">AI, Machine Learning & Agentic Systems</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+                        <h5 class="font-bold mb-1">MLJ.jl</h5>
+                        <p class="text-xs text-gray-600 mb-3">Comprehensive machine learning framework for Julia.</p>
+                        <a href="https://github.com/JuliaAI/MLJ.jl" target="_blank" class="text-xs text-purple-600 font-bold">GitHub Repo →</a>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+                        <h5 class="font-bold mb-1">PromptingTools.jl</h5>
+                        <p class="text-xs text-gray-600 mb-3">Utilities for working with LLMs and prompt engineering.</p>
+                        <a href="https://github.com/svilupp/PromptingTools.jl" target="_blank" class="text-xs text-purple-600 font-bold">GitHub Repo →</a>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+                        <h5 class="font-bold mb-1">RAGTools.jl</h5>
+                        <p class="text-xs text-gray-600 mb-3">Retrieval Augmented Generation ecosystem in Julia.</p>
+                        <a href="https://github.com/JuliaGenAI/RAGTools.jl" target="_blank" class="text-xs text-purple-600 font-bold">GitHub Repo →</a>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+                        <h5 class="font-bold mb-1">Agents.jl</h5>
+                        <p class="text-xs text-gray-600 mb-3">Agent-based modeling for social/biological simulations.</p>
+                        <a href="https://juliadynamics.github.io/Agents.jl/stable/" target="_blank" class="text-xs text-purple-600 font-bold">Documentation →</a>
+                    </div>
+                    <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm">
+                        <h5 class="font-bold mb-1">Franklin.jl</h5>
+                        <p class="text-xs text-gray-600 mb-3">Static site generator tailored for scientific docs.</p>
+                        <a href="https://github.com/JuliaDocs/Franklin.jl" target="_blank" class="text-xs text-purple-600 font-bold">GitHub Repo →</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scientific Organizations -->
+            <section id="scientific">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-emerald-100 text-emerald-600 rounded-lg"><i data-lucide="microscope"></i></div>
+                    <h2 class="text-2xl font-bold">High-Performance & Scientific Organizations</h2>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="https://github.com/JuliaGPU" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Julia GPU</span>
+                    </a>
+                    <a href="https://github.com/JuliaParallel" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Parallel Computing</span>
+                    </a>
+                    <a href="https://github.com/JuliaDiff" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Differentiation</span>
+                    </a>
+                    <a href="https://github.com/JuliaGraphs" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Graph Theory</span>
+                    </a>
+                    <a href="https://github.com/JuliaMolSim" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Molecular Sim</span>
+                    </a>
+                    <a href="https://github.com/JuliaInterop" class="p-4 bg-white border border-gray-100 rounded-xl text-center hover:border-emerald-300 transition-all">
+                        <span class="text-xs font-bold block uppercase tracking-tighter">Interoperability</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Specialized Libraries -->
+            <section id="specialized">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-orange-100 text-orange-600 rounded-lg"><i data-lucide="layers"></i></div>
+                    <h2 class="text-2xl font-bold">Specialized Math & Automata</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Column 1 -->
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">Automata.jl <span class="text-[10px] bg-gray-100 px-1 rounded">Finite State</span></h5>
+                            <p class="text-xs text-gray-500">Construct and manipulate finite state automata.</p>
+                            <a href="https://github.com/HerrPixel/Automata.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">FuzzyLogic.jl <span class="text-[10px] bg-gray-100 px-1 rounded">Soft Computing</span></h5>
+                            <p class="text-xs text-gray-500">Toolbox for fuzzy sets and inference systems.</p>
+                            <a href="https://github.com/lucaferranti/FuzzyLogic.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">CombinatorialSpaces.jl</h5>
+                            <p class="text-xs text-gray-500">Dual cell complexes and discrete exterior calculus.</p>
+                            <a href="https://github.com/AlgebraicJulia/CombinatorialSpaces.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                    </div>
+                    <!-- Column 2 -->
+                    <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">Grassmann.jl <span class="text-[10px] bg-gray-100 px-1 rounded">Geometric Algebra</span></h5>
+                            <p class="text-xs text-gray-500">Multilinear differential geometric algebra.</p>
+                            <a href="https://github.com/chakravala/Grassmann.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">ComputationalHomology.jl</h5>
+                            <p class="text-xs text-gray-500">Algorithms for simplicial homology and beyond.</p>
+                            <a href="https://github.com/wildart/ComputationalHomology.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border-l-4 border-orange-400 shadow-sm">
+                            <h5 class="font-bold flex items-center gap-2">ArgParse.jl <span class="text-[10px] bg-gray-100 px-1 rounded">CLI</span></h5>
+                            <p class="text-xs text-gray-500">Command line argument parsing for Julia scripts.</p>
+                            <a href="https://github.com/carlobaldassi/ArgParse.jl" class="text-xs text-orange-600 hover:underline">Source</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-6 mt-20">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-start gap-1">
+                <div class="flex items-center gap-2 text-white font-bold">
+                    <i data-lucide="zap" class="text-yellow-400"></i> Julia Resources
+                </div>
+                <p class="text-xs">Curated by Miguel Ocampo</p>
+            </div>
+            <div class="text-sm">
+                Built for the Julia Community. Follow <a href="https://github.com/MiguelAutomate" class="text-white hover:underline">MiguelAutomate</a> on GitHub.
+            </div>
+            <div class="flex gap-4">
+                <a href="https://github.com/MiguelAutomate" target="_blank" class="hover:text-white transition-colors"><i data-lucide="github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple scroll spy for sidebar links
+        window.addEventListener('scroll', () => {
+            let current = "";
+            const sections = document.querySelectorAll("section");
+            const navLinks = document.querySelectorAll(".sidebar-link");
+
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach((link) => {
+                link.classList.remove("active");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
