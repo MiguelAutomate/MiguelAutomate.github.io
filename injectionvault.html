@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INJECTION VAULT | AI Red Teaming Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-black: oklch(0.12 0.01 260);
+            --terminal-green: oklch(0.75 0.18 145);
+            --terminal-red: oklch(0.55 0.22 25);
+            --terminal-blue: oklch(0.65 0.15 200);
+            --vault-white: oklch(0.93 0.01 260);
+            --neon-glow: oklch(0.85 0.22 145);
+        }
+
+        body {
+            background-color: var(--bg-black);
+            color: var(--vault-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .mono { font-family: 'Space Mono', monospace; }
+
+        /* Advanced Glitch Effect */
+        .logo-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-text {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-injection {
+            color: var(--terminal-green);
+        }
+
+        .logo-vault {
+            color: var(--vault-white);
+        }
+
+        /* Glitch Animation Logic */
+        .glitch-effect {
+            animation: glitch 500ms infinite;
+        }
+
+        .glitch-effect::before,
+        .glitch-effect::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-effect::before {
+            animation: glitch-before 500ms infinite;
+            color: var(--terminal-red);
+            z-index: -1;
+        }
+
+        .glitch-effect::after {
+            animation: glitch-after 500ms infinite;
+            color: var(--terminal-blue);
+            z-index: -2;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 var(--terminal-red), -0.05em -0.025em 0 var(--terminal-blue), -0.025em 0.05em 0 var(--terminal-green);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 var(--terminal-red), -0.05em -0.025em 0 var(--terminal-blue), -0.025em 0.05em 0 var(--terminal-green);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 var(--terminal-red), 0.025em 0.025em 0 var(--terminal-blue), -0.05em -0.05em 0 var(--terminal-green);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 var(--terminal-red), 0.025em 0.025em 0 var(--terminal-blue), -0.05em -0.05em 0 var(--terminal-green);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 var(--terminal-red), 0.05em 0 0 var(--terminal-blue), 0 -0.05em 0 var(--terminal-green);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 var(--terminal-red), 0.05em 0 0 var(--terminal-blue), 0 -0.05em 0 var(--terminal-green);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 var(--terminal-red), -0.025em -0.025em 0 var(--terminal-blue), -0.025em -0.05em 0 var(--terminal-green);
+            }
+        }
+
+        @keyframes glitch-before {
+            0% { clip: rect(44px, 9999px, 56px, 0); transform: skew(0.35deg); }
+            20% { clip: rect(12px, 9999px, 90px, 0); transform: skew(0.8deg); }
+            40% { clip: rect(70px, 9999px, 20px, 0); transform: skew(0.1deg); }
+            60% { clip: rect(10px, 9999px, 85px, 0); transform: skew(0.4deg); }
+            80% { clip: rect(50px, 9999px, 45px, 0); transform: skew(0.2deg); }
+            100% { clip: rect(33px, 9999px, 62px, 0); transform: skew(0.7deg); }
+        }
+
+        @keyframes glitch-after {
+            0% { clip: rect(15px, 9999px, 30px, 0); transform: skew(-0.5deg); left: -2px; }
+            25% { clip: rect(65px, 9999px, 10px, 0); transform: skew(-0.2deg); left: 2px; }
+            50% { clip: rect(40px, 9999px, 80px, 0); transform: skew(-0.8deg); left: -1px; }
+            75% { clip: rect(5px, 9999px, 55px, 0); transform: skew(-0.3deg); left: 1px; }
+            100% { clip: rect(88px, 9999px, 12px, 0); transform: skew(-0.6deg); left: -2px; }
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, oklch(0.75 0.18 145 / 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            animation: scanline 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100px; }
+        }
+
+        .terminal-box {
+            background: oklch(0.15 0.01 260);
+            border: 1px solid oklch(0.28 0.02 260);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 5px var(--terminal-green), 0 0 10px var(--terminal-green), 0 0 20px var(--terminal-green);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="scanline"></div>
+
+    <!-- Navigation -->
+    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto">
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-20 pb-32 px-6 overflow-hidden">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h2 class="mono text-green-400 text-sm tracking-widest uppercase mb-4 glow-text">AI Red Teaming Infrastructure | Miguel Automate</h2>
+            
+            <div class="mb-8">
+                <h1 class="text-6xl md:text-6xl font-black leading-tight logo-text glitch-effect" data-text="INJECTION VAULT">
+                    <span class="logo-injection">INJECTION</span> <br>
+                    <span class="logo-vault">VAULT</span>
+                </h1>
+            </div>
+
+            <p class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+                A proprietary CLI-driven suite designed for legal AI red teaming contracts. 
+                Securing the next generation of generative models through extreme adversarial pressure.
+            </p>
+            <!--
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-16">
+                <div class="mono text-xs px-4 py-2 border border-green-900 bg-green-950/30 rounded text-green-400">
+                    VERSION: 1.0.4-STABLE
+                </div>
+                <div class="mono text-xs px-4 py-2 border border-blue-900 bg-blue-950/30 rounded text-blue-400">
+                    CORE: JULIA BY MIGUEL OCAMPO
+                </div>
+            </div> -->
+        </div>
+    </header>
+
+    <!-- Services Section -->
+    <section class="max-w-6xl mx-auto px-6 mb-32">
+        <div class="text-center mb-16">
+            <h3 class="text-3xl font-bold mb-6 flex items-center justify-center gap-3">
+                <span class="w-12 h-[1px] bg-green-500"></span>
+                Advanced Red Teaming Services
+                <span class="w-12 h-[1px] bg-green-500"></span>
+            </h3>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                Comprehensive AI security assessment framework utilizing neuroscience-informed attack vectors,
+                cognitive manipulation techniques, and advanced prompt injection methodologies.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Jailbreak Testing</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Advanced jailbreak techniques including basic instruction overrides, roleplay attacks,
+                    and psychological manipulation patterns targeting anthropomorphic vulnerabilities.
+                </p>
+            </div>
+
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Cognitive Attack Vectors</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Neuroscience-informed attacks exploiting dopamine hijacking, working memory overflow,
+                    mirror neuron activation, and temporal spike timing mechanisms.
+                </p>
+            </div>
+
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Knowledge Base Injection</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Dynamic context injection using proprietary knowledge base with 5+ neuroscience-informed
+                    entries for comprehensive vulnerability assessment and scenario development.
+                </p>
+            </div>
+
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Legal Audit Logging</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Comprehensive evidence collection with timestamped audit trails, technique tracking,
+                    and JSON-formatted logs for legal compliance and forensic analysis.
+                </p>
+            </div>
+
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Rich Templating Engine</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Advanced template system with conditional logic, variable substitution,
+                    and dynamic content injection for complex attack scenario development.
+                </p>
+            </div>
+
+            <div class="p-6 border border-gray-800 rounded-lg bg-gray-900/20 hover:bg-gray-900/30 transition-colors">
+                <div class="text-green-500 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Local Model Integration</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Seamless integration with Ollama for secure local model assessment,
+                    ensuring air-gapped security while maintaining full operational effectiveness.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Capabilities -->
+    <section class="max-w-6xl mx-auto px-6 mb-32">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div>
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <span class="w-8 h-[1px] bg-green-500"></span>
+                    Technical Capabilities
+                </h3>
+                <div class="space-y-6">
+                    <div class="border-l-2 border-green-500 pl-6">
+                        <h4 class="font-bold text-green-400 mb-2">Advanced Attack Techniques</h4>
+                        <p class="text-gray-400 text-sm">
+                            From basic jailbreaks to sophisticated psychological manipulation,
+                            covering prompt injection, roleplay attacks, and steganographic methods.
+                        </p>
+                    </div>
+                    <div class="border-l-2 border-green-500 pl-6">
+                        <h4 class="font-bold text-green-400 mb-2">Neuroscience-Informed KB</h4>
+                        <p class="text-gray-400 text-sm">
+                            Proprietary knowledge base with cognitive attack vectors targeting
+                            dopamine pathways, working memory, and neural timing mechanisms.
+                        </p>
+                    </div>
+                    <div class="border-l-2 border-green-500 pl-6">
+                        <h4 class="font-bold text-green-400 mb-2">Julia High-Performance Core</h4>
+                        <p class="text-gray-400 text-sm">
+                            Custom Julia-based architecture optimized for rapid attack iteration
+                            and complex template processing with minimal latency.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <span class="w-8 h-[1px] bg-green-500"></span>
+                    Security & Compliance
+                </h3>
+                <div class="space-y-6">
+                    <div class="border-l-2 border-blue-500 pl-6">
+                        <h4 class="font-bold text-blue-400 mb-2">Legal Scope Documentation</h4>
+                        <p class="text-gray-400 text-sm">
+                            Comprehensive testing scope definitions with client consent tracking,
+                            authorized activities, and out-of-scope restrictions.
+                        </p>
+                    </div>
+                    <div class="border-l-2 border-blue-500 pl-6">
+                        <h4 class="font-bold text-blue-400 mb-2">Evidence Collection</h4>
+                        <p class="text-gray-400 text-sm">
+                            Comprehensive audit logging with timestamps, technique tracking,
+                            and JSON-formatted evidence for forensic analysis.
+                        </p>
+                    </div>
+                    <div class="border-l-2 border-blue-500 pl-6">
+                        <h4 class="font-bold text-blue-400 mb-2">Air-Gapped Operations</h4>
+                        <p class="text-gray-400 text-sm">
+                            Local model testing with Ollama ensuring complete isolation
+                            from external networks and production systems.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Details -->
+    <section class="max-w-6xl mx-auto px-6 mb-32 grid md:grid-cols-2 gap-12">
+        <div>
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                <span class="w-8 h-[1px] bg-green-500"></span>
+                The Mission
+            </h3>
+            <p class="text-gray-400 leading-relaxed mb-6">
+                Injection Vault is a specialized adversarial toolset developed for professional AI red teaming. It provides comprehensive security assessment capabilities for large language models, focusing on prompt injection, data exfiltration, and safety bypass vulnerabilities.
+            </p>
+            <ul class="space-y-4 mono text-sm text-gray-300">
+                <li class="flex items-start gap-3">
+                    <span class="text-green-500">✔</span>
+                    Custom Julia-based architecture for high-performance processing.
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-green-500">✔</span>
+                    Comprehensive audit logging for legal compliance.
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-green-500">✔</span>
+                    Optimized for abliterated and uncensored local model environments.
+                </li>
+            </ul>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="p-6 border border-gray-800 rounded bg-gray-900/20">
+                <div class="text-green-500 mono text-xs mb-2">DEVELOPER</div>
+                <div class="font-bold">Miguel Ocampo</div>
+            </div>
+            <div class="p-6 border border-gray-800 rounded bg-gray-900/20">
+                <div class="text-green-500 mono text-xs mb-2">LANGUAGE</div>
+                <div class="font-bold">Julia</div>
+            </div>
+            <div class="p-6 border border-gray-800 rounded bg-gray-900/20">
+                <div class="text-green-500 mono text-xs mb-2">PURPOSE</div>
+                <div class="font-bold">Legal Red Teaming</div>
+            </div>
+            <div class="p-6 border border-gray-800 rounded bg-gray-900/20">
+                <div class="text-green-500 mono text-xs mb-2">AVAILABILITY</div>
+                <div class="font-bold">Private Service</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exclusivity Footer -->
+    <footer class="border-t border-gray-900 py-20 px-6 bg-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <h4 class="text-xl font-bold mb-4">Service Engagement</h4>
+            <p class="text-gray-500 mono text-sm mb-8">
+                Injection Vault is not available for public download or via GitHub. <br>
+                Access is restricted to active AI Red Teaming contracts and audited partners.
+            </p>
+            <a href="https://github.com/MiguelAutomate" class="inline-block p-[1px] bg-gradient-to-r from-green-500 to-emerald-800 rounded hover:opacity-80 transition-opacity">
+                <div class="bg-black px-8 py-3 rounded text-sm mono text-green-400">
+                    CONTACT FOR CONTRACT INQUIRIES
+                </div>
+            </a>
+            <div class="mt-12 opacity-30 mono text-[10px] tracking-widest uppercase">
+                &copy; 2026 INJECTION VAULT // ENGINEERED IN JULIA BY MIGUEL OCAMPO
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
