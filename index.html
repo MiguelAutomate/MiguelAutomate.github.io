@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Miguel Automate | DevOps & AI Specialist</title>
+    <!-- Lucide Icons for clean visuals -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --bg-card: #161b22;
+            --primary: #58a6ff; /* Tech Blue */
+            --accent: #79c0ff;
+            --text-main: #c9d1d9;
+            --text-bright: #ffffff;
+            --border: #30363d;
+            --glow: rgba(88, 166, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle at center, var(--glow) 0%, transparent 70%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            color: var(--text-bright);
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-tagline {
+            max-width: 700px;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--border);
+            color: var(--text-bright);
+        }
+
+        /* Container & Sections */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        section {
+            margin-bottom: 6rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--text-bright);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* About & Grid Cards */
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            border-radius: 12px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+        }
+
+        .card h3 {
+            color: var(--text-bright);
+            margin-bottom: 1rem;
+        }
+
+        /* Deliver Value List */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .value-item {
+            display: flex;
+            gap: 15px;
+        }
+
+        .value-icon {
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* Tech Stack Table */
+        .tech-table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #1c2128;
+            color: var(--primary);
+            font-weight: 600;
+            width: 250px;
+        }
+
+        /* Projects */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            color: var(--text-bright);
+            margin-bottom: 0.75rem;
+        }
+
+        .project-card p {
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-link {
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .link-repo {
+            color: var(--text-main);
+            background: var(--border);
+        }
+
+        .link-demo {
+            color: var(--bg-dark);
+            background: var(--accent);
+            font-weight: 600;
+        }
+
+        .action-link:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+        }
+
+        /* Certification Tags */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background: #23863622;
+            color: #3fb950;
+            border: 1px solid #23863644;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* TryHackMe Badge Styles */
+        .thm-badge-container {
+            margin-top: auto;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .thm-iframe {
+            width: 100%;
+            height: 90px;
+            border: none;
+            filter: saturate(0.9);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Scroll animations */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        [data-reveal].visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="hero-title">Miguel Automate</h1>
+        <p class="hero-subtitle">DevOps Automation & AI Innovator</p>
+        <p class="hero-tagline">
+            Transforming operations through secure AI integration, architecting resilient cloud infrastructure, and building bespoke automation solutions that scale.
+        </p>
+        <div class="btn-container">
+            <a href="#projects" class="btn btn-primary"><i data-lucide="folder-code"></i> View Projects</a>
+            <a href="#contact" class="btn btn-outline"><i data-lucide="mail"></i> Get in Touch</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- About Section -->
+        <section id="about" data-reveal>
+            <h2 class="section-title"><i data-lucide="user"></i> About Me</h2>
+            <div class="about-card">
+                <p>
+                    As a <strong>Workflow Automation Specialist</strong>, I empower businesses to revolutionize their operations. My approach involves a deep dive into existing business processes, meticulously identifying manual, repetitive, or error-prone tasks that hinder efficiency and waste valuable resources.
+                </p>
+                <br>
+                <p>
+                    Leveraging this understanding, I design and build bespoke automation solutions primarily using Python. My philosophy isn't about fitting a client into a rigid, off-the-shelf platform; it's about crafting tailored software that integrates seamlessly with current systems.
+                </p>
+                
+                <div class="value-grid">
+                    <div class="value-item">
+                        <i data-lucide="check-circle" class="value-icon"></i>
+                        <p>Architect & Deploy Advanced AI Agents</p>
+                    </div>
+                    <div class="value-item">
+                        <i data-lucide="check-circle" class="value-icon"></i>
+                        <p>Fortify Systems with AI-Driven Security</p>
+                    </div>
+                    <div class="value-item">
+                        <i data-lucide="check-circle" class="value-icon"></i>
+                        <p>Automate & Optimize Cloud Infrastructure</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Projects -->
+        <section id="projects" data-reveal>
+            <h2 class="section-title"><i data-lucide="code-2"></i> Featured Projects & Services</h2>
+            <div class="project-grid">
+                <!-- Contractor Services -->
+                <div class="project-card">
+                    <h3>Contractor Services</h3>
+                    <p>Informational overview of my bilingual end-to-end automation system for remodelers. This page details my custom workflows for lead generation, follow-ups, and dispatching.</p>
+                    <div class="project-actions">
+                        <a href="https://miguelautomate.github.io/contractor-services.html" class="action-link link-demo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="external-link"></i> View Service Page</a>
+                    </div>
+                </div>
+
+                <!-- InjectionVault -->
+                <div class="project-card">
+                    <h3>InjectionVault</h3>
+                    <p>Live informational page for an upcoming AI Red Teaming and Penetration Testing service. This explains my methodology for stress-testing LLM integrations and AI infrastructure.</p>
+                    <div class="project-actions">
+                        <a href="https://miguelautomate.github.io/injectionvault.html" class="action-link link-demo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="shield-alert"></i> View Service Page</a>
+                    </div>
+                </div>
+
+                <!-- JuliaLearning -->
+                <div class="project-card">
+                    <h3>Julia Learning</h3>
+                    <p>A dedicated learning resource and documentation page exploring high-performance numerical analysis and automation research using the Julia language.</p>
+                    <div class="project-actions">
+                        <a href="https://miguelautomate.github.io/JuliaLearning.html" class="action-link link-demo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="book-open"></i> View Learning Page</a>
+                    </div>
+                </div>
+
+                <!-- AutoGenStudio-Custom-Agents -->
+                <div class="project-card">
+                    <h3>AutoGen Studio Agents</h3>
+                    <p>Open-source repository containing specialized tools and custom agent configurations for AutogenStudio 0.4, enabling advanced human-in-the-loop operations.</p>
+                    <div class="project-actions">
+                        <a href="https://github.com/MiguelAutomate/AutoGenStudio-Custom-Agents" class="action-link link-repo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="github"></i> View Repository</a>
+                    </div>
+                </div>
+
+                <!-- AnythingLLM -->
+                <div class="project-card">
+                    <h3>AnythingLLM Custom Agents</h3>
+                    <p>GitHub repository for specialized agents for AnythingLLM focused on knowledge retrieval and AI-driven workflow optimization.</p>
+                    <div class="project-actions">
+                        <a href="https://github.com/MiguelAutomate/AnythingLLM-Custom-Agents" class="action-link link-repo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="github"></i> View Repository</a>
+                    </div>
+                </div>
+
+                <!-- Windows File Cleaner -->
+                <div class="project-card">
+                    <h3>Windows File Cleaner</h3>
+                    <p>Open-source batch script for Windows 11 to automate the removal of temporary files and enhance system performance securely.</p>
+                    <div class="project-actions">
+                        <a href="https://github.com/MiguelAutomate/Windows-File-Cleaner" class="action-link link-repo" target="_blank" style="width: 100%; justify-content: center;"><i data-lucide="github"></i> View Repository</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack -->
+        <section id="stack" data-reveal>
+            <h2 class="section-title"><i data-lucide="layers"></i> Tech Stack</h2>
+            <div class="tech-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Technologies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AI & Automation</td>
+                            <td>LangChain, AutoGen, Ollama, Transformers, TensorFlow, n8n, CrewAI, LlamaIndex, AnythingLLM, Agency Swarm</td>
+                        </tr>
+                        <tr>
+                            <td>Infrastructure & Cloud</td>
+                            <td>AWS, Azure, GCP, Docker, Kubernetes, Terraform, Ansible, Linux, Nginx, Supabase, PostgreSQL</td>
+                        </tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>AI Red Teaming, Pen-Testing, Nmap, Wireshark, Metasploit, SIEM (Splunk, ELK), pfSense</td>
+                        </tr>
+                        <tr>
+                            <td>Programming</td>
+                            <td>Python, Julia, Bash/Batch, SQL, Infrastructure as Code</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section id="education" data-reveal>
+            <h2 class="section-title"><i data-lucide="graduation-cap"></i> Education & Certs</h2>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>B.S. Cybersecurity</h3>
+                    <p>Western Governors University</p>
+                </div>
+                <div class="card">
+                    <h3>CompTIA Certifications</h3>
+                    <div class="tag-container">
+                        <span class="tag">Security+</span>
+                        <span class="tag">Network+</span>
+                        <span class="tag">A+</span>
+                    </div>
+                </div>
+                <!-- TryHackMe Card -->
+                <div class="card">
+                    <h3>TryHackMe Profile</h3>
+                    <p>Continuous practical training in offensive and defensive security operations.</p>
+                    <div class="thm-badge-container">
+                        <iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=3338653" class="thm-iframe"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer id="contact">
+        <h2 style="color: var(--text-bright); margin-bottom: 1rem;">Let's Connect</h2>
+        <div class="social-links">
+            <a href="https://github.com/MiguelAutomate" target="_blank" title="GitHub"><i data-lucide="github" size="32"></i></a>
+            <a href="mailto:miguelaocampo@proton.me" title="Email"><i data-lucide="mail" size="32"></i></a>
+        </div>
+        <p style="max-width: 600px; margin: 0 auto; opacity: 0.8;">
+            Securing systems, automating workflows, and bridging AI with infrastructure – driving innovation from concept to deployment.
+        </p>
+        <p style="font-size: 0.8rem; opacity: 0.5; margin-top: 2rem;">
+            &copy; <span id="year"></span> Miguel Automate.
+        </p>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Update Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Reveal animations on scroll
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
