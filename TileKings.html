@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Tile Kings | Premium Tile Installation – San Diego, CA</title>
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: clean industrial vibe -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0c12, #030507);
+            color: #e3e6f0;
+            font-family: 'Inter', 'Fira Code', monospace;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* subtle pattern overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 140, 0, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 140, 0, 0.02) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 4px #fa0, 0 0 8px #fa03;
+        }
+
+        /* header */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 140, 0, 0.3);
+        }
+
+        .avatar-section {
+            display: flex;
+            gap: 1.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            background: #11161f;
+            border-radius: 50%;
+            border: 2px solid #fa7e0f;
+            box-shadow: 0 0 15px rgba(255, 125, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #1e1a12;
+        }
+
+        .avatar i {
+            font-size: 3.4rem;
+            color: #fa7e0f;
+        }
+
+        .title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff, #fa9e2c, #ffc285);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .title .alias {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #f0bc7a;
+            background: #2a1e0e80;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            margin-top: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            color: #ffcf9a;
+            border-left: 3px solid #fa7e0f;
+            padding-left: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        .contact-quick {
+            background: #0b1017cc;
+            backdrop-filter: blur(8px);
+            padding: 1rem 1.5rem;
+            border-radius: 18px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            border: 1px solid #7a4a1e;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .contact-quick p {
+            margin: 0.3rem 0;
+        }
+
+        .prompt {
+            color: #fa7e0f;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #fa7e0f;
+            padding-left: 1rem;
+        }
+
+        .section-title i {
+            color: #fa7e0f;
+            font-size: 1.6rem;
+        }
+
+        /* cards grid */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .service-card {
+            background: rgba(12, 20, 28, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(250, 126, 15, 0.25);
+            border-radius: 24px;
+            padding: 1.5rem 1.2rem;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: #eef5ff;
+        }
+
+        .service-card:hover {
+            border-color: #fa7e0f;
+            background: rgba(30, 25, 15, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -12px rgba(250, 126, 15, 0.3);
+        }
+
+        .service-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+            color: #fa7e0f;
+        }
+
+        .service-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .portfolio-card {
+            background: #0f151fcc;
+            border-radius: 20px;
+            padding: 1.5rem;
+            border: 1px solid #fa9e2c;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .portfolio-card a {
+            background: #fa7e0f20;
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            text-decoration: none;
+            color: #ffcf9a;
+            border: 1px solid #fa7e0f;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .portfolio-card a:hover {
+            background: #fa7e0f;
+            color: #0a0c12;
+        }
+
+        .contact-bar {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            text-align: center;
+            border-top: 1px dashed #7a551e;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .contact-bar a {
+            color: #f0bc7a;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact-bar a:hover {
+            color: #fa7e0f;
+            text-decoration: underline;
+        }
+
+        .badge-small {
+            background: #2a1e0e;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-family: monospace;
+        }
+
+        .btn-appoint {
+            display: inline-block;
+            background: #fa7e0f;
+            border: none;
+            color: #0a0c12;
+            font-weight: bold;
+            padding: 0.75rem 1.8rem;
+            border-radius: 40px;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            margin-top: 0.5rem;
+            box-shadow: 0 0 10px #fa7e0f60;
+        }
+
+        .btn-appoint:hover {
+            background: #ff982e;
+            transform: scale(1.02);
+            box-shadow: 0 0 16px #fa7e0f;
+        }
+
+        @media (max-width: 750px) {
+            .hero {
+                flex-direction: column;
+                align-items: start;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .container {
+                padding: 1.2rem;
+            }
+            .title h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0c12;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fa7e0f;
+            border-radius: 5px;
+        }
+
+        i.fa, i.fab, i.fas {
+            filter: drop-shadow(0 0 2px #fa7e0f80);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Hero Section - Tile Kings Branding -->
+    <div class="hero">
+        <div class="avatar-section">
+            <div class="avatar">
+                <i class="fas fa-th-large"></i>
+            </div>
+            <div class="title">
+                <h1>Tile Kings<span style="font-size: 1.2rem;"> //</span> San Diego</h1>
+                <div class="alias">
+                    <i class="fas fa-trowel"></i> Quality Craftsmanship · Family Owned
+                </div>
+                <div class="tagline">
+                    <i class="fas fa-home"></i> Premium Tile Installation | Upper & Lower Class Homes
+                </div>
+            </div>
+        </div>
+        <div class="contact-quick">
+            <p><span class="prompt">📞></span> CALL NOW</p>
+            <p><i class="fas fa-phone-alt"></i> <a href="tel:+16198527711" style="color:#ffcf9a; text-decoration:none;">(619) 852-7711</a></p>
+            <p><span class="prompt">✉️></span> <a href="mailto:miguelautomate@outlook.com" style="color:#ffcf9a;">miguelautomate@outlook.com</a></p>
+            <p><i class="fas fa-map-marker-alt"></i> San Diego, CA & surrounding areas</p>
+        </div>
+    </div>
+
+    <!-- About / mission (replacing security bio) -->
+    <div style="background: rgba(30, 25, 15, 0.3); border-radius: 28px; padding: 1.5rem; margin: 1rem 0 0.5rem; border: 1px solid #7a4a1e;">
+        <p style="font-size: 1rem;"><i class="fas fa-quote-left" style="color:#fa7e0f; margin-right: 8px;"></i> 
+            Tile Kings delivers precision tile work for upper-middle-class and lower-class homes across San Diego. 
+            From modern kitchens to cozy bathroom remodels, we transform spaces with durable, elegant tiles. 
+            Free estimates, transparent pricing, and a passion for perfect alignment. <strong>#SacramentoTile</strong>
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;">
+            <span class="badge-small"><i class="fas fa-check-circle"></i> 10+ years experience</span>
+            <span class="badge-small"><i class="fas fa-hand-holding-usd"></i> fair prices · no hidden fees</span>
+            <span class="badge-small"><i class="fas fa-calendar-alt"></i> free in-home estimate</span>
+        </div>
+    </div>
+
+    <!-- 🛠️ Our Services (instead of profile grid) -->
+    <div class="section-title">
+        <i class="fas fa-hammer"></i> <span>specialized tile services</span>
+    </div>
+    <div class="service-grid" id="servicesGrid">
+        <!-- static services injected but we can populate via JS or direct html -->
+        <div class="service-card">
+            <div class="service-icon"><i class="fas fa-border-all"></i></div>
+            <h3>Flooring Installation</h3>
+            <p>Porcelain, ceramic, natural stone — flawless layouts for living rooms, kitchens, and hallways.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon"><i class="fas fa-shower"></i></div>
+            <h3>Bathroom & Shower</h3>
+            <p>Waterproof systems, mosaic walls, custom niches. Luxury feel on any budget.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon"><i class="fas fa-kitchen-set"></i></div>
+            <h3>Backsplash & Kitchen</h3>
+            <p>Subway tile, herringbone, glass — make your kitchen pop with durable designs.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-icon"><i class="fas fa-couch"></i></div>
+            <h3>Living Areas & Fireplaces</h3>
+            <p>Elegant tile surrounds, accent walls and hearths that elevate your home’s warmth.</p>
+        </div>
+    </div>
+
+    <!-- 📸 Portfolio / Gallery + Appointment section (replacing GitHub repos) -->
+    <div class="section-title">
+        <i class="fas fa-images"></i> <span>portfolio & schedule</span>
+    </div>
+    
+    <div class="portfolio-card">
+        <div>
+            <i class="fas fa-camera" style="font-size: 1.8rem; color:#fa7e0f; margin-right: 12px;"></i>
+            <strong style="font-size: 1.2rem;">View our latest tile projects</strong>
+            <p style="margin-top: 6px;">Full gallery of residential work in San Diego — kitchens, bathrooms, floors.</p>
+        </div>
+        <a href="https://photos.app.goo.gl/LbsLFzhfArm84xjP8" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-google"></i> Google Photos Portfolio
+        </a>
+    </div>
+
+    <!-- quick appointment / contact block -->
+    <div style="background: #0e141cee; border-radius: 28px; margin: 2rem 0; padding: 1.8rem; text-align: center; border: 1px solid #fa9e2c;">
+        <i class="fas fa-calendar-check" style="font-size: 2rem; color:#fa7e0f;"></i>
+        <h3 style="margin: 0.5rem 0;">Ready to upgrade your tiles?</h3>
+        <p style="margin-bottom: 1rem;">Call, email or schedule an appointment — we respond within 24h.</p>
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;">
+            <a href="tel:+16198527711" class="btn-appoint"><i class="fas fa-phone-alt"></i> Call (619) 852-7711</a>
+            <a href="mailto:miguelautomate@outlook.com?subject=Tile%20Kings%20Appointment%20Request&body=Hello%2C%20I%20would%20like%20to%20schedule%20a%20free%20estimate%20or%20appointment%20for%20tile%20installation." class="btn-appoint" style="background: #2a2a2a; color:#ffcf9a;"><i class="fas fa-envelope"></i> Email Request</a>
+            <!-- Calendly placeholder (user can replace with actual link) -->
+            <a href="#" id="calendlyPlaceholderBtn" class="btn-appoint" style="background: #1f2a1c; border:1px solid #fa7e0f;"><i class="fas fa-calendar-alt"></i> Schedule via Calendly</a>
+        </div>
+        <p style="font-size: 0.7rem; margin-top: 1rem; opacity: 0.7;"><i class="fas fa-tools"></i> Free estimate · Serving upper middle class & lower class homes in San Diego, CA</p>
+    </div>
+
+    <!-- Why choose us + additional trust badges -->
+    <div class="section-title">
+        <i class="fas fa-medal"></i> <span>why tile kings?</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px,1fr)); gap: 1.3rem; margin-bottom: 2rem;">
+        <div class="service-card" style="text-align: center;">
+            <i class="fas fa-dollar-sign" style="font-size: 2rem; color:#fa7e0f;"></i>
+            <h3>Fair & upfront pricing</h3>
+            <p>No surprises — detailed quotes for both budget-friendly and premium projects.</p>
+        </div>
+        <div class="service-card" style="text-align: center;">
+            <i class="fas fa-clock" style="font-size: 2rem; color:#fa7e0f;"></i>
+            <h3>On-time & clean</h3>
+            <p>Respect for your home, dust control, and professional timeline adherence.</p>
+        </div>
+        <div class="service-card" style="text-align: center;">
+            <i class="fas fa-hand-peace" style="font-size: 2rem; color:#fa7e0f;"></i>
+            <h3>Local San Diego</h3>
+            <p>We know local architecture and deliver durable work that lasts decades.</p>
+        </div>
+    </div>
+
+    <!-- footer contact & direct info (fully replaced) -->
+    <div class="contact-bar">
+        <span><i class="fas fa-building"></i> Tile Kings — San Diego's trusted tile experts</span>
+        <a href="tel:+16198527711"><i class="fas fa-mobile-alt"></i> (619) 852-7711</a>
+        <a href="mailto:miguelautomate@outlook.com"><i class="fas fa-envelope"></i> miguelautomate@outlook.com</a>
+        <a href="#" id="scheduleFooterLink"><i class="fas fa-calendar-week"></i> Make an appointment</a>
+        <span><i class="fas fa-globe"></i> TileKings.org</span>
+    </div>
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.7rem; opacity: 0.6;">
+        <i class="fas fa-trowel"></i> Quality tile work for upper middle & lower class homes | San Diego, CA | License & insured
+    </div>
+</div>
+
+<script>
+    // Clean replacement script: remove old github & security references, add interactive scheduling reminder.
+    // This ensures Calendly link behavior (since original calendly URL not provided, we prompt to replace, but we also provide option to email/call)
+    // The user can later replace the calendly link inside the href attribute.
+    // Also add some dynamic year maybe
+    
+    // Update footer year (cosmetic)
+    const yearSpan = document.createElement('span');
+    // Not needed, but we handle calendly placeholder buttons
+    const calendlyBtns = document.querySelectorAll('#calendlyPlaceholderBtn, #scheduleFooterLink');
+    
+    // For any button that points to "#" and has calendly-like text, we show a friendly reminder
+    // and also provide easy instructions. But also we don't break the flow: they can still email or call.
+    // In case the user later sets real calendly link, they can edit href directly.
+    calendlyBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Check if the link still points to "#" or contains placeholder
+            if (btn.getAttribute('href') === '#') {
+                // Show a modal-like notification: reminder to set Calendly URL
+                alert("📅 Add your Calendly link here!\n\nYou can replace this link in the code with your actual Calendly URL (e.g., https://calendly.com/yourname).\n\nMeanwhile, please call (619) 852-7711 or email miguelautomate@outlook.com to schedule.");
+            } else {
+                // if user replaced link, just let it navigate
+                window.open(btn.getAttribute('href'), '_blank');
+            }
+        });
+    });
+    
+    // ensure all external links to Google Photos open safely
+    const galleryLink = document.querySelector('a[href*="photos.app.goo.gl"]');
+    if(galleryLink) galleryLink.setAttribute('rel', 'noopener noreferrer');
+    
+    // small console note for developer to customize Calendly
+    console.log("✅ Tile Kings website ready — replace calendly placeholder with actual link if needed. Contact info ready.");
+    
+    // Optionally add a dynamic copyright year
+    const footerDiv = document.querySelector('.contact-bar + div');
+    if (footerDiv && !footerDiv.innerHTML.includes('©')) {
+        const year = new Date().getFullYear();
+        footerDiv.innerHTML = `<i class="fas fa-trowel"></i> Tile Kings © ${year} — Quality work for San Diego communities | <a href="mailto:miguelautomate@outlook.com" style="color:#fa7e0f;">miguelautomate@outlook.com</a>`;
+    }
+</script>
+
+<!-- inline additional replacement: no security references, all business oriented -->
+</body>
+</html>
