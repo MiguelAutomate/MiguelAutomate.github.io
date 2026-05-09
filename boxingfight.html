@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boxing Training Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: white;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            overscroll-behavior: none;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .font-clock {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* View Section Transitions */
+        .view-section {
+            display: none;
+            opacity: 0;
+            height: 100%;
+            flex-direction: column;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .view-section.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Custom Scrollbar for smaller devices */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5); 
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="flex flex-col">
+
+    <!-- Header -->
+    <header id="main-header" class="p-4 flex items-center justify-between bg-slate-900 border-b border-slate-800 z-10 transition-all duration-300">
+        <button id="btn-back" class="invisible text-slate-400 hover:text-white p-1 transition-colors active:scale-90" aria-label="Go Back">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <h1 id="header-title" class="text-sm font-black tracking-widest text-white uppercase text-center flex-1">Boxing Rounds</h1>
+        <div class="w-10"></div> <!-- Spacer to balance the flex layout -->
+    </header>
+
+    <main class="flex-1 relative overflow-hidden">
+        
+        <!-- HOME VIEW -->
+        <section id="view-home" class="view-section active p-6 justify-center space-y-6">
+            <button onclick="navTo('rounds-setup')" class="group w-full max-w-sm mx-auto bg-gradient-to-br from-red-600 to-red-800 rounded-3xl p-8 flex flex-col items-center shadow-2xl active:scale-95 transition-all">
+                <div class="bg-white/20 p-4 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-black tracking-wide">SPARRING</h2>
+                <p class="text-red-100 font-bold opacity-80 uppercase tracking-widest text-sm mt-1">Round Intervals</p>
+            </button>
+
+            <button onclick="navTo('timer-setup')" class="group w-full max-w-sm mx-auto bg-gradient-to-br from-slate-700 to-slate-800 rounded-3xl p-8 flex flex-col items-center shadow-2xl active:scale-95 transition-all">
+                <div class="bg-white/10 p-4 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="text-3xl font-black tracking-wide">TIMER</h2>
+                <p class="text-slate-400 font-bold opacity-80 uppercase tracking-widest text-sm mt-1">Training Countdown</p>
+            </button>
+        </section>
+
+        <!-- ROUNDS SETUP -->
+        <section id="view-rounds-setup" class="view-section">
+            <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-3">
+                <div class="max-w-md mx-auto space-y-4 py-4">
+                    
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-4 shadow-sm">
+                        <p class="text-slate-400 text-xs font-black uppercase tracking-wider text-center mb-3">Number of Rounds</p>
+                        <div class="flex items-center justify-between bg-slate-900 rounded-xl p-2 shadow-inner">
+                            <button onclick="adjustSetting('rounds', -1)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 12H4"/></svg></button>
+                            <span id="setup-val-rounds" class="text-4xl font-clock font-bold w-16 text-center">5</span>
+                            <button onclick="adjustSetting('rounds', 1)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-4 shadow-sm">
+                        <p class="text-slate-400 text-xs font-black uppercase tracking-wider text-center mb-3">Round Length</p>
+                        <div class="flex items-center justify-between bg-slate-900 rounded-xl p-2 shadow-inner">
+                            <button onclick="adjustSetting('roundTime', -30)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 12H4"/></svg></button>
+                            <span id="setup-val-roundTime" class="text-4xl font-clock font-bold w-28 text-center">03:00</span>
+                            <button onclick="adjustSetting('roundTime', 30)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-4 shadow-sm">
+                        <p class="text-slate-400 text-xs font-black uppercase tracking-wider text-center mb-3">Break Length</p>
+                        <div class="flex items-center justify-between bg-slate-900 rounded-xl p-2 shadow-inner">
+                            <button onclick="adjustSetting('breakTime', -15)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 12H4"/></svg></button>
+                            <span id="setup-val-breakTime" class="text-4xl font-clock font-bold w-28 text-center">01:00</span>
+                            <button onclick="adjustSetting('breakTime', 15)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-2xl p-4 shadow-sm mb-4">
+                        <p class="text-slate-400 text-xs font-black uppercase tracking-wider text-center mb-3">Warning (Clappers)</p>
+                        <div class="flex items-center justify-between bg-slate-900 rounded-xl p-2 shadow-inner">
+                            <button onclick="adjustSetting('warningTime', -10)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 12H4"/></svg></button>
+                            <span id="setup-val-warningTime" class="text-4xl font-clock font-bold w-24 text-center">10s</span>
+                            <button onclick="adjustSetting('warningTime', 10)" class="w-12 h-12 bg-slate-700 text-white rounded-lg flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 bg-slate-900 border-t border-slate-800">
+                <button onclick="startRounds()" class="w-full max-w-md mx-auto block bg-red-600 hover:bg-red-500 text-white py-5 rounded-2xl text-xl font-black uppercase tracking-widest shadow-[0_0_30px_rgba(220,38,38,0.3)] active:scale-95 transition-all">
+                    Start Workout
+                </button>
+            </div>
+        </section>
+
+        <!-- TIMER SETUP -->
+        <section id="view-timer-setup" class="view-section">
+            <div class="flex-1 overflow-y-auto custom-scroll p-4 space-y-6 flex flex-col justify-center">
+                <div class="max-w-md mx-auto w-full text-center">
+                    <h3 class="text-xl font-bold mb-6 text-slate-400 uppercase tracking-widest">Training Countdown</h3>
+                    
+                    <div class="bg-slate-800/50 border border-slate-700 rounded-3xl p-6 mb-8 shadow-sm">
+                        <div class="flex items-center justify-between bg-slate-900 rounded-2xl p-4 shadow-inner">
+                            <button onclick="adjustSetting('trainingTime', -30)" class="w-14 h-14 bg-slate-700 text-white rounded-xl flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M20 12H4"/></svg></button>
+                            <span id="setup-val-trainingTime" class="text-5xl font-clock font-bold w-40 text-center">05:00</span>
+                            <button onclick="adjustSetting('trainingTime', 30)" class="w-14 h-14 bg-slate-700 text-white rounded-xl flex items-center justify-center active:bg-slate-500 transition-colors"><svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
+                        <button onclick="setTrainingTime(60)" class="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold active:bg-slate-600 transition-colors border border-slate-700">1:00</button>
+                        <button onclick="setTrainingTime(180)" class="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold active:bg-slate-600 transition-colors border border-slate-700">3:00</button>
+                        <button onclick="setTrainingTime(300)" class="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold active:bg-slate-600 transition-colors border border-slate-700">5:00</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6 bg-slate-900 border-t border-slate-800">
+                <button onclick="startTrainingTimer()" class="w-full max-w-md mx-auto block bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl text-xl font-black uppercase tracking-widest shadow-[0_0_30px_rgba(37,99,235,0.3)] active:scale-95 transition-all">
+                    Start Timer
+                </button>
+            </div>
+        </section>
+
+        <!-- ACTIVE TIMER -->
+        <section id="view-active-timer" class="view-section items-center justify-center p-8 bg-slate-900 transition-colors duration-700">
+            
+            <div id="active-state-badge" class="mb-8 px-8 py-2 rounded-full text-xl font-black uppercase bg-white/20 tracking-[0.2em] shadow-md backdrop-blur-sm">
+                Ready
+            </div>
+
+            <div class="relative w-full aspect-square max-w-[320px] flex items-center justify-center rounded-full border-[16px] border-white/10 shadow-2xl mb-12 backdrop-blur-sm">
+                <div id="active-time-display" class="text-7xl sm:text-8xl font-clock font-bold tracking-tighter drop-shadow-lg">
+                    00:00
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-8">
+                <!-- Stop / Cancel -->
+                <button onclick="stopTimer()" class="w-16 h-16 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center active:scale-90 transition-all text-white backdrop-blur-sm shadow-lg">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+
+                <!-- Play / Pause -->
+                <button onclick="togglePlayPause()" class="w-24 h-24 bg-red-600 text-white rounded-full flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.6)] active:scale-90 transition-all scale-110">
+                    <svg id="icon-pause" class="w-12 h-12" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <svg id="icon-play" class="w-12 h-12 hidden" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </button>
+
+                <!-- Skip Phase (Only visible in Rounds Mode) -->
+                <button id="btn-skip" onclick="skipPhase()" class="w-16 h-16 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center active:scale-90 transition-all text-white backdrop-blur-sm shadow-lg">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            
+        </section>
+
+    </main>
+
+    <script>
+        // --- System States & Audio ---
+        let audioCtx;
+        
+        const config = { 
+            rounds: 5, 
+            roundTime: 180,  // 3 minutes
+            breakTime: 60,   // 1 minute
+            warningTime: 10, // 10 seconds warning
+            trainingTime: 300 // 5 minutes
+        };
+        
+        let timer = { 
+            isActive: false, 
+            interval: null, 
+            timeLeft: 0, 
+            currentRound: 1, 
+            phase: 'prepare', 
+            mode: null 
+        };
+
+        function initAudio() {
+            // Initialize Web Audio API
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            // "Warm up" Web Speech API to bypass mobile restrictions on first click
+            if ('speechSynthesis' in window) {
+                const warmup = new SpeechSynthesisUtterance("");
+                warmup.volume = 0;
+                window.speechSynthesis.speak(warmup);
+            }
+        }
+
+        // --- Sound Generation ---
+
+        // Generate wood clapper warning sound
+        function triggerClack() {
+            if (!audioCtx) initAudio();
+            const t = audioCtx.currentTime;
+            
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(320, t);
+            osc1.frequency.exponentialRampToValueAtTime(80, t + 0.1);
+            gain1.gain.setValueAtTime(0, t);
+            gain1.gain.linearRampToValueAtTime(1.5, t + 0.001);
+            gain1.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+            
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'square';
+            osc2.frequency.setValueAtTime(900, t);
+            osc2.frequency.exponentialRampToValueAtTime(200, t + 0.05);
+            gain2.gain.setValueAtTime(0, t);
+            gain2.gain.linearRampToValueAtTime(0.6, t + 0.001);
+            gain2.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+            
+            osc1.connect(gain1); 
+            osc2.connect(gain2);
+            gain1.connect(audioCtx.destination); 
+            gain2.connect(audioCtx.destination);
+            
+            osc1.start(t); osc2.start(t);
+            osc1.stop(t + 0.15); osc2.stop(t + 0.15);
+        }
+
+        function playClappers() {
+            initAudio();
+            triggerClack();
+            setTimeout(triggerClack, 180); // Double clack
+        }
+
+        // Voice Command Synthesis
+        function sayBox() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Overwrite any existing speech
+                const utterance = new SpeechSynthesisUtterance("BOX");
+                utterance.rate = 1.0; 
+                utterance.pitch = 0.9; // Lower, authoritative pitch
+                utterance.volume = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Generate Bell Ring
+        function playBell(times) {
+            initAudio();
+            for(let i=0; i<times; i++) {
+                setTimeout(() => {
+                    const t = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, t);
+                    
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(1, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 2);
+                    
+                    osc.connect(gain); 
+                    gain.connect(audioCtx.destination);
+                    
+                    osc.start(t); 
+                    osc.stop(t + 2);
+                }, i * 700);
+            }
+            
+            // Give verbal "BOX" command after round officially starts
+            if (times === 1) {
+                setTimeout(sayBox, 600);
+            }
+        }
+
+        // --- UI & Navigation ---
+
+        function navTo(viewId) {
+            initAudio();
+            
+            // Hide all views
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            // Show target view
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            
+            const backBtn = document.getElementById('btn-back');
+            const title = document.getElementById('header-title');
+            const header = document.getElementById('main-header');
+            
+            // Handle Header States
+            if(viewId === 'home') {
+                header.classList.remove('hidden');
+                backBtn.classList.add('invisible');
+                title.textContent = 'Boxing Rounds';
+            } else if (viewId === 'active-timer') {
+                header.classList.add('hidden'); // Free up screen space while running
+            } else {
+                header.classList.remove('hidden');
+                backBtn.classList.remove('invisible');
+                backBtn.onclick = () => navTo('home');
+                title.textContent = viewId === 'rounds-setup' ? 'Setup Sparring' : 'Setup Timer';
+            }
+        }
+
+        function adjustSetting(key, change) {
+            initAudio();
+            if(key === 'rounds') {
+                config.rounds = Math.max(1, Math.min(50, config.rounds + change));
+            } else if(key === 'warningTime') {
+                config.warningTime = Math.max(0, Math.min(60, config.warningTime + change));
+            } else {
+                config[key] = Math.max(15, Math.min(3600, config[key] + change));
+            }
+            updateSetupUI();
+        }
+
+        function setTrainingTime(sec) { 
+            config.trainingTime = sec; 
+            updateSetupUI(); 
+        }
+
+        function formatMMSS(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateSetupUI() {
+            document.getElementById('setup-val-rounds').textContent = config.rounds;
+            document.getElementById('setup-val-roundTime').textContent = formatMMSS(config.roundTime);
+            document.getElementById('setup-val-breakTime').textContent = formatMMSS(config.breakTime);
+            document.getElementById('setup-val-warningTime').textContent = config.warningTime > 0 ? config.warningTime + 's' : 'OFF';
+            document.getElementById('setup-val-trainingTime').textContent = formatMMSS(config.trainingTime);
+        }
+
+        // --- Core Timer Logic ---
+
+        function startRounds() {
+            initAudio();
+            timer.mode = 'rounds'; 
+            timer.phase = 'prepare'; 
+            timer.timeLeft = 5; 
+            timer.currentRound = 1;
+            
+            document.getElementById('btn-skip').classList.remove('hidden');
+            begin();
+        }
+
+        function startTrainingTimer() {
+            initAudio();
+            timer.mode = 'training'; 
+            timer.phase = 'work'; 
+            timer.timeLeft = config.trainingTime;
+            
+            document.getElementById('btn-skip').classList.add('hidden');
+            begin();
+        }
+
+        function begin() {
+            navTo('active-timer');
+            updateActiveUI();
+            startInterval();
+        }
+
+        function startInterval() {
+            if(timer.interval) clearInterval(timer.interval);
+            timer.isActive = true;
+            
+            document.getElementById('icon-play').classList.add('hidden');
+            document.getElementById('icon-pause').classList.remove('hidden');
+            
+            timer.interval = setInterval(() => {
+                timer.timeLeft--;
+                
+                // Fire Clappers 
+                if(timer.mode === 'rounds' && timer.phase === 'work' && timer.timeLeft === config.warningTime && config.warningTime > 0) {
+                    playClappers();
+                }
+                
+                // End Phase
+                if(timer.timeLeft < 0) {
+                    transition();
+                } else {
+                    updateActiveUI();
+                }
+            }, 1000);
+        }
+
+        function transition() {
+            if(timer.mode === 'training') { 
+                stopTimer(); 
+                playBell(3); 
+                return; 
+            }
+            
+            // Rounds progression
+            if(timer.phase === 'prepare') { 
+                timer.phase = 'work'; 
+                timer.timeLeft = config.roundTime; 
+                playBell(1); 
+            } else if(timer.phase === 'work') {
+                if(timer.currentRound >= config.rounds) { 
+                    stopTimer(); 
+                    playBell(3); // End of Workout
+                    return; 
+                }
+                timer.phase = 'rest'; 
+                timer.timeLeft = config.breakTime; 
+                playBell(2); // Rest bell
+            } else { // After rest
+                timer.currentRound++; 
+                timer.phase = 'work'; 
+                timer.timeLeft = config.roundTime; 
+                playBell(1); 
+            }
+            
+            updateActiveUI();
+        }
+
+        function togglePlayPause() {
+            initAudio();
+            if(timer.isActive) { 
+                clearInterval(timer.interval); 
+                timer.isActive = false; 
+                document.getElementById('icon-play').classList.remove('hidden'); 
+                document.getElementById('icon-pause').classList.add('hidden'); 
+                // Add visual pulsing effect when paused
+                document.getElementById('active-time-display').classList.add('opacity-50');
+            } else { 
+                document.getElementById('active-time-display').classList.remove('opacity-50');
+                startInterval(); 
+            }
+        }
+
+        function stopTimer() { 
+            clearInterval(timer.interval); 
+            timer.isActive = false;
+            document.getElementById('active-time-display').classList.remove('opacity-50');
+            
+            // Navigate back to the relevant setup screen
+            if (timer.mode === 'rounds') {
+                navTo('rounds-setup');
+            } else {
+                navTo('timer-setup');
+            }
+        }
+
+        function skipPhase() { 
+            timer.timeLeft = 0; 
+            transition(); 
+        }
+
+        function updateActiveUI() {
+            document.getElementById('active-time-display').textContent = formatMMSS(timer.timeLeft);
+            
+            const view = document.getElementById('view-active-timer');
+            const badge = document.getElementById('active-state-badge');
+            
+            // Reset base classes for smooth tailwind color transitions
+            view.className = 'view-section active items-center justify-center p-8 transition-colors duration-700';
+            
+            if(timer.phase === 'prepare') { 
+                badge.textContent = 'Get Ready'; 
+                view.classList.add('bg-amber-900'); 
+            } else if(timer.phase === 'work') { 
+                badge.textContent = timer.mode === 'training' ? 'Train' : `Round ${timer.currentRound} / ${config.rounds}`;
+                view.classList.add(timer.mode === 'training' ? 'bg-blue-900' : 'bg-red-900');
+            } else { 
+                badge.textContent = 'Rest Phase'; 
+                view.classList.add('bg-emerald-900'); 
+            }
+        }
+
+        // Initialize display values on load
+        updateSetupUI();
+    </script>
+</body>
+</html>
