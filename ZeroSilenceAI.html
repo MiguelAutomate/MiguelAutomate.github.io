@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroSilence AI — Autonomous Agentic Security-as-a-Service</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              navy: '#0a0f1d',
+              dark: '#0e1526',
+              border: '#1e294b',
+              blue: '#2563eb',
+              cyan: '#06b6d4',
+              emerald: '#10b981',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Premium scanline and grid background overlay effects */
+    .grid-bg {
+      background-image: 
+        linear-gradient(rgba(30, 41, 75, 0.25) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 75, 0.25) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .radial-glow {
+      background: radial-gradient(circle at 50% 30%, rgba(37, 99, 235, 0.15) 0%, transparent 60%);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0e1526;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1e294b;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #2563eb;
+    }
+  </style>
+</head>
+<body class="bg-brand-navy text-slate-100 font-sans selection:bg-brand-blue/30 selection:text-white relative overflow-x-hidden antialiased">
+
+  <!-- Background Overlays -->
+  <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+  <div class="fixed inset-0 radial-glow pointer-events-none z-0"></div>
+
+  <!-- TOP HEADER / NAV -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-navy/85 border-b border-brand-border transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- SVG Logo -->
+        <div class="relative flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-tr from-brand-blue to-brand-cyan shadow-lg shadow-brand-blue/20">
+          <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v4" class="animate-pulse" />
+            <circle cx="12" cy="15.5" r="0.5" fill="currentColor" />
+          </svg>
+          <div class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-brand-cyan rounded-full animate-ping"></div>
+        </div>
+        <div>
+          <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-cyan bg-clip-text text-transparent">ZeroSilence</span>
+          <span class="text-[10px] font-mono block text-brand-cyan tracking-wider -mt-1 font-semibold uppercase">Security Agent</span>
+        </div>
+      </div>
+      
+      <!-- Nav Links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
+        <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+        <a href="#interactive-scanner" class="hover:text-white transition-colors">AST Guard Demo</a>
+        <a href="#threat-directory" class="hover:text-white transition-colors">ASI Threats</a>
+        <a href="#roi-calculator" class="hover:text-white transition-colors">Risk Calculator</a>
+        <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
+      </nav>
+
+      <!-- CTA -->
+      <div class="flex items-center gap-4">
+        <a href="#interactive-scanner" class="hidden sm:inline-flex text-xs font-mono text-brand-cyan bg-brand-cyan/10 hover:bg-brand-cyan/20 border border-brand-cyan/20 px-3 py-1.5 rounded-md transition-colors items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse"></span>
+          XPRIZE Track v1.0
+        </a>
+        <a href="#interactive-scanner" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-brand-blue hover:bg-blue-500 font-semibold text-sm text-white shadow-lg shadow-brand-blue/20 hover:shadow-brand-blue/40 transition-all gap-2 transform hover:-translate-y-0.5">
+          <span>Deploy GitHub App</span>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- HERO SECTION -->
+    <section class="pt-16 pb-20 md:pt-24 md:pb-32 text-center relative">
+      <!-- Top Badges -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-brand-border mb-8 text-xs font-medium text-slate-300 transform hover:scale-105 transition-all">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-emerald opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-emerald"></span>
+        </span>
+        <span class="text-slate-400">Announcing the</span>
+        <strong class="text-brand-cyan">Automatos Agentic Guard</strong>
+        <span class="text-slate-600">|</span>
+        <span class="text-slate-400">B2B SaaS</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight max-w-5xl mx-auto leading-[1.1] mb-6">
+        Prevent <span class="bg-gradient-to-r from-brand-rose via-amber-400 to-brand-rose bg-clip-text text-transparent">Silent Failures</span> and <span class="bg-gradient-to-r from-brand-cyan to-brand-blue bg-clip-text text-transparent">Infinite API Burn</span> in Your LLM Agents
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg sm:text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+        The Autonomous Agentic Security platform that intercepts Pull Requests, parses your code using high-performance <strong>Tree-sitter AST queries</strong>, and generates mathematically sound, structured FSM patches using <strong>GCP Vertex AI</strong>.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+        <a href="#interactive-scanner" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-cyan hover:opacity-95 text-white font-semibold rounded-xl shadow-lg shadow-brand-blue/30 transition-all flex items-center justify-center gap-2 text-base">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Try Sandbox Scan</span>
+        </a>
+        <a href="#threat-directory" class="w-full sm:w-auto px-8 py-4 bg-slate-900 hover:bg-slate-800 border border-brand-border text-slate-300 hover:text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 text-base">
+          <span>Read OWASP ASI Guide</span>
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+
+      <!-- Trust Badges & Tech Stack Metas -->
+      <div class="pt-8 border-t border-brand-border/60 max-w-4xl mx-auto flex flex-wrap justify-center items-center gap-y-6 gap-x-12 text-xs font-mono text-slate-500 uppercase tracking-widest">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
+          <span>BUN.js PARSER ENGINE</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-cyan"></span>
+          <span>Tree-sitter AST S-Expressions</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-emerald"></span>
+          <span>GCP Vertex AI (Gemini Flash)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-brand-amber"></span>
+          <span>BigQuery Audit Stream</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE SECTION 1: LIVE CODE DIFF / REMEDIATOR SANDBOX -->
+    <section id="interactive-scanner" class="py-12 border-t border-brand-border/60 scroll-mt-20">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="text-brand-cyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">AST Query & AI Patch Playground</span>
+        <h2 class="text-3xl font-extrabold tracking-tight">Experience Autonomous Remediation</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          Select an agentic vulnerability below, review the Tree-sitter S-expression query that flagged it, then trigger the <strong>Vertex AI structured patch engine</strong> to refactor it live.
+        </p>
+      </div>
+
+      <!-- Control Toggles -->
+      <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <button onclick="switchVulnerability('asi08')" id="btn-asi08" class="vulnerability-tab-btn px-4 py-2 rounded-lg font-mono text-xs border transition-all flex items-center gap-2 bg-brand-rose/10 border-brand-rose/40 text-brand-rose">
+          <span class="w-2 h-2 rounded-full bg-brand-rose"></span>
+          ASI-08: Unbounded Loop (API Burn)
+        </button>
+        <button onclick="switchVulnerability('asi01')" id="btn-asi01" class="vulnerability-tab-btn px-4 py-2 rounded-lg font-mono text-xs border transition-all flex items-center gap-2 bg-slate-900 border-brand-border text-slate-400 hover:text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+          ASI-01: Silent Failure Catch Block
+        </button>
+        <button onclick="switchVulnerability('asi10')" id="btn-asi10" class="vulnerability-tab-btn px-4 py-2 rounded-lg font-mono text-xs border transition-all flex items-center gap-2 bg-slate-900 border-brand-border text-slate-400 hover:text-slate-200">
+          <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+          ASI-10: Downstream Prompt Poison
+        </button>
+      </div>
+
+      <!-- The Sandbox Terminal Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left Side: Code Viewer & AST Query -->
+        <div class="lg:col-span-7 bg-brand-dark rounded-xl border border-brand-border overflow-hidden shadow-2xl">
+          <div class="flex items-center justify-between px-4 py-3 bg-[#11192e] border-b border-brand-border">
+            <div class="flex items-center gap-2">
+              <span class="flex gap-1.5">
+                <span class="w-3 h-3 rounded-full bg-brand-rose/80"></span>
+                <span class="w-3 h-3 rounded-full bg-brand-amber/80"></span>
+                <span class="w-3 h-3 rounded-full bg-brand-emerald/80"></span>
+              </span>
+              <span id="sandbox-filename" class="font-mono text-xs text-slate-400 ml-2">vulnerable_agent.py</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-[10px] font-mono uppercase bg-brand-rose/10 text-brand-rose px-2 py-0.5 rounded border border-brand-rose/20" id="sandbox-vulnerability-badge">ASI-08 Risk</span>
+              <span class="text-xs text-slate-500 font-mono">Python</span>
+            </div>
+          </div>
+
+          <!-- Code Display / Interactive Terminal Panel -->
+          <div class="relative bg-brand-navy p-6 overflow-x-auto min-h-[360px] max-h-[460px] custom-scrollbar">
+            <!-- Vulnerable Code View -->
+            <div id="code-content-wrapper" class="transition-all duration-300">
+              <pre class="font-mono text-xs sm:text-sm leading-relaxed text-slate-300" id="vulnerable-code-block">
+<span class="text-slate-500"># Warning: This agent runs an infinite ReAct loop containing a direct LLM call</span>
+<span class="text-brand-rose font-bold">def</span> <span class="text-brand-cyan">run_workflow</span>(agent, prompt):
+    agent.running = <span class="text-brand-cyan">True</span>
+    agent.context = prompt
+    
+    <span class="text-brand-rose font-bold">while</span> agent.running:
+        <span class="text-slate-500"># Direct invocation block - no guards, loops indefinitely on bad json response</span>
+        response = agent.client.chat.completions.create(
+            model=<span class="text-slate-400">"gpt-4-turbo"</span>,
+            messages=[{<span class="text-slate-400">"role"</span>: <span class="text-slate-400">"user"</span>, <span class="text-slate-400">"content"</span>: agent.context}]
+        )
+        tool_call = parse_and_execute(response)
+        
+        <span class="text-brand-rose font-bold">if</span> not tool_call:
+            agent.running = <span class="text-brand-cyan">False</span> <span class="text-slate-500"># Vulnerable to dynamic system failure</span>
+        <span class="text-brand-rose font-bold">else</span>:
+            agent.context = tool_call.result
+              </pre>
+            </div>
+
+            <!-- Interactive Terminal Log (Hidden initially, shown during scan animation) -->
+            <div id="terminal-log-wrapper" class="hidden absolute inset-0 bg-brand-dark/95 flex flex-col p-6 font-mono text-xs sm:text-sm text-slate-300 scroll-mt-2 custom-scrollbar overflow-y-auto">
+              <div class="flex items-center gap-2 text-brand-cyan mb-4 border-b border-brand-border pb-2">
+                <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke-width="2" stroke-linecap="round"/></svg>
+                <span>ZEROSILENCE REMOTE AGENT AUDIT IN PROGRESS...</span>
+              </div>
+              <div id="terminal-lines" class="space-y-2">
+                <!-- Appended logs go here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Panel: S-Expression Query View -->
+          <div class="bg-[#11192e] p-4 border-t border-brand-border">
+            <h4 class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              Matched S-Expression AST Query
+            </h4>
+            <pre class="font-mono text-[11px] leading-tight text-slate-400 bg-brand-navy p-3 rounded-md border border-brand-border/40 overflow-x-auto" id="ast-query-block">
+((while_statement
+   condition: (identifier) @cond
+   body: (block
+     (expression_statement
+       (call
+         function: (attribute
+           attribute: (identifier) @meth (#match? @meth "^(run|invoke|chat|stream)$")))))) @burn_loop_py)
+            </pre>
+          </div>
+        </div>
+
+        <!-- Right Side: Pipeline Output / Remediated Diff & Mermaid Flowchart -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+          
+          <!-- Trigger Action -->
+          <div class="bg-gradient-to-br from-brand-dark to-slate-900 border border-brand-border p-6 rounded-xl relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl"></div>
+            <h3 class="text-lg font-bold mb-2 flex items-center gap-2">
+              <svg class="w-5 h-5 text-brand-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+              Remediate Code Vulnerability
+            </h3>
+            <p class="text-slate-400 text-xs leading-relaxed mb-5">
+              Run the full ZeroSilence ASaaS automation sequence. Bun.js reads the abstract syntax tree, maps it to an ASI risk vector, and Vertex AI formats an optimal state-machine patch.
+            </p>
+            
+            <button onclick="runRemediation()" id="remediate-trigger-btn" class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-blue to-brand-cyan hover:opacity-95 font-semibold text-sm flex items-center justify-center gap-2 shadow-lg shadow-brand-blue/10 transform transition-all active:scale-[0.98]">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.7 15.3a5.3 5.3 0 0 1-7.4 0l-3.3 3.3a8 8 0 0 0 11.3 0l-3.3-3.3z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15.3 8.7a5.3 5.3 0 0 1 0 7.4l3.3 3.3a8 8 0 0 0 0-11.3l-3.3 3.3z" /></svg>
+              <span>Analyze & Patch Code</span>
+            </button>
+          </div>
+
+          <!-- Output Remediated Result / Success Box -->
+          <div id="patched-code-card" class="bg-brand-dark border border-brand-border rounded-xl overflow-hidden hidden transition-all duration-300">
+            <div class="flex items-center justify-between px-4 py-3 bg-brand-emerald/10 border-b border-brand-border text-brand-emerald">
+              <span class="text-xs font-mono font-bold flex items-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                Vertex AI Automatos Patch
+              </span>
+              <span class="text-[10px] font-mono bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 px-1.5 py-0.5 rounded">Confidence: 99%</span>
+            </div>
+            
+            <div class="p-5 font-mono text-xs max-h-[300px] overflow-y-auto custom-scrollbar bg-brand-navy">
+              <!-- Render Diff Code -->
+              <pre class="leading-relaxed text-slate-300" id="patched-diff-block">
+                <!-- Patched diff text injected dynamically -->
+              </pre>
+            </div>
+
+            <!-- FSM Diagram Box -->
+            <div class="border-t border-brand-border p-4 bg-slate-950">
+              <span class="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">Automatos FSM Control Flow State Transitions</span>
+              
+              <!-- Built visual FSM inside HTML representation -->
+              <div class="flex items-center justify-around gap-1 p-3 bg-brand-dark/50 border border-brand-border/60 rounded-lg text-[11px] font-mono">
+                <div class="px-2 py-1 rounded bg-slate-800 text-slate-400 border border-brand-border">Idle</div>
+                <div class="text-brand-blue">→</div>
+                <div class="relative px-2 py-1 rounded bg-brand-blue/10 text-brand-blue border border-brand-blue/30">
+                  Invoking
+                  <div class="absolute -top-1 -right-1 w-1.5 h-1.5 bg-brand-rose rounded-full" title="Proxy limit guard bound"></div>
+                </div>
+                <div class="text-brand-blue">→</div>
+                <div class="px-2 py-1 rounded bg-slate-800 text-slate-400 border border-brand-border">Parsing</div>
+                <div class="text-brand-blue">→</div>
+                <div class="px-2 py-1 rounded bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30">Ok (Done)</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PIPELINE STEPS - "HOW IT WORKS" -->
+    <section id="how-it-works" class="py-20 border-t border-brand-border/60 scroll-mt-20">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-brand-cyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">Technical Flow</span>
+        <h2 class="text-3xl font-extrabold tracking-tight">The ASaaS Execution Pipeline</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          From developer push to self-remediated pull request feedback. We run a secure serverless webhook execution loop on GCP architecture with sub-second feedback.
+        </p>
+      </div>
+
+      <!-- Interactive Grid Map of steps -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Step 1 -->
+        <div class="bg-brand-dark border border-brand-border/80 p-6 rounded-xl relative hover:border-brand-blue/30 transition-all flex flex-col justify-between group">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-900 border border-brand-border flex items-center justify-center font-mono text-xs font-bold text-brand-cyan group-hover:border-brand-cyan transition-colors">01</div>
+          <div class="pt-2">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-1.5">
+              <span>Webhook Event</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+              GitHub App listens for Pull Requests. Bun.js immediately captures the JSON payload, verifies HMAC-SHA256 headers, and sends it directly to GCP Pub/Sub.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border/40 font-mono text-[10px] text-slate-500">
+            Latency limit: <span class="text-slate-300">&lt; 1.2s response</span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-brand-dark border border-brand-border/80 p-6 rounded-xl relative hover:border-brand-blue/30 transition-all flex flex-col justify-between group">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-900 border border-brand-border flex items-center justify-center font-mono text-xs font-bold text-brand-cyan group-hover:border-brand-cyan transition-colors">02</div>
+          <div class="pt-2">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-1.5">
+              <span>Tree-sitter AST</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+              Downloads source files dynamically from the HEAD commit. Bun.js parses Python/JS code into detailed semantic Abstract Syntax Trees in milliseconds.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border/40 font-mono text-[10px] text-slate-500">
+            Query engine: <span class="text-slate-300">S-Expression matching</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-brand-dark border border-brand-border/80 p-6 rounded-xl relative hover:border-brand-blue/30 transition-all flex flex-col justify-between group">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-900 border border-brand-border flex items-center justify-center font-mono text-xs font-bold text-brand-cyan group-hover:border-brand-cyan transition-colors">03</div>
+          <div class="pt-2">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-1.5">
+              <span>Vertex AI Patch</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+              Feeds vulnerable code fragments to Vertex AI Gemini-Flash using temperature 0.0 and JSON schemas to guarantee zero formatting hallucination.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border/40 font-mono text-[10px] text-slate-500">
+            Structured schema: <span class="text-slate-300">Strict Output JSON</span>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-brand-dark border border-brand-border/80 p-6 rounded-xl relative hover:border-brand-blue/30 transition-all flex flex-col justify-between group">
+          <div class="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-slate-900 border border-brand-border flex items-center justify-center font-mono text-xs font-bold text-brand-cyan group-hover:border-brand-cyan transition-colors">04</div>
+          <div class="pt-2">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-1.5">
+              <span>Telemetry Audit</span>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
+              The patch is injected into the PR as a line-level inline suggestion. Every execution payload is streamed directly to GCP BigQuery for SOC2/Compliance.
+            </p>
+          </div>
+          <div class="mt-6 pt-4 border-t border-brand-border/40 font-mono text-[10px] text-slate-500">
+            Storage: <span class="text-slate-300">GCP BigQuery Streaming</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTERACTIVE SECTION 2: COST / RISK CALCULATOR -->
+    <section id="roi-calculator" class="py-20 border-t border-brand-border/60 scroll-mt-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left details -->
+        <div class="lg:col-span-5">
+          <span class="text-brand-cyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">Infinite Loop Budget Risk</span>
+          <h2 class="text-3xl font-extrabold tracking-tight">The Price of "Vibe Coding"</h2>
+          <p class="text-slate-400 mt-4 text-sm sm:text-base leading-relaxed">
+            LLMs run at massive generation speed inside loop contexts. If your autonomous agent encounters a JSON syntax failure or dynamic exception, it can run thousands of loop queries within minutes, silently burning your entire OpenAI/Anthropic wallet balance.
+          </p>
+          <div class="mt-8 space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand-rose/10 flex items-center justify-center text-brand-rose">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+              </div>
+              <span class="text-xs text-slate-300">Average uncontrolled loop triggers 20-50 API requests per minute.</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-lg bg-brand-blue/10 flex items-center justify-center text-brand-blue">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <span class="text-xs text-slate-300">Continuous operation can burn thousands of dollars in input tokens overnight.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Calculator Card -->
+        <div class="lg:col-span-7 bg-brand-dark rounded-2xl border border-brand-border p-8 shadow-2xl relative">
+          <div class="absolute top-0 right-0 p-4 font-mono text-[9px] text-slate-500 uppercase">Live Calculator</div>
+          <h3 class="text-xl font-bold mb-6 text-slate-200">API Burn Risk Calculator</h3>
+          
+          <div class="space-y-6">
+            <!-- Parameter 1 -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-mono text-slate-400 uppercase">Average Daily Active Agents</label>
+                <span id="agents-val" class="text-sm font-bold text-brand-cyan">15</span>
+              </div>
+              <input type="range" id="agents-input" min="1" max="100" value="15" oninput="calculateRisk()" class="w-full accent-brand-cyan cursor-pointer bg-slate-950 rounded-lg h-2" />
+            </div>
+
+            <!-- Parameter 2 -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-mono text-slate-400 uppercase">Tokens Per Agent Session</label>
+                <span id="tokens-val" class="text-sm font-bold text-brand-cyan">15k</span>
+              </div>
+              <input type="range" id="tokens-input" min="1" max="100" value="15" oninput="calculateRisk()" class="w-full accent-brand-cyan cursor-pointer bg-slate-950 rounded-lg h-2" />
+            </div>
+
+            <!-- Parameter 3 -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-mono text-slate-400 uppercase">LLM Token Pricing (Per Million Tokens)</label>
+                <span id="price-val" class="text-sm font-bold text-brand-cyan">$10.00</span>
+              </div>
+              <input type="range" id="price-input" min="1" max="30" value="10" oninput="calculateRisk()" class="w-full accent-brand-cyan cursor-pointer bg-slate-950 rounded-lg h-2" />
+            </div>
+
+            <!-- Result Panel -->
+            <div class="bg-brand-navy p-6 rounded-xl border border-brand-border/60 grid grid-cols-2 gap-4">
+              <div class="text-center p-3 bg-brand-rose/5 border border-brand-rose/10 rounded-lg">
+                <span class="text-[10px] font-mono text-slate-500 uppercase block mb-1">Max Daily Risk</span>
+                <span id="risk-result" class="text-2xl sm:text-3xl font-extrabold text-brand-rose">$22.50</span>
+              </div>
+              <div class="text-center p-3 bg-brand-emerald/5 border border-brand-emerald/10 rounded-lg">
+                <span class="text-[10px] font-mono text-slate-500 uppercase block mb-1">ZeroSilence Cost</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-brand-emerald">$0.66<span class="text-xs text-slate-400 font-normal">/day</span></span>
+              </div>
+            </div>
+
+            <!-- Summary callout -->
+            <div class="text-xs text-slate-400 leading-relaxed text-center bg-slate-950/60 p-3 rounded-md border border-brand-border/30">
+              <p>
+                By implementing <strong class="text-brand-cyan">Automatos proxy limiters</strong> across all identified vulnerable endpoints, your maximum daily loop cost drops to <strong class="text-brand-emerald">$0.00</strong>. Secure absolute protection.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- INTRODUCING THE THREAT DIRECTORY (ASI-01 TO ASI-10) -->
+    <section id="threat-directory" class="py-20 border-t border-brand-border/60 scroll-mt-20">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-brand-cyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">The OWASP Agentic Security Matrix</span>
+        <h2 class="text-3xl font-extrabold tracking-tight">Vulnerability Taxonomy Directory</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          ZeroSilence intercepts security patterns mapping directly to the official OWASP Agentic Security Initiative framework. Click on any class to view detailed indicators.
+        </p>
+      </div>
+
+      <!-- The Directory Grid of clickable items -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- Threat Card 1 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-1')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-rose bg-brand-rose/10 border border-brand-rose/20 px-2 py-0.5 rounded">ASI-01</span>
+              <span class="text-xs text-slate-500 font-mono">CRITICAL</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Goal Hijacking</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              Malicious code or user instructions passed from external search tools alter the agent's deterministic instruction loop.
+            </p>
+          </div>
+          <div id="threat-1" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            Matches unchecked downstream model responses passed directly to system instruction updates.
+          </div>
+        </div>
+
+        <!-- Threat Card 2 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-2')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-rose bg-brand-rose/10 border border-brand-rose/20 px-2 py-0.5 rounded">ASI-02</span>
+              <span class="text-xs text-slate-500 font-mono">HIGH</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Tool Misuse & SSRF</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              LLMs dynamically generate path-traversal or SSRF parameters inside command line tools without checking input schema bindings.
+            </p>
+          </div>
+          <div id="threat-2" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            Matches direct execution calls without pydantic models or validation proxy interceptors.
+          </div>
+        </div>
+
+        <!-- Threat Card 3 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-3')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-amber bg-brand-amber/10 border border-brand-amber/20 px-2 py-0.5 rounded">ASI-04</span>
+              <span class="text-xs text-slate-500 font-mono">MEDIUM</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Agentic Supply Chain</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              Agents linking to unverified model connection protocols or compromised/untracked MCP (Model Context Protocol) servers.
+            </p>
+          </div>
+          <div id="threat-3" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            Flagged when open MCP client connections are instantiated without secure JWT access authorization headers.
+          </div>
+        </div>
+
+        <!-- Threat Card 4 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-4')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-rose bg-brand-rose/10 border border-brand-rose/20 px-2 py-0.5 rounded">ASI-08</span>
+              <span class="text-xs text-slate-500 font-mono">CRITICAL</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Cascading Failures</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              Infinite looping sequences in which an LLM continues invoking downstream clients despite failing parsing validation schemes.
+            </p>
+          </div>
+          <div id="threat-4" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            While statements with no loop break conditions calling LLM model contexts or network gateways.
+          </div>
+        </div>
+
+        <!-- Threat Card 5 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-5')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-amber bg-brand-amber/10 border border-brand-amber/20 px-2 py-0.5 rounded">ASI-05</span>
+              <span class="text-xs text-slate-500 font-mono">HIGH</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Unexpected Code Run</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              The agent attempts to generate and execute native shell scripts, calling eval or subprocess patterns dynamically.
+            </p>
+          </div>
+          <div id="threat-5" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            Flagged instantly upon any execution syntax tree match pointing to subprocess modules or python eval declarations.
+          </div>
+        </div>
+
+        <!-- Threat Card 6 -->
+        <div class="bg-brand-dark border border-brand-border p-6 rounded-xl transition-all hover:border-brand-rose/30 flex flex-col justify-between group cursor-pointer" onclick="toggleThreatDetail('threat-6')">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="font-mono text-xs text-brand-rose bg-brand-rose/10 border border-brand-rose/20 px-2 py-0.5 rounded">ASI-10</span>
+              <span class="text-xs text-slate-500 font-mono">CRITICAL</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2 flex justify-between items-center group-hover:text-brand-cyan transition-colors">
+              <span>Rogue Behavior Drift</span>
+              <svg class="w-4 h-4 text-slate-500 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </h3>
+            <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4">
+              Lack of programmatic execution limit constraints allows state-changing agents to drift significantly from targeted outcomes.
+            </p>
+          </div>
+          <div id="threat-6" class="hidden text-[11px] bg-brand-navy p-3 rounded-md border border-brand-border/60 font-mono mt-3 text-slate-300">
+            <strong>AST Capture Indicator:</strong><br>
+            Vulnerable context logs passed through open downstream schemas without explicit finite state boundary checks.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PRICING PLANS -->
+    <section id="pricing" class="py-20 border-t border-brand-border/60 scroll-mt-20">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-brand-cyan font-mono text-xs font-bold uppercase tracking-widest block mb-2">Flexible SaaS Subscriptions</span>
+        <h2 class="text-3xl font-extrabold tracking-tight">Protect Your Agent Infrastructure</h2>
+        <p class="text-slate-400 mt-3 text-sm sm:text-base">
+          From independent builders on GitHub to venture-backed enterprises processing millions of agent steps.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch">
+        
+        <!-- Tier 1 -->
+        <div class="bg-brand-dark border border-brand-border rounded-2xl p-8 flex flex-col justify-between hover:border-slate-700 transition-all">
+          <div>
+            <span class="font-mono text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded block w-fit mb-4">SANDBOX TIER</span>
+            <h3 class="text-xl font-bold">Developer</h3>
+            <p class="text-slate-400 text-xs mt-2">Perfect for side projects and local experiments.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold">$0</span>
+              <span class="text-slate-500 text-xs font-mono">/ FOREVER</span>
+            </div>
+            <ul class="text-xs space-y-3 text-slate-300 border-t border-brand-border/60 pt-6">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>5 GitHub Repository Scans / mo</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Core Tree-sitter Queries</span>
+              </li>
+              <li class="flex items-center gap-2 text-slate-500">
+                <svg class="w-4 h-4 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                <span>No Automated Vertex AI Patches</span>
+              </li>
+            </ul>
+          </div>
+          <a href="#interactive-scanner" class="mt-8 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-xs text-center block text-slate-200 transition-colors">Start Free Scanning</a>
+        </div>
+
+        <!-- Tier 2 - POPULAR -->
+        <div class="bg-brand-dark border-2 border-brand-blue rounded-2xl p-8 flex flex-col justify-between relative shadow-2xl hover:-translate-y-1 transition-all">
+          <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-brand-blue text-white text-[10px] font-mono px-3 py-1 rounded-full uppercase font-bold tracking-wider">Most Popular</div>
+          <div>
+            <div class="flex justify-between items-center mb-4">
+              <span class="font-mono text-[10px] bg-brand-blue/10 text-brand-cyan px-2 py-1 rounded block w-fit">STARTUP SHIELD</span>
+              <span class="text-brand-cyan text-[10px] font-bold font-mono">XPRIZE GTM SPECIAL</span>
+            </div>
+            <h3 class="text-xl font-bold">Startup Guard</h3>
+            <p class="text-slate-400 text-xs mt-2">Continuous inline code defense & remediation for active teams.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold">$20</span>
+              <span class="text-slate-500 text-xs font-mono">/ MONTH</span>
+            </div>
+            <ul class="text-xs space-y-3 text-slate-300 border-t border-brand-border/60 pt-6">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span class="font-semibold text-white">UNLIMITED Pull Request Scans</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Automatos Finite State patches</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>1-Click GitHub PR Suggestions</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>BigQuery Audit Log Integration</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="simulateStripeSubscription()" class="mt-8 py-3 px-4 rounded-xl bg-gradient-to-r from-brand-blue to-brand-cyan hover:opacity-95 font-semibold text-xs text-center block text-white shadow-lg shadow-brand-blue/20 transition-all">
+            Secure Guard ($20/mo)
+          </button>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="bg-brand-dark border border-brand-border rounded-2xl p-8 flex flex-col justify-between hover:border-slate-700 transition-all">
+          <div>
+            <span class="font-mono text-[10px] bg-slate-800 text-slate-400 px-2 py-1 rounded block w-fit mb-4">COMPLIANCE & AUDIT</span>
+            <h3 class="text-xl font-bold">Enterprise</h3>
+            <p class="text-slate-400 text-xs mt-2">Deep inter-procedural static queries & dynamic sandboxing.</p>
+            <div class="my-6">
+              <span class="text-3xl font-extrabold">Custom</span>
+              <span class="text-slate-500 text-xs font-mono">/ YEARLY BIND</span>
+            </div>
+            <ul class="text-xs space-y-3 text-slate-300 border-t border-brand-border/60 pt-6">
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>All Startup Shield features</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Custom proprietary Tree-sitter rules</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Dynamic sandbox execution checks</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                <span>Dedicated GCP security tenant hosting</span>
+              </li>
+            </ul>
+          </div>
+          <button onclick="simulateStripeSubscription('custom')" class="mt-8 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 font-semibold text-xs text-center block text-slate-200 transition-colors">Contact Enterprise Security</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STATUS BANNER / CUSTOM NOTIFICATION MODAL (REPLACES ALERT) -->
+    <div id="status-notification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 max-w-sm w-full bg-[#11192e] border border-brand-cyan/40 p-4 rounded-xl shadow-2xl flex items-start gap-3">
+      <div class="w-8 h-8 rounded-full bg-brand-cyan/10 flex items-center justify-center text-brand-cyan flex-shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <div>
+        <h4 id="status-title" class="text-xs font-mono font-bold text-slate-200 uppercase">Remediation Action Complete</h4>
+        <p id="status-body" class="text-[11px] text-slate-400 mt-1">Successfully patched local function code using Automatos Pattern.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-brand-dark/95 border-t border-brand-border/60 py-12 relative z-10 mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      
+      <!-- Brand info -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded bg-gradient-to-tr from-brand-blue to-brand-cyan flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <span class="font-bold text-sm tracking-tight">ZeroSilence AI</span>
+          <span class="text-[9px] font-mono block text-brand-cyan tracking-wider uppercase">Continuous ASaaS Protection</span>
+        </div>
+      </div>
+
+      <!-- XPRIZE attribution -->
+      <div class="text-center sm:text-right">
+        <span class="text-xs text-slate-500 font-mono">XPRIZE &times; Hacker.Fund GTM Project Entry | Miguel Ocampo</span>
+        <span class="text-[10px] text-slate-600 font-mono block mt-1">&copy; 2026 ZeroSilence AI Inc. All rights reserved. Built using Bun.js & GCP Vertex AI.</span>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- SCRIPTING FOR INTERACTIVES -->
+  <script>
+    // Local database containing vulnerability samples based on the uploaded whitepaper
+    const samples = {
+      asi08: {
+        filename: 'vulnerable_agent.py',
+        badge: 'ASI-08 Burn Loop',
+        vulnerable: `# Warning: This agent runs an infinite ReAct loop containing a direct LLM call
+def run_workflow(agent, prompt):
+    agent.running = True
+    agent.context = prompt
+    
+    while agent.running:
+        # Direct invocation block - no guards, loops indefinitely on bad json response
+        response = agent.client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": agent.context}]
+        )
+        tool_call = parse_and_execute(response)
+        
+        if not tool_call:
+            agent.running = False # Vulnerable to dynamic system failure
+        else:
+            agent.context = tool_call.result`,
+        query: `((while_statement
+   condition: (identifier) @cond
+   body: (block
+     (expression_statement
+       (call
+         function: (attribute
+           attribute: (identifier) @meth (#match? @meth "^(run|invoke|chat|stream)$")))))) @burn_loop_py)`,
+        patched: `# ZeroSilence Patched Implementation using Automatos Invariants
+from typing import TypedDict, Union
+
+class MaxIterationsError(Exception):
+    pass
+
+# Safe Loop containing iteration proxy guard and explicit transition boundaries
+def run_workflow(agent, prompt):
+    agent.running = True
+    agent.context = prompt
+    iteration_count = 0
+    MAX_ITERATIONS = 10 # HARD proxy iteration guard limit
+    
+    while agent.running:
+        iteration_count += 1
+        if iteration_count > MAX_ITERATIONS:
+            raise MaxIterationsError(f"API safety limit reached. Loops: {iteration_count}")
+            
+        response = agent.client.chat.completions.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": agent.context}]
+        )
+        tool_call = parse_and_execute(response)
+        
+        if not tool_call:
+            agent.running = False
+        else:
+            agent.context = tool_call.result`
+      },
+      asi01: {
+        filename: 'silent_fail.ts',
+        badge: 'ASI-01 Silent Fail',
+        vulnerable: `// TypeScript empty catch blocks propagate corrupted agent state silently
+async function fetchAgentDecision(agent: any) {
+  try {
+    const result = await agent.client.chat({
+      messages: [{ role: "user", content: "Validate transaction flow" }]
+    });
+    return JSON.parse(result.choices[0].message.content);
+  } catch (error) {
+    // SILENT FAILURE: Swallows critical model exceptions
+  }
+}`,
+        query: `((try_statement
+   body: (_)
+   handler: (catch_clause
+     body: (statement_block . "}"))) @silent_fail)`,
+        patched: `// Patched with strict Automatos Result pattern
+type Result<T, E> = 
+  | { kind: "ok"; value: T }
+  | { kind: "err"; error: E; code: string };
+
+async function fetchAgentDecision(agent: any): Promise<Result<any, Error>> {
+  try {
+    const result = await agent.client.chat({
+      messages: [{ role: "user", content: "Validate transaction flow" }]
+    });
+    const parsed = JSON.parse(result.choices[0].message.content);
+    return { kind: "ok", value: parsed };
+  } catch (error: any) {
+    // Explicit exception escalation returning Typed error taxonomy
+    return { 
+      kind: "err", 
+      error: error, 
+      code: "AGENT_DESTRUCTION_EXCEPTION" 
+    };
+  }
+}`
+      },
+      asi10: {
+        filename: 'prompts.ts',
+        badge: 'ASI-10 Rogue Agent',
+        vulnerable: `// Direct LLM responses are executed dynamically as terminal commands
+async function executeAgentScript(agent: any, response: string) {
+  // Direct dynamic invocation of prompt outputs
+  const action = await eval(response);
+  return action;
+}`,
+        query: `((call_expression
+   function: (identifier) @func (#eq? @func "eval")) @untrusted_eval)`,
+        patched: `// Patched using isolated sandboxed runtime bounds
+import { SafeSandbox } from "automatos-sandbox";
+
+async function executeAgentScript(agent: any, response: string) {
+  // Use SafeSandbox runtime execution constraints (No system shell access)
+  const sandbox = new SafeSandbox({
+    timeoutMs: 1000,
+    permittedImports: []
+  });
+  
+  const action = await sandbox.run(response);
+  return action;
+}`
+      }
+    };
+
+    let selectedVulnerability = 'asi08';
+
+    // Switch Vulnerability active samples
+    function switchVulnerability(type) {
+      selectedVulnerability = type;
+      
+      // Update toggle button active states
+      document.querySelectorAll('.vulnerability-tab-btn').forEach(btn => {
+        btn.classList.add('bg-slate-900', 'border-brand-border', 'text-slate-400');
+        btn.classList.remove('bg-brand-rose/10', 'border-brand-rose/40', 'text-brand-rose');
+        // Reset dot indicators
+        const dot = btn.querySelector('span');
+        if (dot) {
+          dot.classList.add('bg-slate-600');
+          dot.classList.remove('bg-brand-rose');
+        }
+      });
+
+      const activeBtn = document.getElementById(`btn-${type}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-900', 'border-brand-border', 'text-slate-400');
+        activeBtn.classList.add('bg-brand-rose/10', 'border-brand-rose/40', 'text-brand-rose');
+        const dot = activeBtn.querySelector('span');
+        if (dot) {
+          dot.classList.remove('bg-slate-600');
+          dot.classList.add('bg-brand-rose');
+        }
+      }
+
+      // Hide patched card on change
+      document.getElementById('patched-code-card').classList.add('hidden');
+      document.getElementById('code-content-wrapper').classList.remove('hidden');
+      document.getElementById('terminal-log-wrapper').classList.add('hidden');
+
+      // Update text
+      document.getElementById('sandbox-filename').textContent = samples[type].filename;
+      document.getElementById('sandbox-vulnerability-badge').textContent = samples[type].badge;
+      document.getElementById('vulnerable-code-block').textContent = samples[type].vulnerable;
+      document.getElementById('ast-query-block').textContent = samples[type].query;
+    }
+
+    // Simulate Terminal Scan and Vertex AI Generation Pipeline
+    function runRemediation() {
+      const wrapper = document.getElementById('terminal-log-wrapper');
+      const linesContainer = document.getElementById('terminal-lines');
+      
+      wrapper.classList.remove('hidden');
+      document.getElementById('code-content-wrapper').classList.add('hidden');
+      linesContainer.innerHTML = ''; // Clear previous
+
+      const logs = [
+        { text: '► Webhook Event received. Verifying signature headers...', delay: 150 },
+        { text: '✔ HMAC signature authentic. Parsing git trees...', delay: 400 },
+        { text: '► Bun.js loading tree-sitter compiler grammar definitions...', delay: 650 },
+        { text: `► Traversing ${samples[selectedVulnerability].filename} and evaluating AST targets...`, delay: 900 },
+        { text: '⚡ AST MATCH: Capture identifier triggered. Generating query signatures...', delay: 1100 },
+        { text: '► Invoking GCP Vertex AI structured output schema endpoint...', delay: 1400 },
+        { text: '✔ Gemini-Flash parsed code patches output matching Automatos Pattern.', delay: 1800 },
+        { text: '► Streaming complete telemetry schema audit properties to BigQuery...', delay: 2050 },
+        { text: '✔ Pipeline finished. 1-click suggested PR refactoring published.', delay: 2300 }
+      ];
+
+      logs.forEach(log => {
+        setTimeout(() => {
+          const line = document.createElement('p');
+          if (log.text.startsWith('✔')) {
+            line.className = 'text-brand-emerald font-semibold';
+          } else if (log.text.startsWith('⚡')) {
+            line.className = 'text-brand-rose font-bold';
+          } else {
+            line.className = 'text-slate-300';
+          }
+          line.textContent = log.text;
+          linesContainer.appendChild(line);
+          wrapper.scrollTop = wrapper.scrollHeight;
+        }, log.delay);
+      });
+
+      // Show result patch card after timeline simulation concludes
+      setTimeout(() => {
+        wrapper.classList.add('hidden');
+        document.getElementById('code-content-wrapper').classList.remove('hidden');
+        
+        const patchCard = document.getElementById('patched-code-card');
+        patchCard.classList.remove('hidden');
+        
+        document.getElementById('patched-diff-block').textContent = samples[selectedVulnerability].patched;
+        
+        // Show status banner notification
+        showNotification(
+          "Remediation Patch Complete",
+          `Successfully applied safe Automatos state bindings to ${samples[selectedVulnerability].filename}.`
+        );
+      }, 2500);
+    }
+
+    // Toggle Threats expansion
+    function toggleThreatDetail(id) {
+      const element = document.getElementById(id);
+      if (element.classList.contains('hidden')) {
+        element.classList.remove('hidden');
+      } else {
+        element.classList.add('hidden');
+      }
+    }
+
+    // ROI Risk Calculator Calculations
+    function calculateRisk() {
+      const agents = parseInt(document.getElementById('agents-input').value);
+      const tokens = parseInt(document.getElementById('tokens-input').value);
+      const price = parseFloat(document.getElementById('price-input').value);
+
+      document.getElementById('agents-val').textContent = agents;
+      document.getElementById('tokens-val').textContent = tokens + 'k';
+      document.getElementById('price-val').textContent = '$' + price.toFixed(2);
+
+      // Calculations: Daily risk = Agents * Sessions * Cost per million tokens
+      // If agents run into uncontrolled loops, we estimate they can run up to 50 infinite loop invocations.
+      const multiplier = 50; // loop multiplier factor
+      const totalTokens = agents * (tokens * 1000) * multiplier;
+      const calculatedRisk = (totalTokens / 1000000) * price;
+
+      document.getElementById('risk-result').textContent = '$' + calculatedRisk.toFixed(2);
+    }
+
+    // Simulated Action Complete notification Modal
+    function showNotification(title, msg) {
+      const banner = document.getElementById('status-notification');
+      document.getElementById('status-title').textContent = title;
+      document.getElementById('status-body').textContent = msg;
+
+      banner.classList.remove('translate-y-20', 'opacity-0');
+      
+      setTimeout(() => {
+        banner.classList.add('translate-y-20', 'opacity-0');
+      }, 5000);
+    }
+
+    // Stripe checkout subscription simulation
+    function simulateStripeSubscription(type = 'startup') {
+      showNotification(
+        "Redirecting to checkout...",
+        type === 'custom' 
+          ? "Connecting with enterprise cybersecurity representatives."
+          : "Secure Stripe checkout portal is spinning up in memory."
+      );
+    }
+
+    // Initialize calculator on page load
+    window.onload = function() {
+      calculateRisk();
+    }
+  </script>
+</body>
+</html>
