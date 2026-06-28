@@ -901,22 +901,22 @@ code{
   └──────────────┬───────────────────────────┬──────────────┘
               MATCH                       NO MATCH
                  │                            │
-  ┌──────────────▼────────────┐   ┌───────────▼───────────────┐
+  ┌──────────────▼────────────┐   ┌───────────▼────────────────┐
   │  frameworkId resolved     │   │  Unknown framework         │
   │  e.g. "crewai"            │   │  → Full Vertex AI scan     │
   └──────────────┬────────────┘   │    (all 10 ASI .scm files) │
-                 │                └───────────────────────────────┘
+                 │                └────────────────────────────┘
   ┌──────────────▼──────────────────────────────────────────┐
   │  HASH TABLE LOOKUP (resolveCapture)                     │
   │  key = frameworkId + ":" + asiClass                     │
-  └──────────┬──────────────────────────┬────────────────────┘
+  └──────────┬──────────────────────────┬───────────────────┘
          HIT (≥0.75)               MISS / low confidence
              │                          │
-  ┌──────────▼──────────────┐  ┌────────▼──────────────────┐
-  │  Return patch template  │  │  Escalate to Vertex AI     │
-  │  skipLLM = true         │  │  Gemini Flash + PatchSchema│
-  │  ~0ms latency           │  │  ~1800ms latency           │
-  └─────────────────────────┘  └────────────────────────────┘</pre>
+  ┌──────────▼──────────────┐  ┌────────▼─────────────────────┐
+  │  Return patch template  │  │  Escalate to Vertex AI       │
+  │  skipLLM = true         │  │  Gemini Flash + PatchSchema  │
+  │  ~0ms latency           │  │  ~1800ms latency             │
+  └─────────────────────────┘  └──────────────────────────────┘</pre>
 </div>
 
 <h3 class="subsec">2.5 User Authentication Layer</h3>
@@ -1637,11 +1637,11 @@ Output ONLY valid JSON matching the provided schema. No preamble. No explanation
 <div class="flowchart">
   <div class="fc-label">Figure 4.5b — Autonomous Lead Generation Pipeline</div>
 <pre>
-  ┌─────────────────────────────────────────────────────────────────────┐
-  │  GITHUB API SEARCH                                                  │
-  │  query: "from crewai import" OR "import autogen" OR "from langchain"│
-  │  created:&gt;2026-05-19  language:Python  language:JavaScript          │
-  └──────────────────────────────┬──────────────────────────────────────┘
+  ┌───────────────────────────────────────────────────────────────────────┐
+  │  GITHUB API SEARCH                                                    │
+  │  query: "from crewai import" OR "import autogen" OR "from langchain"  │
+  │  created:&gt;2026-05-19  language:Python  language:JavaScript         │
+  └──────────────────────────────┬────────────────────────────────────────┘
                                  │  repo[] — github_username, repo_url
                                  ▼
   ┌─────────────────────────────────────────────────────────────────────┐
@@ -1911,7 +1911,7 @@ Output ONLY valid JSON matching the provided schema.`</span>,
   ║                              │  Parser.parse(content)            │   ║
   ║                              │  query.matches(tree) → captures   │   ║
   ║                              │                                   │   ║
-  ║                              │  .scm/asi01-*.scm → ASI-01-10    │   ║
+  ║                              │  .scm/asi01-*.scm → ASI-01-10     │   ║
   ║                              └──────────────┬────────────────────┘   ║
   ║                                             │                        ║
   ║                              ┌──────────────▼────────────────────┐   ║
