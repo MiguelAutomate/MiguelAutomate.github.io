@@ -1303,51 +1303,8 @@ Output ONLY valid JSON matching the provided schema. No preamble. No explanation
   </p>
 </div>
 
-<h3 class="subsec">4.3 Submission Requirements Checklist</h3>
-<table class="schema-table">
-  <thead>
-    <tr><th>Requirement</th><th>ZeroSilence Strategy</th><th>Status</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GitHub Repo (shared with judging@hacker.fund)</td>
-      <td>Public GitHub repo; ZeroSilence GitHub App installable by judges</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>3-Minute Demo Video</td>
-      <td>Live terminal: push vulnerable AutoGen code → ZeroSilence catches silent fail → Vertex AI rewrites → PR suggestion posted</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>Written Narrative (500–1000 words)</td>
-      <td>This whitepaper serves as the technical foundation; executive summary extracted for submission</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>Revenue Evidence (Stripe MRR)</td>
-      <td>Stripe dashboard export; real paying customers; see Section 4.7</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>User Evidence</td>
-      <td>Contact info + testimonials from paying AI startup founders; see Section 4.7</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>Product Evidence (BigQuery)</td>
-      <td>GCP BigQuery: continuous scan events, AST parse metrics, Vertex AI execution logs; see Section 4.7</td>
-      <td>✅ Complete</td>
-    </tr>
-    <tr>
-      <td>Expense Disclosure (CAC)</td>
-      <td>Apollo.io scraping costs + cold email infrastructure; see Section 4.7</td>
-      <td>✅ Complete</td>
-    </tr>
-  </tbody>
-</table>
 
-<h3 class="subsec">4.4 Go-To-Market: The Cold Email Attack Vector</h3>
+<h3 class="subsec">4.3 Go-To-Market: The Cold Email Attack Vector</h3>
 <p>
   The GTM strategy weaponizes ZeroSilence's own scanner against the market. A GitHub scraping script
   queries the GitHub API for all repositories created in the past 30 days that contain <code>import autogen</code>,
@@ -1369,7 +1326,7 @@ Output ONLY valid JSON matching the provided schema. No preamble. No explanation
   </p>
 </div>
 
-<h3 class="subsec">4.5 ASI Vulnerability Coverage — Complete ASI-01 to ASI-10</h3>
+<h3 class="subsec">4.4 ASI Vulnerability Coverage — Complete ASI-01 to ASI-10</h3>
 <p>
   ZeroSilence's scanner engine covers all 10 OWASP Agentic Security Initiative classes with dedicated
   Tree-sitter S-Expression query files. The table below details the detection strategy for each class.
@@ -1446,51 +1403,6 @@ Output ONLY valid JSON matching the provided schema. No preamble. No explanation
     </tr>
   </tbody>
 </table>
-
-<h3 class="subsec">4.6 Execution Timeline</h3>
-<ul class="phase-list">
-  <li>
-    <span class="phase-num">DAYS 1–7</span>
-    <div class="phase-content">
-      <strong>Phase 1 — Core Engine</strong>
-      <p>
-        <code>bun init zerosilence-ai</code>. Install Tree-sitter grammars. Write the AST parser for all 10 ASI classes.
-        Write <code>.scm</code> query files for ASI-01 through ASI-10. Unit test against fixture files.
-      </p>
-    </div>
-  </li>
-  <li>
-    <span class="phase-num">DAYS 8–14</span>
-    <div class="phase-content">
-      <strong>Phase 2 — GCP Integration</strong>
-      <p>
-        Set up GCP project. Enable Vertex AI (Gemini Flash), Cloud Run, BigQuery. Build the Vertex AI
-        prompt pipeline with structured output schema. Deploy Bun.js webhook to Cloud Run. Wire BigQuery
-        telemetry.
-      </p>
-    </div>
-  </li>
-  <li>
-    <span class="phase-num">DAYS 15–25</span>
-    <div class="phase-content">
-      <strong>Phase 3 — GitHub App &amp; GTM</strong>
-      <p>
-        Build GitHub App; configure webhook for PR events. Implement PR code suggestion posting with
-        Mermaid flowchart. Form LLC. Activate Stripe. Build Apollo.io lead scraping script.
-      </p>
-    </div>
-  </li>
-  <li>
-    <span class="phase-num">DAYS 26–90</span>
-    <div class="phase-content">
-      <strong>Phase 4 — Revenue &amp; Evidence</strong>
-      <p>
-        Convert cold email leads to Stripe subscriptions. Accumulate BigQuery evidence (10,000+ scan events).
-        Collect customer testimonials. Prepare 3-minute demo video. Package XPRIZE submission.
-      </p>
-    </div>
-  </li>
-</ul>
 
 
 <!-- ══════════════════════════════════════════════
@@ -1807,9 +1719,9 @@ link_clicked = true                            github_push_requested = true
 
 <p><strong>Live Product Links:</strong></p>
 <ul>
-  <li><strong>Demo Video:</strong> <a href="https://youtu.be/demo-placeholder" target="_blank" rel="noopener">https://youtu.be/demo-placeholder</a></li>
+  <!--<li><strong>Demo Video:</strong> <a href="https://youtu.be/demo-placeholder" target="_blank" rel="noopener">https://youtu.be/demo-placeholder</a></li>-->
   <li><strong>Live Demo Instance:</strong> <a href="https://miguelautomate.github.io/ZeroSilenceAI.html" target="_blank" rel="noopener">https://zerosilence.ai/demo</a></li>
-  <li><strong>GitHub Repository:</strong> <a href="https://github.com/zerosilence/zerosilence" target="_blank" rel="noopener">https://github.com/zerosilence/zerosilence</a> (shared with judging@hacker.fund)</li>
+  <!--<li><strong>GitHub Repository:</strong> <a href="https://github.com/zerosilence/zerosilence" target="_blank" rel="noopener">https://github.com/zerosilence/zerosilence</a> (shared with judging@hacker.fund)</li>-->
 </ul>
 
 <h4 class="subhead">Gemini API Usage — Production Implementation</h4>
@@ -2020,11 +1932,11 @@ Output ONLY valid JSON matching the provided schema.`</span>,
      ══════════════════════════════════════════════ -->
 <div id="buttercup" class="section-header">
   <span class="section-badge badge-arch">§6 — Reference</span>
-  <h2 class="section-title">Buttercup CRS: Architecture Inspiration</h2>
+  <h2 class="section-title">Architecture Inspiration</h2>
 </div>
 
 <p>
-  ZeroSilence's AST-based detection methodology is directly inspired by <strong>Buttercup</strong>, the
+  ZeroSilence's AST-based detection methodology is inspired by <strong>Buttercup</strong>, the
   Cyber Reasoning System developed by Trail of Bits for DARPA's AIxCC competition. Buttercup autonomously
   discovers, analyzes, and patches security vulnerabilities in C/C++/Java software by combining
   coverage-guided fuzzing, semantic code analysis via CodeQuery + Tree-sitter, and LLM-driven patch
