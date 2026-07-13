@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORTEX VOTE // consensus terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #05100a;
+    --bg-raised: #081a10;
+    --line: #14361f;
+    --phosphor: #39ff6a;
+    --phosphor-dim: #7fae8c;
+    --phosphor-faint: #4a6b53;
+    --amber: #ffb000;
+    --red: #ff4d4d;
+    --cyan: #34e0ff;
+    --display: 'VT323', monospace;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px),
+      radial-gradient(ellipse at 50% -10%, #0c2415 0%, var(--bg) 55%);
+    color: var(--phosphor-dim);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.55;
+    padding: 28px 16px 64px;
+  }
+  .wrap{ max-width: 860px; margin: 0 auto; }
+
+  .crt-title{
+    font-family: var(--display);
+    color: var(--phosphor);
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 6px rgba(57,255,106,0.35);
+  }
+
+  pre.banner{
+    color: var(--phosphor);
+    font-size: 12px;
+    line-height: 1.3;
+    margin: 0 0 4px;
+    text-shadow: 0 0 8px rgba(57,255,106,0.3);
+    overflow-x: auto;
+  }
+  .subtitle{
+    color: var(--phosphor-faint);
+    font-size: 12px;
+    border-top: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
+    padding: 6px 0;
+    margin-bottom: 22px;
+    display:flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .gh-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--cyan);
+    border: 1px solid var(--line);
+    padding: 5px 10px;
+    font-size: 11.5px;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .gh-btn:hover, .gh-btn:focus-visible{ border-color: var(--cyan); background: rgba(52,224,255,0.08); }
+  .gh-btn svg{ width: 13px; height: 13px; fill: currentColor; }
+  .cursor::after{
+    content: "_";
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+  @media (prefers-reduced-motion: reduce){
+    .cursor::after{ animation: none; }
+  }
+
+  .menu{
+    list-style: none;
+    margin: 0 0 24px;
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+  }
+  .menu li + li{ border-top: 1px solid var(--line); }
+  .menu button{
+    all: unset;
+    display: flex;
+    width: 100%;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: var(--phosphor-dim);
+    gap: 14px;
+    align-items: baseline;
+  }
+  .menu button:hover, .menu button:focus-visible{
+    background: rgba(57,255,106,0.08);
+    color: var(--phosphor);
+  }
+  .menu button.active{
+    background: rgba(57,255,106,0.13);
+    color: var(--phosphor);
+  }
+  .menu .idx{ color: var(--phosphor-faint); width: 1.4em; }
+  .menu .code{ color: var(--cyan); min-width: 84px; font-weight: 600; }
+  .menu .desc{ color: var(--phosphor-faint); font-size: 12.5px; }
+  .menu button:hover .desc, .menu button.active .desc{ color: var(--phosphor-dim); }
+
+  .panel{
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    padding: 20px;
+    margin-bottom: 22px;
+  }
+  .panel h2{
+    font-family: var(--display);
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--phosphor);
+    margin: 0 0 4px;
+  }
+  .panel .path-desc{ color: var(--phosphor-faint); font-size: 12.5px; margin: 0 0 18px; }
+
+  .group{ margin-bottom: 18px; }
+  .group-label{
+    display:block;
+    color: var(--phosphor-faint);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .toggles{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .vote-toggle{
+    all: unset;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    color: var(--phosphor-faint);
+    min-width: 78px;
+    text-align: center;
+  }
+  .vote-toggle .id{ display:block; color: var(--phosphor-faint); font-size: 10.5px; margin-bottom: 2px; }
+  .vote-toggle[data-state="accept"]{ border-color: var(--phosphor); color: var(--phosphor); background: rgba(57,255,106,0.08); }
+  .vote-toggle[data-state="reject"]{ border-color: var(--red); color: var(--red); background: rgba(255,77,77,0.06); }
+  .vote-toggle:focus-visible{ outline: 1px solid var(--cyan); outline-offset: 2px; }
+
+  .gate-row{ display:flex; flex-wrap: wrap; gap: 8px; }
+
+  select.state-select{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--bg);
+    color: var(--phosphor);
+    border: 1px solid var(--line);
+    padding: 7px 8px;
+    min-width: 118px;
+  }
+  select.state-select:focus-visible{ outline: 1px solid var(--cyan); }
+  .agent-row{ display:flex; align-items:center; gap: 8px; margin-bottom: 6px; }
+  .agent-row .id{ width: 3.2em; color: var(--phosphor-faint); font-size: 12px; }
+  .agent-remove{ all:unset; cursor:pointer; color: var(--red); font-size: 12px; padding: 4px 6px; }
+  .agent-add, .entropy-toggle{
+    all: unset;
+    cursor: pointer;
+    color: var(--cyan);
+    font-size: 12.5px;
+    border: 1px dashed var(--line);
+    padding: 6px 10px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+  .entropy-toggle[data-on="true"]{ color: var(--amber); border-color: var(--amber); }
+
+  .execute{
+    all: unset;
+    cursor: pointer;
+    font-family: var(--display);
+    font-size: 18px;
+    letter-spacing: 2px;
+    color: var(--bg);
+    background: var(--phosphor);
+    padding: 10px 22px;
+    display: inline-block;
+  }
+  .execute:hover{ background: #55ff85; }
+  .execute:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  .output{
+    border: 1px solid var(--line);
+    background: #020805;
+    padding: 18px;
+    min-height: 64px;
+  }
+  .output .prompt{ color: var(--phosphor-faint); }
+  .output .outcome-line{ font-size: 15px; margin: 6px 0 10px; }
+  .outcome-COMMIT, .outcome-SAFE_COMMIT{ color: var(--phosphor); text-shadow: 0 0 6px rgba(57,255,106,0.4); }
+  .outcome-ROLLBACK, .outcome-ABORT{ color: var(--red); }
+  .outcome-RECONCILE, .outcome-HOLD, .outcome-DELAY_AND_AUDIT{ color: var(--amber); }
+  .outcome-HUMAN_REVIEW{ color: var(--cyan); }
+
+  .audit-track{ display:flex; gap: 4px; flex-wrap: wrap; margin: 10px 0; }
+  .audit-cell{
+    width: 20px; height: 20px;
+    border: 1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 10px;
+  }
+  .audit-cell.pass{ background: rgba(57,255,106,0.18); color: var(--phosphor); border-color: var(--phosphor); }
+  .audit-cell.fail{ background: rgba(255,77,77,0.1); color: var(--red); border-color: var(--red); }
+
+  details.raw{ margin-top: 12px; }
+  details.raw summary{ cursor: pointer; color: var(--phosphor-faint); font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase; }
+  details.raw pre{ font-size: 11.5px; color: var(--phosphor-dim); overflow-x: auto; margin-top: 8px; }
+
+  .usecases{
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+  .usecases .group-label{ margin-bottom: 10px; }
+  .usecases ul{ list-style: none; margin: 0; padding: 0; }
+  .usecases li{
+    padding: 7px 0 7px 18px;
+    position: relative;
+    font-size: 13px;
+    color: var(--phosphor-dim);
+    border-top: 1px dashed var(--line);
+  }
+  .usecases li:first-child{ border-top: none; }
+  .usecases li::before{ content: "›"; position: absolute; left: 0; color: var(--phosphor); }
+  .usecases li strong{ color: var(--phosphor); font-weight: 600; }
+
+  .about{
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    padding: 20px;
+    margin-bottom: 22px;
+  }
+  .about h2{
+    font-family: var(--display);
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--phosphor);
+    margin: 0 0 10px;
+  }
+  .about p{ font-size: 13px; color: var(--phosphor-dim); margin: 0 0 14px; }
+  .exports-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .export-tag{
+    border: 1px solid var(--line);
+    padding: 6px 8px;
+    font-size: 11.5px;
+    color: var(--phosphor-faint);
+  }
+  .export-tag .fn{ color: var(--cyan); }
+  .about pre.code{
+    background: #020805;
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    font-size: 12px;
+    color: var(--phosphor-dim);
+    overflow-x: auto;
+    margin: 0 0 16px;
+  }
+  .about pre.code .kw{ color: var(--cyan); }
+  .about pre.code .str{ color: var(--phosphor); }
+  .about pre.code .cm{ color: var(--phosphor-faint); }
+  .about-links{ display:flex; gap: 10px; flex-wrap: wrap; }
+
+  footer{ color: var(--phosphor-faint); font-size: 11px; text-align:center; margin-top: 30px; letter-spacing: 0.5px; }
+  a{ color: var(--cyan); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <pre class="banner">  _   _   _   _   _   _   _   _   _   _   _
+ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+( V | O | R | T | E | X |   V | O | T | E )
+ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/</pre>
+
+  <div class="subtitle">
+    <span>v0.9 &mdash; vortex math-inspired consensus paths</span>
+    <span style="display:flex; align-items:center; gap: 14px;">
+      <a class="gh-btn" href="https://github.com/PLACEHOLDER-ORG/vortex-vote" target="_blank" rel="noopener noreferrer" id="gh-link">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        view module on github
+      </a>
+      <span class="cursor">root@vortex:~</span>
+    </span>
+  </div>
+
+  <ul class="menu" id="menu" role="tablist">
+    <li><button class="path-btn active" data-path="FAST" role="tab" aria-selected="true">
+      <span class="idx">1</span><span class="code">3-4-1/3</span><span class="desc">FAST &mdash; ephemeral, low-latency quorum</span>
+    </button></li>
+    <li><button class="path-btn" data-path="MIDDLE" role="tab" aria-selected="false">
+      <span class="idx">2</span><span class="code">3-6-9</span><span class="desc">MIDDLE &mdash; balanced redundancy, vortex-stable</span>
+    </button></li>
+    <li><button class="path-btn" data-path="SLOW" role="tab" aria-selected="false">
+      <span class="idx">3</span><span class="code">7-4-?</span><span class="desc">SLOW &mdash; fail-safe, deterministic hesitation</span>
+    </button></li>
+  </ul>
+
+  <div class="panel" id="panel"></div>
+
+  <div class="output" id="output">
+    <span class="prompt">&gt; awaiting execution...</span>
+  </div>
+
+  <div class="usecases" id="usecases"></div>
+
+  <div class="about">
+    <h2>ABOUT vortexVote.js</h2>
+    <p>This demo is a browser-side mirror of a small, dependency-free Bun/ES module. It exposes pure functions for each path plus a dispatcher, so the same logic can run in a UI, a CI gate, or a CLI without modification.</p>
+
+    <div class="exports-grid">
+      <div class="export-tag"><span class="fn">fastPath()</span> 3-4-1/3</div>
+      <div class="export-tag"><span class="fn">middlePath()</span> 3-6-9</div>
+      <div class="export-tag"><span class="fn">slowPath()</span> 7-4-?</div>
+      <div class="export-tag"><span class="fn">runVote()</span> dispatcher</div>
+      <div class="export-tag"><span class="fn">runCyclicAudit()</span> + pollFn</div>
+      <div class="export-tag"><span class="fn">Ok()</span> / <span class="fn">Err()</span></div>
+      <div class="export-tag"><span class="fn">isOk()</span> / <span class="fn">isErr()</span></div>
+      <div class="export-tag"><span class="fn">unwrap()</span></div>
+      <div class="export-tag"><span class="fn">VortexVoteError</span> class</div>
+      <div class="export-tag"><span class="fn">ErrorCode</span> enum</div>
+      <div class="export-tag"><span class="fn">Outcome</span> enum</div>
+      <div class="export-tag"><span class="fn">VoteState</span> enum</div>
+      <div class="export-tag"><span class="fn">VotePath</span> enum</div>
+    </div>
+
+    <pre class="code"><span class="cm">// bun add / clone, then:</span>
+<span class="kw">import</span> { runVote, VotePath, isOk } <span class="kw">from</span> <span class="str">"./vortexVote.js"</span>;
+
+<span class="kw">const</span> result = runVote(VotePath.MIDDLE, {
+  seedVotes:      [{vote:<span class="str">"accept"</span>}, {vote:<span class="str">"accept"</span>}, {vote:<span class="str">"accept"</span>}],
+  validatorVotes: [{vote:<span class="str">"accept"</span>}, {vote:<span class="str">"accept"</span>}, {vote:<span class="str">"accept"</span>},
+                    {vote:<span class="str">"accept"</span>}, {vote:<span class="str">"reject"</span>}, {vote:<span class="str">"reject"</span>}],
+});
+
+<span class="kw">if</span> (isOk(result)) {
+  result.value; <span class="cm">// { outcome: "COMMIT", details: { passes: 9, rounds: [...], passThreshold: 7 } }</span>
+} <span class="kw">else</span> {
+  result.error; <span class="cm">// VortexVoteError — malformed input, not a business outcome</span>
+}</pre>
+
+    <div class="about-links">
+      <a class="gh-btn" href="https://github.com/PLACEHOLDER-ORG/vortex-vote" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        source &amp; tests on github
+      </a>
+    </div>
+  </div>
+
+  <footer>logic mirrors vortexVote.js (fastPath / middlePath / slowPath) &mdash; Result-typed, NSF-compliant &mdash; not a cryptographic protocol, a consensus metaphor.</footer>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Core logic — kept 1:1 with vortexVote.js so this demo never drifts from
+// the real module's behavior.
+// ---------------------------------------------------------------------------
+const Outcome = Object.freeze({
+  ABORT: "ABORT", COMMIT: "COMMIT", ROLLBACK: "ROLLBACK", RECONCILE: "RECONCILE",
+  HOLD: "HOLD", HUMAN_REVIEW: "HUMAN_REVIEW", DELAY_AND_AUDIT: "DELAY_AND_AUDIT", SAFE_COMMIT: "SAFE_COMMIT",
+});
+const VoteState = Object.freeze({
+  YES: "yes", NO: "no", MAYBE: "maybe", WAIT: "wait", ESCALATE: "escalate", REJECT: "reject", AUDIT: "audit",
+});
+
+function hasQuorum(votes, min = votes.length) {
+  if (!Array.isArray(votes) || votes.length < min) return false;
+  const accepted = votes.filter(v => v && (v.vote === "accept" || v.vote === true || v.vote === "yes"));
+  return accepted.length >= min;
+}
+function takeFirst(votes, n) { return votes.slice(0, n); }
+
+function fastPath(primaryVotes, stabilizerVotes) {
+  const primary = takeFirst(primaryVotes ?? [], 3);
+  if (!hasQuorum(primary, 3)) return { outcome: Outcome.ABORT, details: { reason: "no primary quorum" } };
+  const stabilizers = takeFirst(stabilizerVotes ?? [], 4);
+  const acceptCount = stabilizers.filter(v => v && v.vote === "accept").length;
+  const threshold = Math.ceil(stabilizers.length * (1 / 3));
+  if (acceptCount >= threshold) return { outcome: Outcome.COMMIT, details: { acceptCount, threshold } };
+  return { outcome: Outcome.ROLLBACK, details: { acceptCount, threshold } };
+}
+
+function runCyclicAudit(validators, auditCount = 9) {
+  const rounds = [];
+  for (let i = 0; i < auditCount; i++) {
+    const acceptCount = validators.filter(v => v && v.vote === "accept").length;
+    rounds.push(acceptCount > validators.length / 2);
+  }
+  return { passes: rounds.filter(Boolean).length, rounds };
+}
+
+function middlePath(seedVotes, validatorVotes, passThreshold = 7) {
+  const seeds = takeFirst(seedVotes ?? [], 3);
+  if (!hasQuorum(seeds, 3)) return { outcome: Outcome.ABORT, details: { reason: "no seed quorum" } };
+  const validators = takeFirst(validatorVotes ?? [], 6);
+  const audit = runCyclicAudit(validators, 9);
+  if (audit.passes >= passThreshold) return { outcome: Outcome.COMMIT, details: { ...audit, passThreshold } };
+  return { outcome: Outcome.RECONCILE, details: { ...audit, passThreshold } };
+}
+
+function allGatesClear(gateChecks) {
+  if (!Array.isArray(gateChecks) || gateChecks.length < 4) return false;
+  return gateChecks.slice(0, 4).every(Boolean);
+}
+function majorityYes(stateVotes) {
+  if (!stateVotes?.length) return false;
+  return stateVotes.filter(s => s === VoteState.YES).length > stateVotes.length / 2;
+}
+function slowPath({ stateVotes, gateChecks, entropyBufferTriggered = false }) {
+  if (!allGatesClear(gateChecks)) return { outcome: Outcome.HOLD, details: { reason: "structural gates not clear" } };
+  if (stateVotes?.some(s => s === VoteState.ESCALATE)) return { outcome: Outcome.HUMAN_REVIEW, details: { reason: "escalate vote present" } };
+  if (entropyBufferTriggered) return { outcome: Outcome.DELAY_AND_AUDIT, details: { reason: "entropy buffer triggered ('?')" } };
+  if (majorityYes(stateVotes)) return { outcome: Outcome.SAFE_COMMIT, details: {} };
+  return { outcome: Outcome.ABORT, details: { reason: "no majority yes" } };
+}
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+let currentPath = "FAST";
+const state = {
+  FAST: {
+    primary: [true, true, true],
+    stabilizers: [true, true, false, false],
+  },
+  MIDDLE: {
+    seeds: [true, true, true],
+    validators: [true, true, true, false, false, false],
+  },
+  SLOW: {
+    agents: ["yes", "yes", "maybe"],
+    gates: [true, true, true, true],
+    entropy: false,
+  },
+};
+
+const panel = document.getElementById("panel");
+const output = document.getElementById("output");
+const usecasesEl = document.getElementById("usecases");
+
+const USE_CASES = {
+  FAST: {
+    label: "FAST PATH — 3-4-1/3 use cases",
+    items: [
+      "<strong>Rolling feature flags</strong> — low-risk, instantly reversible toggles",
+      "<strong>Ephemeral routing changes</strong> — short-lived traffic shifts during an incident",
+      "<strong>QoS policy swap</strong> — adjusting rate limits or priority tiers on the fly",
+    ],
+  },
+  MIDDLE: {
+    label: "MIDDLE PATH — 3-6-9 use cases",
+    items: [
+      "<strong>Billing threshold changes</strong> — needs redundancy but not emergency handling",
+      "<strong>Infra scaling decisions</strong> — auto-scaler config, capacity plans",
+      "<strong>Non-emergency governance</strong> — resource allocation across teams or services",
+    ],
+  },
+  SLOW: {
+    label: "SLOW PATH — 7-4-? use cases",
+    items: [
+      "<strong>DNS root key rotation</strong> — irreversible, high blast-radius infrastructure change",
+      "<strong>Root CA revocation</strong> — trust-chain actions that can't be quietly undone",
+      "<strong>Any action requiring out-of-band verification</strong> — phone call, physical token, courier, quorum witness",
+    ],
+  },
+};
+
+function renderUseCases() {
+  const uc = USE_CASES[currentPath];
+  usecasesEl.innerHTML = `
+    <span class="group-label">${uc.label}</span>
+    <ul>${uc.items.map(i => `<li>${i}</li>`).join("")}</ul>
+  `;
+}
+
+function toggleBtn(kind, idx, on, label) {
+  return `<button type="button" class="vote-toggle" data-kind="${kind}" data-idx="${idx}" data-state="${on ? "accept" : "reject"}">
+    <span class="id">${label}</span>${on ? "ACCEPT" : "REJECT"}
+  </button>`;
+}
+
+function renderPanel() {
+  if (currentPath === "FAST") {
+    const s = state.FAST;
+    panel.innerHTML = `
+      <h2>FAST PATH — 3-4-1/3</h2>
+      <p class="path-desc">3 primary voters establish quorum, then commit if at least 1/3 of 4 stabilizers accept. Use for low-risk, reversible operations.</p>
+      <div class="group">
+        <span class="group-label">Primary voters (need all 3 to accept for quorum)</span>
+        <div class="toggles">${s.primary.map((v,i)=>toggleBtn("primary", i, v, "P"+(i+1))).join("")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">Stabilizers (commit if ≥ 2 of 4 accept)</span>
+        <div class="toggles">${s.stabilizers.map((v,i)=>toggleBtn("stabilizers", i, v, "S"+(i+1))).join("")}</div>
+      </div>
+      <button class="execute" id="run-btn">EXECUTE ▸</button>
+    `;
+  } else if (currentPath === "MIDDLE") {
+    const s = state.MIDDLE;
+    panel.innerHTML = `
+      <h2>MIDDLE PATH — 3-6-9</h2>
+      <p class="path-desc">3 seed voters establish quorum, 6 validators are cyclically re-audited across 9 rounds. Commits if at least 7 of 9 rounds pass. Use for governance and non-emergency config.</p>
+      <div class="group">
+        <span class="group-label">Seed voters (need all 3 to accept for quorum)</span>
+        <div class="toggles">${s.seeds.map((v,i)=>toggleBtn("seeds", i, v, "Sd"+(i+1))).join("")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">Validators (majority needed each audit round)</span>
+        <div class="toggles">${s.validators.map((v,i)=>toggleBtn("validators", i, v, "V"+(i+1))).join("")}</div>
+      </div>
+      <button class="execute" id="run-btn">EXECUTE ▸</button>
+    `;
+  } else {
+    const s = state.SLOW;
+    const stateOptions = Object.values(VoteState);
+    panel.innerHTML = `
+      <h2>SLOW PATH — 7-4-?</h2>
+      <p class="path-desc">Every agent casts one of 7 discrete states. 4 structural gates must all clear, any ESCALATE forces human review, and the '?' entropy buffer forces a deliberate delay. Use for irreversible, emergency-class actions.</p>
+      <div class="group">
+        <span class="group-label">Agent states</span>
+        <div id="agent-list">
+          ${s.agents.map((v,i)=>`
+            <div class="agent-row">
+              <span class="id">A${i+1}</span>
+              <select class="state-select" data-idx="${i}">
+                ${stateOptions.map(opt=>`<option value="${opt}" ${opt===v?"selected":""}>${opt}</option>`).join("")}
+              </select>
+              <button type="button" class="agent-remove" data-idx="${i}" title="remove agent">✕</button>
+            </div>`).join("")}
+        </div>
+        <button type="button" class="agent-add" id="agent-add">+ add agent</button>
+      </div>
+      <div class="group">
+        <span class="group-label">Structural gates (all 4 must clear)</span>
+        <div class="gate-row">${s.gates.map((v,i)=>toggleBtn("gates", i, v, "G"+(i+1))).join("")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">Entropy buffer ('?')</span>
+        <button type="button" class="entropy-toggle" id="entropy-toggle" data-on="${s.entropy}">
+          ${s.entropy ? "TRIGGERED — human-in-loop delay" : "clear — no delay"}
+        </button>
+      </div>
+      <button class="execute" id="run-btn">EXECUTE ▸</button>
+    `;
+  }
+  attachPanelHandlers();
+}
+
+function attachPanelHandlers() {
+  panel.querySelectorAll(".vote-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const kind = btn.dataset.kind, idx = Number(btn.dataset.idx);
+      const arr = state[currentPath][kind];
+      arr[idx] = !arr[idx];
+      renderPanel();
+    });
+  });
+  const runBtn = document.getElementById("run-btn");
+  if (runBtn) runBtn.addEventListener("click", execute);
+
+  if (currentPath === "SLOW") {
+    panel.querySelectorAll(".state-select").forEach(sel => {
+      sel.addEventListener("change", () => {
+        state.SLOW.agents[Number(sel.dataset.idx)] = sel.value;
+      });
+    });
+    panel.querySelectorAll(".agent-remove").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.SLOW.agents.splice(Number(btn.dataset.idx), 1);
+        renderPanel();
+      });
+    });
+    const addBtn = document.getElementById("agent-add");
+    if (addBtn) addBtn.addEventListener("click", () => {
+      state.SLOW.agents.push("maybe");
+      renderPanel();
+    });
+    const entropyBtn = document.getElementById("entropy-toggle");
+    if (entropyBtn) entropyBtn.addEventListener("click", () => {
+      state.SLOW.entropy = !state.SLOW.entropy;
+      renderPanel();
+    });
+  }
+}
+
+function toVotes(boolArr) { return boolArr.map(v => ({ vote: v ? "accept" : "reject" })); }
+
+function execute() {
+  let result;
+  let auditRounds = null;
+
+  if (currentPath === "FAST") {
+    result = fastPath(toVotes(state.FAST.primary), toVotes(state.FAST.stabilizers));
+  } else if (currentPath === "MIDDLE") {
+    result = middlePath(toVotes(state.MIDDLE.seeds), toVotes(state.MIDDLE.validators));
+    if (result.details?.rounds) auditRounds = result.details.rounds;
+  } else {
+    result = slowPath({
+      stateVotes: state.SLOW.agents,
+      gateChecks: state.SLOW.gates,
+      entropyBufferTriggered: state.SLOW.entropy,
+    });
+  }
+
+  const auditHtml = auditRounds
+    ? `<div class="audit-track">${auditRounds.map((p,i)=>`<div class="audit-cell ${p?"pass":"fail"}" title="round ${i+1}">${i+1}</div>`).join("")}</div>`
+    : "";
+
+  output.innerHTML = `
+    <span class="prompt">&gt; vortex-vote --path=${currentPath.toLowerCase()} --execute</span>
+    <div class="outcome-line outcome-${result.outcome}">RESULT: ${result.outcome}</div>
+    ${auditHtml}
+    <details class="raw"><summary>raw output</summary><pre>${JSON.stringify(result, null, 2)}</pre></details>
+  `;
+}
+
+document.querySelectorAll(".path-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".path-btn").forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected", "false"); });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
+    currentPath = btn.dataset.path;
+    output.innerHTML = `<span class="prompt">&gt; awaiting execution...</span>`;
+    renderPanel();
+    renderUseCases();
+  });
+});
+
+renderPanel();
+renderUseCases();
+</script>
+</body>
+</html>
