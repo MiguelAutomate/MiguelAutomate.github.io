@@ -733,13 +733,13 @@ where each Vᵢ is a fixed-arity vote vector, and Outcome ∈
            no│
           ▼
  ┌─────────────────────────┐   yes    ┌───────────────────┐
- │ entropyBufferTriggered? ├─────────▶│  DELAY_AND_AUDIT   │  ← unconditional deliberate delay
+ │ entropyBufferTriggered? ├─────────▶│  DELAY_AND_AUDIT  │  ← unconditional deliberate delay
  └───────────┬─────────────┘          └───────────────────┘
            no│
           ▼
- ┌─────────────────────────┐   yes    ┌───────────────┐
- │ majorityYes(stateVotes)?├─────────▶│  SAFE_COMMIT  │
- └───────────┬─────────────┘          └───────────────┘
+ ┌──────────────────────────┐   yes    ┌───────────────┐
+ │ majorityYes(stateVotes)? ├─────────▶│  SAFE_COMMIT  │
+ └───────────┬──────────────┘          └───────────────┘
            no│
           ▼
         ABORT</pre>
