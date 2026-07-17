@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Vortex Vote — Technical Whitepaper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f7f3ec;
+  --bg-paper:#faf8f4;
+  --linen:#e9e3d6;
+  --navy:#1a2744;
+  --navy-mid:#253561;
+  --blue:#2e5fa3;
+  --blue-light:#4a7abf;
+  --blue-faint:#eef4fb;
+  --teal:#1e7b6e;
+  --teal-light:#2a9d8a;
+  --gold:#9a6f1a;
+  --red:#8b1a1a;
+  --red-faint:#fdf0f0;
+  --green:#1a5c2a;
+  --green-faint:#f0faf2;
+  --text:#1c1a17;
+  --text-mid:#3d3830;
+  --text-muted:#7a7060;
+  --border:#ccc5b4;
+  --border-blue:#adc4e8;
+  --code-bg:#0d1117;
+  --code-text:#c9d1d9;
+  --code-green:#7ee787;
+  --code-blue:#79c0ff;
+  --code-yellow:#e3b341;
+  --code-red:#ff7b72;
+  --code-purple:#d2a8ff;
+  --code-comment:#8b949e;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Source Serif 4',Georgia,serif;
+  font-size:16px;
+  line-height:1.82;
+  color:var(--text);
+  background:var(--bg);
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(180,170,155,0.07) 27px,rgba(180,170,155,0.07) 28px);
+}
+::-webkit-scrollbar{width:7px;}
+::-webkit-scrollbar-track{background:var(--linen);}
+::-webkit-scrollbar-thumb{background:var(--navy-mid);border-radius:4px;}
+
+/* ─── NAV ─── */
+nav.top-nav{
+  position:sticky;top:0;z-index:100;
+  background:var(--navy);
+  color:#e0ddd6;
+  padding:10px 28px;
+  display:flex;align-items:center;gap:14px;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.05em;
+  border-bottom:2px solid var(--blue);
+  flex-wrap:wrap;
+}
+nav.top-nav .brand{color:#c8d4ea;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;margin-right:auto;}
+nav.top-nav a{color:#7a9fd4;text-decoration:none;font-size:10px;letter-spacing:0.08em;transition:color .2s;}
+nav.top-nav a:hover{color:#c8d4ea;}
+nav.top-nav .sep{color:#2e4a78;}
+
+/* ─── HERO ─── */
+.hero{
+  max-width:960px;margin:0 auto;
+  padding:72px 36px 56px;
+  border-bottom:1px solid var(--border);
+}
+.hero-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:20px;
+}
+.hero-eyebrow span{color:var(--blue);margin-right:10px;}
+h1.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.4rem,5vw,3.6rem);
+  font-weight:700;line-height:1.08;
+  color:var(--navy);letter-spacing:-0.02em;
+  margin-bottom:12px;
+}
+h1.hero-title em{font-style:italic;color:var(--blue);}
+.hero-sub{
+  font-size:1.05rem;color:var(--text-mid);
+  max-width:640px;margin-bottom:32px;line-height:1.7;
+}
+.hero-meta{
+  display:flex;gap:32px;flex-wrap:wrap;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);
+}
+.hero-meta .key{color:var(--blue);margin-right:6px;}
+
+.path-bar{
+  margin-top:36px;
+  display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.04em;
+}
+.pb-seg{
+  padding:11px 18px;
+  display:flex;flex-direction:column;gap:3px;
+  flex:1;border-right:1px solid var(--border);
+}
+.pb-seg:last-child{border-right:none;}
+.pb-seg .label{color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-size:9px;}
+.pb-seg .val{font-weight:500;font-size:12px;}
+.pb-seg .sub{font-size:9.5px;color:var(--text-muted);}
+.pb-seg.fast{background:#eef4fb;}.pb-seg.fast .val{color:var(--blue);}
+.pb-seg.middle{background:#e6f5f1;}.pb-seg.middle .val{color:var(--teal);}
+.pb-seg.slow{background:#fef9ed;}.pb-seg.slow .val{color:var(--gold);}
+
+/* ─── LAYOUT ─── */
+.page-wrap{max-width:1000px;margin:0 auto;padding:0 36px 100px;}
+
+/* ─── SECTION HEADERS ─── */
+.section-header{
+  margin:64px 0 32px;
+  padding-top:20px;
+  border-top:2px solid var(--border);
+  display:flex;align-items:baseline;gap:16px;
+  flex-wrap:wrap;
+}
+.section-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  padding:4px 10px;border-radius:3px;white-space:nowrap;
+  font-weight:500;
+}
+.badge-idea{background:#eef4fb;color:var(--blue);border:1px solid var(--border-blue);}
+.badge-feature{background:#e6f5f1;color:var(--teal);border:1px solid #a8d8ce;}
+.badge-research{background:#fef9ed;color:var(--gold);border:1px solid #d6bc84;}
+.badge-challenge{background:#fdf0f0;color:var(--red);border:1px solid #d9a8a8;}
+.badge-arch{background:#1a2744;color:#c8d4ea;border:1px solid #2e4a78;}
+.badge-appendix{background:var(--linen);color:var(--text-muted);border:1px solid var(--border);}
+.badge-evidence{background:#e6f5f1;color:var(--teal);border:1px solid #a8d8ce;}
+
+.status-pill{display:inline-block;padding:2px 9px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.03em;font-weight:500;white-space:nowrap;}
+.status-yes{background:var(--green-faint);color:var(--green);border:1px solid #a8d9b0;}
+.status-partial{background:#fff8ee;color:#8b5a00;border:1px solid #d9c088;}
+.status-no{background:var(--red-faint);color:var(--red);border:1px solid #d9a8a8;}
+
+h2.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.75rem;font-weight:700;
+  color:var(--navy);letter-spacing:-0.01em;
+  flex:1;
+}
+
+/* ─── TOC ─── */
+.toc{
+  margin:40px 0;
+  padding:28px 32px;
+  background:var(--bg-paper);
+  border:1px solid var(--border);
+  border-left:4px solid var(--navy);
+  border-radius:4px;
+}
+.toc-title{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:16px;
+}
+.toc ol{list-style:none;counter-reset:toc;}
+.toc ol li{counter-increment:toc;display:flex;align-items:baseline;gap:10px;margin-bottom:7px;}
+.toc ol li::before{
+  content:counter(toc,decimal-leading-zero)".";
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);
+  min-width:28px;
+}
+.toc ol li a{
+  color:var(--blue);text-decoration:none;font-size:0.95rem;
+  border-bottom:1px solid transparent;transition:border-color .2s;
+}
+.toc ol li a:hover{border-bottom-color:var(--blue);}
+.toc ol li .tag{
+  font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);
+  margin-left:auto;
+}
+
+/* ─── ABSTRACT ─── */
+.abstract{
+  margin:40px 0;padding:28px 32px;
+  background:var(--blue-faint);
+  border:1px solid var(--border-blue);
+  border-left:4px solid var(--blue);
+  border-radius:4px;
+}
+.abstract-label{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--blue);
+  margin-bottom:12px;
+}
+.abstract p{color:var(--text-mid);font-size:0.97rem;line-height:1.75;margin-bottom:0.8rem;}
+.abstract p:last-child{margin-bottom:0;}
+
+/* ─── BODY TEXT ─── */
+p{margin-bottom:1.1rem;color:var(--text-mid);}
+p strong{color:var(--text);font-weight:600;}
+ul.plain,ol.plain{margin:0 0 1.1rem 1.4rem;color:var(--text-mid);}
+ul.plain li,ol.plain li{margin-bottom:0.4rem;}
+
+h3.subsec{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;font-weight:700;
+  color:var(--navy);margin:36px 0 14px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--linen);
+}
+h4.subhead{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-muted);margin:28px 0 10px;
+}
+
+/* ─── CALLOUT BOXES ─── */
+.callout{
+  margin:28px 0;padding:20px 24px;
+  border-radius:4px;border-left:4px solid;
+}
+.callout-danger{background:var(--red-faint);border-color:var(--red);}
+.callout-danger .callout-label{color:var(--red);}
+.callout-info{background:var(--blue-faint);border-color:var(--blue);}
+.callout-info .callout-label{color:var(--blue);}
+.callout-success{background:var(--green-faint);border-color:var(--green);}
+.callout-success .callout-label{color:var(--green);}
+.callout-warn{background:#fff8ee;border-color:#b5860d;}
+.callout-warn .callout-label{color:#8b5a00;}
+.callout-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  font-weight:500;margin-bottom:8px;
+}
+.callout p{color:var(--text-mid);margin-bottom:0;font-size:0.95rem;}
+.callout p+p{margin-top:0.6rem;}
+
+/* ─── CODE BLOCKS ─── */
+.code-block{
+  margin:24px 0;
+  background:var(--code-bg);
+  border-radius:6px;overflow:hidden;
+}
+.code-header{
+  padding:8px 16px;
+  background:#161b22;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid #21262d;
+}
+.code-lang{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#4a6898;
+  margin-right:auto;
+}
+.code-dots{display:flex;gap:6px;}
+.code-dots span{width:10px;height:10px;border-radius:50%;}
+.code-dots .r{background:#ff5f57;}.code-dots .y{background:#febc2e;}.code-dots .g{background:#28c840;}
+.code-block pre{
+  padding:20px 20px;
+  font-size:12.5px;line-height:1.6;
+  color:var(--code-text);white-space:pre;overflow-x:auto;
+}
+.kw{color:var(--code-red);}
+.fn{color:var(--code-blue);}
+.str{color:var(--code-yellow);}
+.cm{color:var(--code-comment);font-style:italic;}
+.num{color:var(--code-purple);}
+.tp{color:var(--code-green);}
+.op{color:#c9d1d9;}
+
+/* ─── FLOWCHART ─── */
+.flowchart{
+  margin:32px 0;
+  background:var(--code-bg);
+  border-radius:6px;
+  padding:28px 24px;
+  overflow-x:auto;
+  font-family:'JetBrains Mono',monospace;
+}
+.flowchart pre{
+  color:var(--code-text);
+  font-size:12px;line-height:1.55;
+  white-space:pre;
+}
+.fc-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:#4a6898;margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.fc-label::after{content:"";flex:1;height:1px;background:#1e2e4a;}
+
+/* ─── SCHEMA / TABLE ─── */
+.schema-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:0.9rem;}
+.schema-table th{
+  background:var(--navy);color:#c8d4ea;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:10px 14px;text-align:left;font-weight:400;
+}
+.schema-table td{
+  padding:10px 14px;color:var(--text-mid);
+  border-bottom:1px solid var(--border);vertical-align:top;
+}
+.schema-table tr:nth-child(even) td{background:var(--bg-paper);}
+.schema-table code{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:#e8e2d6;color:var(--navy);padding:2px 5px;border-radius:3px;
+}
+
+/* ─── HYPOTHESIS / CONTRAST CARDS ─── */
+.hyp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0;}
+@media(max-width:1000px){.hyp-grid{grid-template-columns:1fr;}}
+.hyp-card{
+  padding:22px 22px;
+  background:var(--bg-paper);border:1px solid var(--border);
+  border-radius:4px;
+}
+.hyp-card .label{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  margin-bottom:10px;font-weight:500;
+}
+.hyp-card.tech .label{color:var(--blue);}
+.hyp-card.biz .label{color:var(--teal);}
+.hyp-card p{color:var(--text-mid);font-size:0.92rem;line-height:1.7;margin:0;}
+
+/* ─── PHASE / ROADMAP LIST ─── */
+.phase-list{list-style:none;margin:24px 0;}
+.phase-list li{
+  display:flex;gap:20px;margin-bottom:20px;padding-bottom:20px;
+  border-bottom:1px solid var(--linen);
+}
+.phase-list li:last-child{border-bottom:none;margin-bottom:0;}
+.phase-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;font-weight:500;
+  color:var(--text-muted);min-width:72px;padding-top:3px;
+}
+.phase-content strong{
+  display:block;color:var(--navy);
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  margin-bottom:4px;
+}
+.phase-content p{color:var(--text-mid);font-size:0.92rem;margin:0;line-height:1.65;}
+
+/* ─── OUTCOME MATRIX (asi-grid pattern, repurposed) ─── */
+.outcome-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin:24px 0;}
+.outcome-card{
+  padding:16px 16px;
+  background:var(--bg-paper);border:1px solid var(--border);border-radius:4px;
+  border-top:3px solid;
+}
+.outcome-card.terminal{border-top-color:var(--green);}
+.outcome-card.negative{border-top-color:var(--red);}
+.outcome-card.deferred{border-top-color:#b5860d;}
+.outcome-card.escalated{border-top-color:var(--blue);}
+.outcome-card .oc-path{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;
+  color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;
+}
+.outcome-card .oc-name{
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+  color:var(--navy);margin-bottom:6px;
+}
+.outcome-card p{font-size:0.82rem;color:var(--text-muted);margin:0;line-height:1.55;}
+
+/* ─── INLINE CODE ─── */
+code{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:#e8e2d6;color:var(--navy);padding:2px 5px;border-radius:3px;
+}
+
+/* ─── FOOTNOTES ─── */
+.footnotes{
+  margin-top:64px;padding-top:24px;border-top:1px solid var(--border);
+  font-size:0.82rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;
+}
+.footnotes p{margin-bottom:6px;}
+
+/* ─── TABLE SCROLL WRAPPER (mobile-safe tables) ─── */
+.table-scroll{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:24px 0;
+  border-radius:4px;
+}
+.table-scroll .schema-table{margin:0;min-width:560px;}
+
+/* ─── MOBILE ─── */
+@media (max-width:640px){
+  body{font-size:15px;line-height:1.68;}
+
+  nav.top-nav{
+    padding:9px 14px;
+    gap:10px;
+    font-size:9.5px;
+    overflow-x:auto;
+    flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;
+    justify-content:flex-start;
+  }
+  nav.top-nav .brand{margin-right:12px;flex-shrink:0;}
+  nav.top-nav a{flex-shrink:0;}
+
+  .hero{padding:40px 20px 32px;}
+  .hero-eyebrow{font-size:9px;letter-spacing:2.5px;margin-bottom:14px;}
+  h1.hero-title{font-size:2.1rem;}
+  .hero-sub{font-size:0.96rem;margin-bottom:24px;}
+  .hero-meta{gap:14px 22px;font-size:10px;}
+
+  .path-bar{flex-direction:column;border-radius:6px;}
+  .pb-seg{border-right:none;border-bottom:1px solid var(--border);padding:10px 14px;}
+  .pb-seg:last-child{border-bottom:none;}
+
+  .page-wrap{padding:0 18px 70px;}
+
+  .toc{padding:22px 20px;margin:28px 0;}
+  .toc ol li{flex-wrap:wrap;}
+  .toc ol li .tag{margin-left:0;}
+
+  .abstract{padding:22px 20px;margin:28px 0;}
+
+  .section-header{margin:48px 0 24px;padding-top:16px;gap:10px;}
+  h2.section-title{font-size:1.4rem;}
+  .section-badge{font-size:8.5px;padding:3px 8px;}
+
+  h3.subsec{font-size:1.05rem;margin:28px 0 12px;}
+
+  .callout{padding:16px 18px;margin:22px 0;}
+
+  .code-block pre,.flowchart pre{font-size:11px;padding:16px 14px;}
+  .code-lang{font-size:9px;}
+
+  .hyp-grid{grid-template-columns:1fr;gap:14px;}
+  .hyp-card{padding:18px;}
+
+  .outcome-grid{grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;}
+  .outcome-card{padding:12px;}
+
+  .phase-list li{flex-direction:column;gap:6px;}
+  .phase-num{min-width:0;}
+
+  .schema-table th,.schema-table td{padding:8px 10px;font-size:0.82rem;}
+
+  .footnotes{font-size:0.76rem;}
+}
+
+@media (max-width:400px){
+  h1.hero-title{font-size:1.8rem;}
+  .hero-meta{flex-direction:column;gap:8px;}
+}
+
+/* ─── PRINT ─── */
+@media print{
+  nav.top-nav{display:none;}
+  body{background:white;}
+  .code-block,.flowchart{page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <span class="brand">Vortex Vote &mdash; Technical Whitepaper</span>
+  <a href="#abstract">Abstract</a><span class="sep">·</span>
+  <a href="#model">Formal Model</a><span class="sep">·</span>
+  <a href="#fast">Fast Path</a><span class="sep">·</span>
+  <a href="#middle">Middle Path</a><span class="sep">·</span>
+  <a href="#slow">Slow Path</a><span class="sep">·</span>
+  <a href="#theory">Consensus Theory</a><span class="sep">·</span>
+  <a href="#gaps">Known Gaps</a><span class="sep">·</span>
+  <a href="#errormodel">Error Model</a><span class="sep">·</span>
+  <a href="#literature">Literature</a><span class="sep">·</span>
+  <a href="#appendix">Appendix</a>
+</nav>
+
+<!-- ══════════════════════════════════════════════
+     HERO
+     ══════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <span>Consensus Metaphor Design</span>
+    Technical Whitepaper &nbsp;·&nbsp; v1.0 &nbsp;·&nbsp; July 2026 &nbsp;·&nbsp; reflects fixed release
+  </div>
+  <h1 class="hero-title"><em>Vortex</em> Vote</h1>
+  <p class="hero-sub">
+    A formal analysis of <code>vortexVote.js</code> — a dependency-free Bun/ES module implementing three
+    threshold-quorum decision procedures (3-4-1/3, 3-6-9, 7-4-?) for gating operations by risk class,
+    from ephemeral feature flags to irreversible infrastructure changes. This edition documents the
+    Result-typed, NSF-compliant release; gaps identified in §6 are marked with their current status.
+  </p>
+  <div class="hero-meta">
+    <span><span class="key">author:</span> Miguel Ocampo</span>
+    <span><span class="key">stack:</span> Bun.js · ES Modules · bun:test</span>
+    <span><span class="key">module:</span> vortexVote.js</span>
+    <span><span class="key">status:</span> released, Result-typed, NSF-compliant</span>
+  </div>
+
+  <div class="path-bar">
+    <div class="pb-seg fast">
+      <span class="label">Fast Path</span>
+      <span class="val">3-4-1/3</span>
+      <span class="sub">ephemeral, low-latency quorum</span>
+    </div>
+    <div class="pb-seg middle">
+      <span class="label">Middle Path</span>
+      <span class="val">3-6-9</span>
+      <span class="sub">balanced redundancy, vortex-stable</span>
+    </div>
+    <div class="pb-seg slow">
+      <span class="label">Slow Path</span>
+      <span class="val">7-4-?</span>
+      <span class="sub">fail-safe, deterministic hesitation</span>
+    </div>
+  </div>
+
+<div class="page-wrap">
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <ol>
+    <li><a href="#abstract">Abstract</a><span class="tag">overview</span></li>
+    <li><a href="#model">Formal Model &amp; Notation</a><span class="tag">model</span></li>
+    <li><a href="#fast">Fast Path — Two-Stage Threshold Gate</a><span class="tag">3-4-1/3</span></li>
+    <li><a href="#middle">Middle Path — Quorum-Gated Repeated Sampling</a><span class="tag">3-6-9</span></li>
+    <li><a href="#slow">Slow Path — Priority-Ordered Guard Chain</a><span class="tag">7-4-?</span></li>
+    <li><a href="#theory">Relationship to Classical Consensus Theory</a><span class="tag">theory</span></li>
+    <li><a href="#gaps">Known Gaps &amp; Recommendations</a><span class="tag">gaps</span></li>
+    <li><a href="#errormodel">Result Type &amp; Error Model</a><span class="tag">§7</span></li>
+    <li><a href="#literature">Terminology, Disambiguation &amp; Adjacent Literature</a><span class="tag">§8</span></li>
+    <li><a href="#appendix">Appendix: API Surface &amp; Reference Source</a><span class="tag">appendix</span></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     ABSTRACT
+     ══════════════════════════════════════════════ -->
+<div id="abstract" class="abstract">
+  <div class="abstract-label">Abstract</div>
+  <p>
+    <strong>vortexVote.js</strong> implements three parameterized threshold-quorum decision procedures over
+    discrete-valued vote arrays: a <strong>Fast Path</strong> (3-4-1/3) for ephemeral, low-risk operations;
+    a <strong>Middle Path</strong> (3-6-9) for balanced-redundancy governance decisions; and a
+    <strong>Slow Path</strong> (7-4-?) for irreversible, emergency-class actions gated behind structural
+    integrity checks and human escalation. Each path is a pure, deterministic, total function — every
+    reachable input produces one of eight terminal outcomes, with no unhandled branch.
+  </p>
+  <p>
+    This paper treats the module as an object of formal analysis rather than a marketing artifact. We define
+    the input/output model for each path, compare its structure against classical distributed-consensus
+    concepts (unanimity gates, plurality thresholds, Byzantine repeated sampling, veto-weighted rule chains),
+    and identify concrete gaps between the module's documented intent and its current implementation —
+    most notably in the Middle Path's cyclic-audit routine, which is currently deterministic across all
+    rounds rather than exhibiting genuine round-to-round independence.
+  </p>
+  <p>
+    The conclusion is explicit in the module's own header comment and reaffirmed here: this is a
+    <strong>consensus metaphor</strong> — a business-rule threshold engine borrowing distributed-systems
+    vocabulary — suitable for gating deploy pipelines, config changes, and human-review triggers, and
+    <strong>not</strong> a substitute for a fault-tolerant consensus protocol where Byzantine behavior,
+    network partition, or liveness guarantees must be formally proven.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 1: FORMAL MODEL
+     ══════════════════════════════════════════════ -->
+<div id="model" class="section-header">
+  <span class="section-badge badge-idea">§1 — Model</span>
+  <h2 class="section-title">Formal Model &amp; Notation</h2>
+</div>
+
+<p>
+  Let a <em>vote</em> be an element of the loosely-typed set <code>{accept, reject, true, false, yes}</code>,
+  which the module treats as a coerced boolean via <code>hasQuorum</code> and inline filter predicates. Each
+  path <code>P</code> is a function
+</p>
+
+<div class="code-block">
+  <div class="code-header">
+    <span class="code-lang">Notation</span>
+    <div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+  </div>
+  <pre>P : V₁ × V₂ × ... × Vₖ  →  Outcome × Details
+
+where each Vᵢ is a fixed-arity vote vector, and Outcome ∈
+  { ABORT, COMMIT, ROLLBACK, RECONCILE, HOLD, HUMAN_REVIEW, DELAY_AND_AUDIT, SAFE_COMMIT }</pre>
+</div>
+
+<p>
+  A central structural property holds across all three paths: they are <strong>total functions</strong>.
+  Every reachable input — including malformed or under-length vote arrays — produces a defined outcome,
+  never an exception or an undefined branch (<code>hasQuorum</code> and <code>allGatesClear</code> both
+  return <code>false</code> on missing or short arrays, rather than throwing). This is a minimal but
+  real correctness guarantee: closer to <em>exhaustiveness</em> in the state-machine sense than to
+  <em>liveness</em> in the CAP-theorem sense, but it does mean the decision procedure cannot stall in an
+  undefined state.
+</p>
+
+<div class="outcome-grid">
+  <div class="outcome-card terminal"><div class="oc-path">fast · middle · slow</div><div class="oc-name">COMMIT / SAFE_COMMIT</div><p>Positive terminal outcome — the gated action proceeds.</p></div>
+  <div class="outcome-card negative"><div class="oc-path">fast · middle</div><div class="oc-name">ABORT</div><p>Quorum stage failed outright before any downstream check ran.</p></div>
+  <div class="outcome-card negative"><div class="oc-path">fast</div><div class="oc-name">ROLLBACK</div><p>Quorum passed but stabilizer acceptance fell below threshold.</p></div>
+  <div class="outcome-card deferred"><div class="oc-path">middle</div><div class="oc-name">RECONCILE</div><p>Quorum passed but cyclic-audit pass count fell below threshold.</p></div>
+  <div class="outcome-card deferred"><div class="oc-path">slow</div><div class="oc-name">HOLD</div><p>Structural gates not all clear — highest-priority block.</p></div>
+  <div class="outcome-card escalated"><div class="oc-path">slow</div><div class="oc-name">HUMAN_REVIEW</div><p>Any agent voted ESCALATE — liberal veto, single dissenter wins.</p></div>
+  <div class="outcome-card deferred"><div class="oc-path">slow</div><div class="oc-name">DELAY_AND_AUDIT</div><p>Entropy buffer ('?') triggered — deliberate hesitation, independent of vote content.</p></div>
+  <div class="outcome-card negative"><div class="oc-path">slow</div><div class="oc-name">ABORT</div><p>Gates clear, no escalation, no entropy trigger, but no majority yes.</p></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 2: FAST PATH
+     ══════════════════════════════════════════════ -->
+<div id="fast" class="section-header">
+  <span class="section-badge badge-feature">§2 — Fast Path</span>
+  <h2 class="section-title">Two-Stage Threshold Gate (3-4-1/3)</h2>
+</div>
+
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">Decision Rule</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre>quorum(primary, k=3)  ∧  |{accept ∈ stabilizers}| ≥ ⌈4·(1/3)⌉</pre>
+</div>
+
+<p>
+  Structurally, this is a <strong>conjunction of a unanimity gate and a plurality gate</strong> — not a
+  single quorum system but a cascade of two. The first stage, <code>hasQuorum(primary, 3)</code> called
+  with <code>min = length</code>, is effectively unanimity among the 3 primary voters — a strictly
+  stronger requirement than the majority quorum (<code>⌈n/2⌉+1</code>) used in classical systems such as
+  Paxos. The second stage relaxes the bar to <code>⌈4/3⌉ = 2</code>, i.e., a <em>plurality</em> rather than
+  a majority.
+</p>
+<p>
+  This asymmetry — a strict unanimity gate feeding a comparatively weak downstream check — is the formal
+  expression of the design intent: "fast, but only for low-stakes decisions." The expensive check
+  (unanimous primaries) is cheap to fail early; the cheap check (2-of-4 stabilizers) is what actually
+  governs the commit/rollback boundary.
+</p>
+
+<div class="callout callout-warn">
+  <div class="callout-label">Implementation note</div>
+  <p>
+    The threshold <code>Math.ceil(4 * (1/3))</code> is a roundabout way of writing <code>2</code>, and it is
+    computed against the literal constant <code>4</code>, not against <code>stabilizers.length</code>. A
+    caller passing more than 4 stabilizers still gets a threshold of 2 — the arity and the threshold formula
+    are coupled by convention, not by code. Worth an assertion or an explicit <code>stabilizers.length</code>
+    reference if the arity is ever expected to vary.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 3: MIDDLE PATH
+     ══════════════════════════════════════════════ -->
+<div id="middle" class="section-header">
+  <span class="section-badge badge-research">§3 — Middle Path</span>
+  <h2 class="section-title">Quorum-Gated Repeated Sampling (3-6-9)</h2>
+</div>
+
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">Decision Rule</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre>quorum(seeds, k=3)  ∧  passes(auditRounds=9, majority(validators)) ≥ 7</pre>
+</div>
+
+<p>
+  This is the most analytically interesting path. <code>runCyclicAudit</code> re-evaluates the
+  <strong>same static</strong> <code>validators</code> array across 9 iterations:
+</p>
+
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">JavaScript — runCyclicAudit (excerpt)</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre><span class="kw">for</span> (<span class="kw">let</span> i = <span class="num">0</span>; i &lt; auditCount; i++) {
+  <span class="kw">const</span> acceptCount = validators.<span class="fn">filter</span>(
+    (v) =&gt; v &amp;&amp; (v.vote === <span class="str">"accept"</span> || v.vote === <span class="kw">true</span>)
+  ).length;
+  rounds.<span class="fn">push</span>(acceptCount &gt; validators.length / <span class="num">2</span>);
+}</pre>
+</div>
+
+<p>
+  Since <code>validators</code> never mutates between iterations, <strong>all 9 rounds are deterministically
+  identical</strong> — the result is <code>passes ∈ {0, 9}</code>, never anything in between, under the
+  current implementation. In a genuine cyclic-audit design — repeated sampling under noise, or re-polling
+  live agents whose votes can plausibly flip between rounds — one would expect a distribution over
+  <code>passes ∈ [0, 9]</code>. As written, the function is a majority check dressed as an iterative
+  protocol: the loop currently has no independent source of variance per round.
+</p>
+
+<div class="hyp-grid">
+  <div class="hyp-card tech">
+    <div class="label">Current semantics</div>
+    <p>Single majority evaluation of a static snapshot, repeated 9 times with identical inputs. Output
+    space collapses to two points: full pass (9/9) or full fail (0/9). The "9 rounds" language in the
+    interface is not yet backed by 9 independent observations.</p>
+  </div>
+  <div class="hyp-card biz">
+    <div class="label">Intended cyclic-audit semantics</div>
+    <p>Each round re-polls live validators (or samples from a distribution over their possible states),
+    so <code>passes</code> can land anywhere in <code>[0,9]</code> and the 7-of-9 threshold does
+    meaningful work as a noise-tolerance parameter rather than a no-op.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 4: SLOW PATH
+     ══════════════════════════════════════════════ -->
+<div id="slow" class="section-header">
+  <span class="section-badge badge-arch">§4 — Slow Path</span>
+  <h2 class="section-title">Priority-Ordered Guard Chain (7-4-?)</h2>
+</div>
+
+<p>
+  Unlike the Fast and Middle paths, the Slow Path is best modeled as an <strong>ordered rule list</strong>
+  — closer to a firewall ruleset or a <code>cond</code> expression than to a quorum system. The order in
+  which its four checks run <em>is</em> the specification:
+</p>
+
+<div class="flowchart">
+  <div class="fc-label">slowPath() — decision flow</div>
+  <pre>INPUT: { stateVotes, gateChecks, entropyBufferTriggered }
+        │
+        ▼
+ ┌─────────────────────────┐   fail   ┌────────┐
+ │ allGatesClear(4/4)?     ├─────────▶│  HOLD  │   ← safety precondition, unconditional block
+ └───────────┬─────────────┘          └────────┘
+          pass│
+          ▼
+ ┌─────────────────────────┐   yes    ┌────────────────┐
+ │ any vote === ESCALATE?  ├─────────▶│  HUMAN_REVIEW  │  ← liberal veto: one dissenter wins
+ └───────────┬─────────────┘          └────────────────┘
+           no│
+          ▼
+ ┌─────────────────────────┐   yes    ┌───────────────────┐
+ │ entropyBufferTriggered? ├─────────▶│  DELAY_AND_AUDIT   │  ← unconditional deliberate delay
+ └───────────┬─────────────┘          └───────────────────┘
+           no│
+          ▼
+ ┌─────────────────────────┐   yes    ┌───────────────┐
+ │ majorityYes(stateVotes)?├─────────▶│  SAFE_COMMIT  │
+ └───────────┬─────────────┘          └───────────────┘
+           no│
+          ▼
+        ABORT</pre>
+</div>
+
+<p>
+  The priority order encodes a threat model: structural integrity failures are treated as more urgent than
+  a lone dissenter, which is itself more urgent than "just delay," which is itself more urgent than
+  counting votes. The escalation veto is notably stronger than typical Byzantine quorum protections — those
+  usually require <code>⌊n/3⌋+1</code> dissenters to block an action, whereas here a <strong>single</strong>
+  agent voting <code>ESCALATE</code> is sufficient to force human review, regardless of how many other
+  agents voted <code>YES</code>.
+</p>
+
+<div class="callout callout-info">
+  <div class="callout-label">Design note</div>
+  <p>
+    This ordering is a legitimate stance for irreversible actions, but it is currently implicit in code
+    rather than documented as a decision. A reordering — e.g., checking the entropy buffer before the
+    escalation veto — would change real-world behavior nontrivially and should be treated as a breaking
+    change requiring its own review, not a refactor.
+  </p>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 5: CONSENSUS THEORY
+     ══════════════════════════════════════════════ -->
+<div id="theory" class="section-header">
+  <span class="section-badge badge-evidence">§5 — Theory</span>
+  <h2 class="section-title">Relationship to Classical Consensus Theory</h2>
+</div>
+
+<p>
+  Classical consensus protocols (Paxos, Raft, PBFT) are judged against two properties: <strong>safety</strong>
+  (nothing bad happens — no two conflicting values are ever chosen) and <strong>liveness</strong> (something
+  good eventually happens, given enough correct, live nodes). <code>vortexVote.js</code> does not model
+  liveness at all — there is no retry, timeout, or leader-election notion anywhere in the module. Its
+  "safety" is really just deterministic evaluation of an already-collected, already-trusted snapshot of
+  votes: it assumes the vote arrays are honest, with no Byzantine fault tolerance. A maliciously constructed
+  <code>{vote: "accept"}</code> object is indistinguishable from a genuine one at this layer.
+</p>
+
+<div class="table-scroll">
+<table class="schema-table">
+  <thead>
+    <tr><th>Path</th><th>Structure</th><th>Nearest classical analogue</th><th>Key gap vs. that analogue</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>fastPath</code><br>3-4-1/3</td>
+      <td>Unanimity gate → plurality gate</td>
+      <td>Two-phase commit (loosely)</td>
+      <td>Threshold hardcoded to arity 4, not relative to <code>stabilizers.length</code></td>
+    </tr>
+    <tr>
+      <td><code>middlePath</code><br>3-6-9</td>
+      <td>Quorum gate → repeated majority</td>
+      <td>Byzantine repeated sampling</td>
+      <td>Rounds are non-independent; <code>passes</code> is always 0 or 9, never in between</td>
+    </tr>
+    <tr>
+      <td><code>slowPath</code><br>7-4-?</td>
+      <td>Ordered guard chain with veto</td>
+      <td>Rule-based access control / circuit breaker</td>
+      <td>Not a quorum system at all — ordering of checks <em>is</em> the semantics, and is undocumented as a design decision</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<p>
+  The honest characterization, consistent with the module's own header comment, is that
+  <code>vortexVote.js</code> is a <strong>business-rule threshold engine borrowing consensus vocabulary</strong>
+  — well suited to gating deploy pipelines, config changes, or human-review triggers, and not a substitute
+  for a protocol offering formal distributed-systems guarantees.
+</p>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 6: KNOWN GAPS
+     ══════════════════════════════════════════════ -->
+<div id="gaps" class="section-header">
+  <span class="section-badge badge-challenge">§6 — Gaps</span>
+  <h2 class="section-title">Known Gaps &amp; Recommendations</h2>
+</div>
+
+<ol class="phase-list">
+  <li>
+    <span class="phase-num">GAP&nbsp;01</span>
+    <div class="phase-content">
+      <strong>Fast Path threshold is not arity-relative <span class="status-pill status-yes">fixed</span></strong>
+      <p>Resolved: the commit threshold is now computed as <code>Math.ceil(stabilizers.length * (1/3))</code>
+      against the actual validated array, not a hardcoded literal.</p>
+    </div>
+  </li>
+  <li>
+    <span class="phase-num">GAP&nbsp;02</span>
+    <div class="phase-content">
+      <strong>Cyclic audit is not independent per round <span class="status-pill status-yes">fixed</span></strong>
+      <p>Resolved: <code>runCyclicAudit</code> now accepts an optional <code>pollFn(round, validators)</code>.
+      Supplying one gives each of the 9 rounds a genuinely independent snapshot, so <code>passes</code> can
+      land anywhere in <code>[0,9]</code>. Without a <code>pollFn</code>, behavior remains deterministic —
+      this was an additive fix, not a breaking change.</p>
+    </div>
+  </li>
+  <li>
+    <span class="phase-num">GAP&nbsp;03</span>
+    <div class="phase-content">
+      <strong>Slow Path guard ordering is implicit <span class="status-pill status-yes">documented</span></strong>
+      <p>Resolved: the priority order (gates → escalation → entropy → majority) is now stated explicitly in
+      the module's own header comment as a design decision, not left to be inferred from control flow.</p>
+    </div>
+  </li>
+  <li>
+    <span class="phase-num">GAP&nbsp;04</span>
+    <div class="phase-content">
+      <strong>No Byzantine fault tolerance at the vote-object layer <span class="status-pill status-yes">by design</span></strong>
+      <p>Out of scope for this module by design, and correctly disclosed in the header comment — but worth
+      re-stating at every call site that feeds this module: it validates vote <em>shape</em>, not vote
+      <em>authenticity</em>.</p>
+    </div>
+  </li>
+  <li>
+    <span class="phase-num">GAP&nbsp;05</span>
+    <div class="phase-content">
+      <strong>Malformed input indistinguishable from a legitimate ABORT <span class="status-pill status-yes">fixed</span></strong>
+      <p>Resolved (post-whitepaper addition): every path now validates input shape, arity, and enum
+      membership at the boundary and returns <code>Err(VortexVoteError)</code> on failure — a distinct
+      channel from the <code>Ok({ outcome: ABORT, ... })</code> a caller gets from a legitimate quorum or
+      vote-count failure. See §7 for the updated model.</p>
+    </div>
+  </li>
+</ol>
+
+<!-- ══════════════════════════════════════════════
+     SECTION 7: RESULT TYPE & ERROR MODEL
+     ══════════════════════════════════════════════ -->
+<div id="errormodel" class="section-header">
+  <span class="section-badge badge-evidence">§7 — Error Model</span>
+  <h2 class="section-title">Result Type &amp; Error Model</h2>
+</div>
+
+<p>
+  §1's formal model is updated in the release to reflect a stricter contract:
+</p>
+
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">Notation — updated</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre>P : V₁ × V₂ × ... × Vₖ  →  Result&lt;Decision, VortexVoteError&gt;
+
+Result&lt;T,E&gt;  =  Ok(T)  |  Err(E)
+Decision     =  { outcome: Outcome, details: object }</pre>
+</div>
+
+<p>
+  The distinction that matters: <code>Ok({ outcome: ABORT, ... })</code> is a legitimate business result —
+  the votes were well-formed and a quorum genuinely wasn't reached. <code>Err(VortexVoteError)</code> is a
+  <em>caller</em> error — malformed shape, wrong arity, or an unrecognized enum value. GAP 05 (§6) was
+  exactly this conflation in the pre-release version; the two channels are now structurally distinct, so a
+  consuming system can retry/alert differently for each.
+</p>
+
+<table class="schema-table">
+  <thead><tr><th>Error code</th><th>Raised by</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>INVALID_VOTE_ARRAY</code></td><td>all three paths</td><td>vote array missing, wrong type, or below required arity</td></tr>
+    <tr><td><code>INVALID_VOTE_ENTRY</code></td><td>fast, middle, slow</td><td>a vote entry isn't a recognized <code>{vote: accept|reject|true|false}</code> shape</td></tr>
+    <tr><td><code>INVALID_GATE_ARRAY</code></td><td>slow</td><td><code>gateChecks</code> missing, too short, or containing a non-boolean</td></tr>
+    <tr><td><code>INVALID_STATE_VALUE</code></td><td>slow</td><td>a <code>stateVotes</code> entry isn't one of the 7 canonical <code>VoteState</code> values</td></tr>
+    <tr><td><code>INVALID_PATH</code></td><td><code>runVote</code></td><td>the requested path isn't <code>fast</code>, <code>middle</code>, or <code>slow</code></td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-success">
+  <div class="callout-label">Consequence</div>
+  <p>
+    Every function in the module is now a total function over a strictly wider domain: it was already total
+    over well-formed input (§1), and is now total over <em>all</em> input, because malformed input routes to
+    a typed <code>Err</code> instead of either throwing unpredictably or silently degrading into a business
+    outcome. No input shape can produce an unhandled exception under normal operation.
+  </p>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     SECTION 8: TERMINOLOGY & ADJACENT LITERATURE
+     ══════════════════════════════════════════════ -->
+<div id="literature" class="section-header">
+  <span class="section-badge badge-research">§8 — Literature</span>
+  <h2 class="section-title">Terminology, Disambiguation &amp; Adjacent Literature</h2>
+</div>
+
+<p>
+  The module's own vocabulary — "no phase locks," "no silent failure," "fail fast," "total function" — borrows
+  from several distinct bodies of literature: software error-handling patterns, distributed-systems fault
+  models, and (once, loosely) electrical engineering. This section cross-checks each borrowed term against its
+  source definition and states plainly which ones the code actually earns, which are deliberate departures, and
+  which don't apply at all. Recording a negative result here is treated as equally load-bearing as a positive
+  one — the same standard §6 already applies to the module's own claims.
+</p>
+
+<h3 class="subsec">8.1 Patterns the module genuinely implements</h3>
+<div class="table-scroll">
+<table class="schema-table">
+  <thead><tr><th>Concept</th><th>Where in this module</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Fail-fast" target="_blank" rel="noopener noreferrer">Fail-fast</a></td>
+      <td>Every path validates shape, arity, and enum membership <em>before</em> any quorum or threshold logic runs (§3 of the source). A malformed call never reaches business logic.</td>
+      <td><span class="status-pill status-yes">confirmed</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Defensive_programming" target="_blank" rel="noopener noreferrer">Defensive programming</a></td>
+      <td><code>validateVoteArray</code>, <code>validateGateArray</code>, <code>validateStateVotes</code> — every externally supplied array and enum value is shape-checked at the boundary.</td>
+      <td><span class="status-pill status-yes">confirmed</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Exception_handling" target="_blank" rel="noopener noreferrer">Exception handling</a> (Result-type substitute)</td>
+      <td>Internally, nothing throws — <code>Ok</code>/<code>Err</code> is used in place of exceptions for control flow. <code>unwrap()</code> is the single, explicitly documented point where an <code>Err</code> becomes a thrown exception, and only at an outermost caller's discretion.</td>
+      <td><span class="status-pill status-yes">confirmed</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Undefined_behavior" target="_blank" rel="noopener noreferrer">Undefined behavior</a> — avoided by construction</td>
+      <td>JavaScript has no UB in the C/C++ sense, so this is an analogy, not a literal claim: every reachable input, valid or malformed, maps to exactly one defined branch (§1's totality property). There is no input shape that falls through unhandled.</td>
+      <td><span class="status-pill status-yes">confirmed (by analogy)</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Robustness_principle" target="_blank" rel="noopener noreferrer">Robustness principle</a> (Postel's Law)</td>
+      <td><code>validateStateVotes</code> rejects an unrecognized value like <code>"yess"</code> with <code>Err(INVALID_STATE_VALUE)</code> instead of liberally coercing it. See callout below.</td>
+      <td><span class="status-pill status-partial">deliberate departure</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Graceful_degradation" target="_blank" rel="noopener noreferrer">Graceful degradation</a></td>
+      <td><code>RECONCILE</code>, <code>HOLD</code>, and <code>DELAY_AND_AUDIT</code> are non-terminal, non-crashing outcomes a caller can act on, rather than a thrown error or a forced commit.</td>
+      <td><span class="status-pill status-yes">confirmed (loose analogy)</span></td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Circuit_breaker_design_pattern" target="_blank" rel="noopener noreferrer">Circuit breaker design pattern</a></td>
+      <td><code>allGatesClear()</code> failing routes the Slow Path straight to <code>HOLD</code>, functioning as an open-circuit block on further evaluation. See caveat below.</td>
+      <td><span class="status-pill status-partial">partial analogy</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout callout-info">
+  <div class="callout-label">On the robustness-principle departure</div>
+  <p>
+    Postel's Law ("be liberal in what you accept") is the industry-standard default, but this module inverts it
+    on purpose for <code>stateVotes</code>: GAP 05 (§6) was exactly the failure mode that liberal acceptance
+    produces — a typo'd vote silently degrading into an ordinary <code>ABORT</code>, indistinguishable from a
+    genuine "no." Strict validation was the fix. This is a considered exception to Postel's Law, not an
+    unawareness of it — liberal acceptance is still the right default for most integration boundaries.
+  </p>
+</div>
+
+<div class="callout callout-warn">
+  <div class="callout-label">On the circuit-breaker analogy</div>
+  <p>
+    <code>allGatesClear()</code> has no memory across calls: no trip counter, no half-open probe state, no reset
+    timer. Every invocation re-evaluates <code>gateChecks</code> from scratch. It reproduces the pattern's
+    <em>effect</em> (block downstream work when upstream integrity has failed) without its state machine — worth
+    flagging so "circuit breaker" isn't read as a claim of the full pattern.
+  </p>
+</div>
+
+<h3 class="subsec">8.2 Concepts confirmed absent</h3>
+<p>
+  These were checked against the source and are simply not present — consistent with, not contradicting, the
+  liveness disclaimer already made in §5 (no retry, timeout, or leader election anywhere in the module).
+</p>
+<div class="table-scroll">
+<table class="schema-table">
+  <thead><tr><th>Concept</th><th>Finding</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Timeout_(computing)" target="_blank" rel="noopener noreferrer">Timeout (computing)</a></td>
+      <td>No deadline or timer is enforced anywhere. <code>entropyBufferTriggered</code> is a caller-supplied boolean the module reacts to — it does not itself run a clock or a wait.</td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Keepalive" target="_blank" rel="noopener noreferrer">Keepalive</a></td>
+      <td>No heartbeat or liveness signal exists. The module has no way to distinguish a vote source that is slow from one that is permanently gone.</td>
+    </tr>
+    <tr>
+      <td><a href="https://en.wikipedia.org/wiki/Futures_and_promises" target="_blank" rel="noopener noreferrer">Futures and promises</a></td>
+      <td>Every exported function, including a caller-supplied <code>pollFn</code>, is called and used synchronously. A <code>pollFn</code> that genuinely re-polls live agents over a network would need to return a <code>Promise</code>, which the current <code>runCyclicAudit</code> does not await — a real constraint on v1.0, not yet a documented GAP.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="subsec">8.3 "Phase lock" is a naming metaphor, not a claim</h3>
+<p>
+  The module header's "NO PHASE LOCKS" principle (and the README's identical language) describes the absence
+  of shared mutable state and cross-call ordering requirements — a software-engineering property. It is not a
+  technical reference to <a href="https://en.wikipedia.org/wiki/Phase-locking" target="_blank" rel="noopener noreferrer">phase-locking</a>,
+  the <a href="https://en.wikipedia.org/wiki/Phase-locked_loop" target="_blank" rel="noopener noreferrer">phase-locked loop</a>,
+  <a href="https://en.wikipedia.org/wiki/Injection_locking" target="_blank" rel="noopener noreferrer">injection locking</a>, or the
+  <a href="https://en.wikipedia.org/wiki/Lock-in_amplifier" target="_blank" rel="noopener noreferrer">lock-in amplifier</a> — the
+  electrical-engineering concepts the term is borrowed from. None of this module's functions have an oscillator,
+  a frequency reference, or a signal-synchronization property. Consistent with how the project's "vortex math"
+  (3-6-9) framing is already disclosed as metaphor rather than mechanism (Abstract, §5), no literal EE claim
+  should be read into this naming.
+</p>
+
+<h3 class="subsec">8.4 Implementation footnotes</h3>
+<ul class="plain">
+  <li>
+    <strong><a href="https://en.wikipedia.org/wiki/Hash_table" target="_blank" rel="noopener noreferrer">Hash table</a></strong> —
+    <code>validateStateVotes</code> checks membership via
+    <code>VALID_VOTE_STATES = new Set(Object.values(VoteState))</code>, giving average-case O(1) lookups instead
+    of an O(n) array scan. The set is fixed at 7 short string keys, so
+    <a href="https://en.wikipedia.org/wiki/Hash_collision" target="_blank" rel="noopener noreferrer">hash collision</a>
+    behavior is cited here only to rule it out as a concern, not because it is one — there is no attacker-controlled
+    key space at this layer.
+  </li>
+  <li>
+    <strong>Language surface</strong> — the implementation uses standard
+    <a href="https://en.wikipedia.org/wiki/Arrow_function" target="_blank" rel="noopener noreferrer">arrow-function</a>
+    callbacks (<code>.filter</code>, <code>.some</code>, <code>.every</code>; see also
+    <a href="https://en.wikipedia.org/wiki/JavaScript_syntax#Arrow_functions" target="_blank" rel="noopener noreferrer">JS syntax — arrow functions</a>)
+    and ordinary <code>if</code>/<code>for</code>
+    <a href="https://en.wikipedia.org/wiki/JavaScript_syntax#Control_flow" target="_blank" rel="noopener noreferrer">control flow</a> —
+    no exotic or version-specific language features anywhere in the module.
+  </li>
+</ul>
+
+<h3 class="subsec">8.5 Explicitly out of scope — not force-fit</h3>
+<p>
+  The following were considered and don't describe anything this module does. They're recorded so the absence
+  reads as a checked decision, not an oversight.
+</p>
+<ul class="plain">
+  <li>
+    <strong><a href="https://en.wikipedia.org/wiki/Proxy_pattern" target="_blank" rel="noopener noreferrer">Proxy pattern</a></strong> —
+    not used. Enum immutability (<code>Outcome</code>, <code>VoteState</code>, <code>VotePath</code>,
+    <code>ErrorCode</code>) is <code>Object.freeze</code>, a direct mutation lock — not a <code>Proxy</code>-based
+    interception layer.
+  </li>
+  <li>
+    <strong><a href="https://en.wikipedia.org/wiki/Web_worker" target="_blank" rel="noopener noreferrer">Web worker</a></strong> /
+    <strong><a href="https://en.wikipedia.org/wiki/Shared_memory" target="_blank" rel="noopener noreferrer">shared memory</a></strong> /
+    <strong><a href="https://en.wikipedia.org/wiki/Spectre_(security_vulnerability)" target="_blank" rel="noopener noreferrer">Spectre</a></strong>
+    — this module has no browser or worker execution context, no <code>SharedArrayBuffer</code>, and no
+    cross-thread shared mutable state. The "no shared mutable state" property already claimed (design notes, §1)
+    is a purity and testability guarantee about ordinary synchronous JS call semantics — it is not a claim about
+    immunity to speculative-execution timing side-channels, which is a distinct, hardware-level concern this
+    module has no surface area for one way or the other.
+  </li>
+</ul>
+
+<div id="appendix" class="section-header">
+  <span class="section-badge badge-appendix">Appendix</span>
+  <h2 class="section-title">API Surface &amp; Reference Source</h2>
+</div>
+
+<h3 class="subsec">A.1 Exported API</h3>
+<div class="table-scroll">
+<table class="schema-table">
+  <thead><tr><th>Export</th><th>Signature</th><th>Returns</th></tr></thead>
+  <tbody>
+    <tr><td><code>fastPath</code></td><td><code>(primaryVotes, stabilizerVotes)</code></td><td><code>Result&lt;{outcome, details}, VortexVoteError&gt;</code></td></tr>
+    <tr><td><code>middlePath</code></td><td><code>(seedVotes, validatorVotes, {passThreshold=7, pollFn}?)</code></td><td><code>Result&lt;{outcome, details}, VortexVoteError&gt;</code></td></tr>
+    <tr><td><code>slowPath</code></td><td><code>({ stateVotes, gateChecks, entropyBufferTriggered })</code></td><td><code>Result&lt;{outcome, details}, VortexVoteError&gt;</code></td></tr>
+    <tr><td><code>runCyclicAudit</code></td><td><code>(validators, auditCount=9, pollFn?)</code></td><td><code>{ passes, rounds }</code></td></tr>
+    <tr><td><code>allGatesClear</code></td><td><code>(gateChecks)</code></td><td><code>boolean</code></td></tr>
+    <tr><td><code>majorityYes</code></td><td><code>(stateVotes)</code></td><td><code>boolean</code></td></tr>
+    <tr><td><code>runVote</code></td><td><code>(path, input)</code></td><td>dispatches to one of the above</td></tr>
+    <tr><td><code>Ok</code> / <code>Err</code> / <code>isOk</code> / <code>isErr</code> / <code>unwrap</code></td><td>—</td><td><code>Result</code> helpers</td></tr>
+    <tr><td><code>VortexVoteError</code></td><td>class</td><td>typed error with <code>.code</code> and <code>.context</code></td></tr>
+    <tr><td><code>ErrorCode</code> / <code>Outcome</code> / <code>VoteState</code> / <code>VotePath</code></td><td>frozen enums</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3 class="subsec">A.2 Fast Path — Reference Source</h3>
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">JavaScript — vortexVote.js</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre><span class="kw">export</span> <span class="kw">function</span> <span class="fn">fastPath</span>(primaryVotes, stabilizerVotes) {
+  <span class="kw">const</span> primaryCheck = <span class="fn">validateVoteArray</span>(primaryVotes, <span class="num">3</span>, <span class="str">"primaryVotes"</span>);
+  <span class="kw">if</span> (<span class="fn">isErr</span>(primaryCheck)) <span class="kw">return</span> primaryCheck;
+
+  <span class="kw">const</span> stabilizerCheck = <span class="fn">validateVoteArray</span>(stabilizerVotes, <span class="num">4</span>, <span class="str">"stabilizerVotes"</span>);
+  <span class="kw">if</span> (<span class="fn">isErr</span>(stabilizerCheck)) <span class="kw">return</span> stabilizerCheck;
+
+  <span class="kw">const</span> primary = <span class="fn">takeFirst</span>(primaryCheck.value, <span class="num">3</span>);
+  <span class="kw">if</span> (!<span class="fn">hasQuorum</span>(primary, <span class="num">3</span>)) {
+    <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.ABORT, details: { reason: <span class="str">"no primary quorum"</span> } });
+  }
+
+  <span class="kw">const</span> stabilizers = <span class="fn">takeFirst</span>(stabilizerCheck.value, <span class="num">4</span>);
+  <span class="kw">const</span> acceptCount = <span class="fn">countAccepts</span>(stabilizers);
+  <span class="cm">// threshold scales with actual arity — fixes GAP 01</span>
+  <span class="kw">const</span> threshold = <span class="tp">Math</span>.<span class="fn">ceil</span>(stabilizers.length * (<span class="num">1</span> / <span class="num">3</span>));
+
+  <span class="kw">return</span> acceptCount &gt;= threshold
+    ? <span class="fn">Ok</span>({ outcome: Outcome.COMMIT, details: { acceptCount, threshold } })
+    : <span class="fn">Ok</span>({ outcome: Outcome.ROLLBACK, details: { acceptCount, threshold } });
+}</pre>
+</div>
+
+<h3 class="subsec">A.3 Slow Path — Reference Source</h3>
+<div class="code-block">
+  <div class="code-header"><span class="code-lang">JavaScript — vortexVote.js</span><div class="code-dots"><span class="r"></span><span class="y"></span><span class="g"></span></div></div>
+  <pre><span class="kw">export</span> <span class="kw">function</span> <span class="fn">slowPath</span>({ stateVotes, gateChecks, entropyBufferTriggered = <span class="kw">false</span> }) {
+  <span class="kw">const</span> gateCheckResult = <span class="fn">validateGateArray</span>(gateChecks);
+  <span class="kw">if</span> (<span class="fn">isErr</span>(gateCheckResult)) <span class="kw">return</span> gateCheckResult;
+
+  <span class="kw">const</span> stateVoteResult = <span class="fn">validateStateVotes</span>(stateVotes);
+  <span class="kw">if</span> (<span class="fn">isErr</span>(stateVoteResult)) <span class="kw">return</span> stateVoteResult;
+
+  <span class="cm">// ── ordered guard chain — gates → escalation → entropy → majority ──</span>
+  <span class="kw">if</span> (!<span class="fn">allGatesClear</span>(gateCheckResult.value)) {
+    <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.HOLD, details: { reason: <span class="str">"structural gates not clear"</span> } });
+  }
+  <span class="kw">if</span> (stateVoteResult.value.<span class="fn">some</span>((s) =&gt; s === VoteState.ESCALATE)) {
+    <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.HUMAN_REVIEW, details: { reason: <span class="str">"escalate vote present"</span> } });
+  }
+  <span class="kw">if</span> (entropyBufferTriggered) {
+    <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.DELAY_AND_AUDIT, details: { reason: <span class="str">"entropy buffer triggered ('?')"</span> } });
+  }
+  <span class="kw">if</span> (<span class="fn">majorityYes</span>(stateVoteResult.value)) {
+    <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.SAFE_COMMIT, details: {} });
+  }
+  <span class="kw">return</span> <span class="fn">Ok</span>({ outcome: Outcome.ABORT, details: { reason: <span class="str">"no majority yes"</span> } });
+}</pre>
+</div>
+
+<!-- FOOTNOTES -->
+<div class="footnotes">
+  <p>References:</p>
+  <p>[1] Lamport, L. — "The Part-Time Parliament" (Paxos), ACM TOCS, 1998</p>
+  <p>[2] Ongaro, D. &amp; Ousterhout, J. — "In Search of an Understandable Consensus Algorithm" (Raft), USENIX ATC, 2014</p>
+  <p>[3] Castro, M. &amp; Liskov, B. — "Practical Byzantine Fault Tolerance", OSDI, 1999</p>
+  <p>[4] Lynch, N. — <em>Distributed Algorithms</em>, Morgan Kaufmann, 1996</p>
+  <p>[5] vortexVote.js — reference implementation source, Bun.js module, v1.0 (Miguel Ocampo, 2026)</p>
+</div>
+
+</div><!-- /page-wrap -->
+</body>
+</html>
