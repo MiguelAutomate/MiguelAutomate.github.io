@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHADOW CLONE // CONSOLE</title>
+<style>
+  :root {
+    --bg: #050505;
+    --scanline: rgba(0, 0, 0, 0.3);
+    --phosphor: #33ff00;
+    --phosphor-dim: #1f9900;
+    --phosphor-dark: #114400;
+    --phosphor-glow: rgba(51, 255, 0, 0.2);
+    --cyan: #00f2ff;
+    --red: #ff3e3e;
+    --amber: #ffb800;
+    --mono: 'Courier New', Courier, monospace;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--phosphor);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.55;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding: 16px;
+    text-shadow: 0 0 5px rgba(51,255,0,0.15);
+  }
+  @media (min-width: 768px){ body{ padding: 32px; } }
+
+  .crt-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    background: linear-gradient(var(--scanline) 50%, transparent 50%);
+    background-size: 100% 4px;
+    z-index: 100;
+    opacity: 0.2;
+  }
+
+  .flicker { animation: flicker 0.15s infinite; }
+  @keyframes flicker {
+    0% { opacity: 0.98; } 50% { opacity: 1; } 100% { opacity: 0.95; }
+  }
+  @media (prefers-reduced-motion: reduce){ .flicker{ animation: none; } }
+
+  .page{ max-width: 940px; margin: 0 auto; }
+
+  .terminal-header {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 10px var(--phosphor);
+    border-bottom: 2px solid var(--phosphor);
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .header-row{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px; }
+  .header-brand{ display:flex; flex-direction:column; gap:.4rem; }
+  .vortex-logo{ font-size: 2rem; line-height: 1; color: var(--phosphor); text-shadow: 0 0 20px var(--phosphor-glow); display:block; font-weight:bold; }
+  .header-tag{ font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--phosphor-dim); font-weight: 700; }
+  .header-status{ text-align: right; font-size: 11px; text-shadow: none; }
+  .header-status p{ margin: 0 0 2px; }
+  .status-value{ color: var(--cyan); }
+  .link-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:.6rem; }
+  .txt-link{
+    display:inline-flex; align-items:center; gap:6px;
+    color: var(--cyan); border:1px solid var(--phosphor-dark);
+    padding: 4px 9px; font-size: 10.5px; letter-spacing:.04em;
+    text-decoration:none; text-shadow:none; text-transform:none;
+  }
+  .txt-link:hover, .txt-link:focus-visible{ border-color: var(--cyan); background: rgba(0,242,255,0.08); }
+
+  .path-grid{ display:grid; grid-template-columns:1fr; gap:1rem; margin-top:1.5rem; }
+  @media (min-width:700px){ .path-grid{ grid-template-columns:repeat(3,1fr); } }
+  .path-btn{
+    all: unset; box-sizing:border-box; cursor:pointer;
+    border:1px solid var(--phosphor); background:transparent; color:var(--phosphor);
+    padding:1rem; text-align:left; transition:all .2s; font-family: var(--mono);
+  }
+  .path-btn:hover, .path-btn.active{ background:var(--phosphor); color:var(--bg); box-shadow:0 0 15px var(--phosphor); }
+  .path-btn .code{ display:block; color:var(--cyan); font-weight:700; font-size: 13px; }
+  .path-btn:hover .code, .path-btn.active .code{ color:var(--bg); }
+  .path-btn .desc{ font-size: 11px; }
+
+  .terminal-card{ background:rgba(10,20,15,0.7); border:1px solid var(--phosphor-dark); box-shadow:0 0 10px rgba(0,0,0,0.5); padding:1.5rem; margin-top:1.5rem; }
+  .content-intro h2{ font-size:1.15rem; margin:0 0 .75rem; text-shadow:0 0 8px var(--phosphor); text-transform:uppercase; }
+  .content-intro .lead{ color: var(--phosphor-dim); margin:0 0 1.5rem; font-style:italic; font-size: 13px; }
+
+  .panel{ margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--phosphor-dark); }
+  .panel h3{ font-size: 1.05rem; color: var(--cyan); margin: 0 0 .4rem; text-shadow:0 0 6px rgba(0,242,255,.35); text-transform:uppercase; }
+  .panel .path-desc{ color: var(--phosphor-dim); font-size: 12px; margin: 0 0 1.25rem; }
+
+  .group{ margin-bottom: 1.25rem; }
+  .group-label{ display:flex; justify-content:space-between; font-size: 10.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--phosphor-dim); margin-bottom:.5rem; }
+  .group-label .val{ color: var(--cyan); }
+  input[type="range"]{ width:100%; accent-color: var(--phosphor); background:transparent; }
+  input[type="text"], input[type="number"]{
+    font-family: var(--mono); font-size: 12px; background: var(--bg); color: var(--phosphor);
+    border:1px solid var(--phosphor-dark); padding:.45rem .5rem;
+  }
+
+  .toggles{ display:flex; flex-wrap:wrap; gap:.5rem; }
+  .vote-toggle{
+    all: unset; cursor:pointer; font-family: var(--mono); font-size: 12px;
+    padding:.5rem .65rem; border:1px solid var(--phosphor-dark); color:var(--phosphor-dim);
+    min-width:110px; text-align:center;
+  }
+  .vote-toggle[data-state="on"]{ border-color:var(--phosphor); color:var(--phosphor); background:rgba(51,255,0,.08); }
+  .vote-toggle[data-state="off"]{ border-color:var(--red); color:var(--red); background:rgba(255,62,62,.08); }
+  .vote-toggle:focus-visible{ outline:1px solid var(--cyan); outline-offset:2px; }
+
+  .queue-row{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin-bottom: .6rem; }
+  .queue-add-btn, .queue-process-btn{
+    all:unset; cursor:pointer; color:var(--cyan); font-size:12px;
+    border:1px dashed var(--phosphor-dark); padding:.45rem .7rem; display:inline-block;
+  }
+  .queue-process-btn{ color: var(--phosphor); border-style: solid; border-color: var(--phosphor-dark); }
+  .queue-list{ display:flex; gap:6px; flex-wrap:wrap; margin: 10px 0; min-height: 30px; }
+  .queue-cell{
+    border:1px solid var(--phosphor-dark); padding:6px 10px; font-size:11px; color:var(--phosphor-dim);
+    display:flex; flex-direction:column; gap:2px; min-width: 90px;
+  }
+  .queue-cell .qk{ color: var(--phosphor); }
+  .queue-cell .qw{ color: var(--cyan); }
+  .queue-empty{ color: var(--phosphor-dark); font-size: 11px; font-style: italic; }
+
+  .execute-btn{
+    all:unset; cursor:pointer; font-family: var(--mono); font-weight:600; letter-spacing:.04em;
+    padding:.6rem 1.5rem; background:#0f3d1f; border:1px solid var(--phosphor); color:#d9f7e2; display:inline-block;
+    transition:all .2s;
+  }
+  .execute-btn:hover, .execute-btn:focus-visible{ background:var(--phosphor); color:#000; box-shadow:0 0 15px var(--phosphor); }
+
+  .output{ border:1px solid var(--phosphor-dark); background:#020805; padding:16px; min-height:60px; margin-top: 1.5rem; }
+  .output .prompt{ color:var(--phosphor-dim); }
+  .output .outcome-line{ font-size:14px; margin:6px 0 4px; font-weight:600; }
+  .output .outcome-detail{ font-size: 11.5px; color: var(--phosphor-dim); margin: 0 0 10px; }
+  .outcome-PRIMARY, .outcome-CLONE_MERGED, .outcome-SUCCESS{ color:var(--phosphor); text-shadow:0 0 6px rgba(51,255,0,0.4); }
+  .outcome-CLONE_DISCARDED, .outcome-THROTTLED, .outcome-TIMEOUT, .outcome-QUEUE_OVERFLOW, .outcome-CANCELLED{ color:var(--red); }
+  .outcome-QUEUED, .outcome-WAITING, .outcome-RETRYING{ color:var(--amber); }
+
+  details.raw{ margin-top:12px; }
+  details.raw summary{ cursor:pointer; color:var(--phosphor-dim); font-size:10.5px; letter-spacing:1px; text-transform:uppercase; }
+  details.raw pre{ font-size:11px; color:var(--phosphor-dim); overflow-x:auto; margin-top:8px; }
+
+  .usecases{ margin-top: 1.5rem; padding-top: 1.5rem; border-top:1px solid var(--phosphor-dark); }
+  .usecases ul{ list-style:none; margin:0; padding:0; }
+  .usecases li{ padding:6px 0 6px 18px; position:relative; font-size:12.5px; color:var(--phosphor-dim); border-top:1px dashed var(--phosphor-dark); }
+  .usecases li:first-child{ border-top:none; }
+  .usecases li::before{ content:">"; position:absolute; left:0; color:var(--phosphor); }
+  .usecases li strong{ color:var(--phosphor); font-weight:600; }
+
+  .about{ margin-top: 1.5rem; padding-top: 1.5rem; border-top:1px solid var(--phosphor-dark); }
+  .about h3{ font-size:1.05rem; color:var(--cyan); margin:0 0 .6rem; text-transform:uppercase; }
+  .about p{ font-size:12.5px; color:var(--phosphor-dim); margin:0 0 14px; }
+  .exports-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:6px; margin-bottom:16px; }
+  .export-tag{ border:1px solid var(--phosphor-dark); padding:6px 8px; font-size:11px; color:var(--phosphor-dim); }
+  .export-tag .fn{ color:var(--cyan); }
+  .about pre.code{ background:#020805; border:1px solid var(--phosphor-dark); padding:14px 16px; font-size:11.5px; color:var(--phosphor-dim); overflow-x:auto; margin:0 0 16px; }
+  .about pre.code .kw{ color:var(--cyan); }
+  .about pre.code .str{ color:var(--phosphor); }
+  .about pre.code .cm{ color:var(--phosphor-dim); }
+  .about-links{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  footer{ color:#164d0d; font-size:11px; text-align:center; margin-top:24px; letter-spacing:0.08em; }
+  a{ color: var(--cyan); }
+</style>
+</head>
+<body>
+
+  <div class="crt-overlay"></div>
+  <div class="flicker page">
+
+    <header class="terminal-header">
+      <div class="header-row">
+        <div class="header-brand">
+          <span class="vortex-logo">SHADOW // CLONE</span>
+          <span class="header-tag">Contention Console v5.3.0-stable</span>
+        </div>
+        <div class="header-status">
+          <p>STATUS: <span class="status-value">OPERATIONAL</span></p>
+          <p>NODE: <span class="status-value">SHADOWCLONE-MAIN-01</span></p>
+        </div>
+      </div>
+      <div class="link-row">
+        <a class="txt-link" href="./shadowClone.html" target="_blank" rel="noopener noreferrer">schematics &amp; flowcharts</a>
+        <a class="txt-link" href="./README.md" target="_blank" rel="noopener noreferrer">readme</a>
+        <a class="txt-link" href="https://github.com/MiguelAutomate/shadowClone" target="_blank" rel="noopener noreferrer">source on github</a>
+      </div>
+    </header>
+
+    <main class="terminal-card">
+      <div id="content" class="content-intro">
+        <h2>/// INITIALIZING CONTENTION SCENARIOS</h2>
+        <p class="lead">&gt; Select a scenario to drive ScopedResourceManager's decision logic by hand.</p>
+
+        <div class="path-grid" id="menu" role="tablist">
+          <button class="path-btn active" data-path="GUARD" role="tab" id="tab-guard" aria-selected="true" aria-controls="panel">
+            <span class="code">SCOPE_GUARD</span>
+            <span class="desc">withScope() primary / clone / queue</span>
+          </button>
+          <button class="path-btn" data-path="AXIS" role="tab" id="tab-axis" aria-selected="false" aria-controls="panel">
+            <span class="code">TRIPLE_AXIS</span>
+            <span class="desc">rate · concurrency · duration</span>
+          </button>
+          <button class="path-btn" data-path="QUEUE" role="tab" id="tab-queue" aria-selected="false" aria-controls="panel">
+            <span class="code">TIE_LEDGER</span>
+            <span class="desc">weighted queue ordering + aging</span>
+          </button>
+          <button class="path-btn" data-path="RETRY" role="tab" id="tab-retry" aria-selected="false" aria-controls="panel">
+            <span class="code">RETRY_CANCEL</span>
+            <span class="desc">RetryLedger vs. AbortSignal — v5.3.0</span>
+          </button>
+        </div>
+
+        <div class="panel" id="panel" role="tabpanel" aria-labelledby="tab-guard"></div>
+
+        <div class="output" id="output" aria-live="polite">
+          <span class="prompt">&gt; awaiting execution...</span>
+        </div>
+
+        <div class="usecases" id="usecases"></div>
+
+        <div class="about">
+          <h3>ABOUT shadowClone.js</h3>
+          <p>This console is a browser-side mirror of the decision points inside the real <code>ScopedResourceManager</code> — it reimplements the branching logic (not the async machinery: no real <code>setTimeout</code>, no real <code>structuredClone</code>, no real Promise queue) so you can drive it by hand and see exactly which typed outcome a given state produces, without waiting on real timers.</p>
+
+          <div class="exports-grid">
+            <div class="export-tag"><span class="fn">ScopedResourceManager</span> core guard</div>
+            <div class="export-tag"><span class="fn">.withScope()</span> entry point</div>
+            <div class="export-tag"><span class="fn">.getMetrics()</span> observability</div>
+            <div class="export-tag"><span class="fn">.shutdown()</span> waits for idle</div>
+            <div class="export-tag"><span class="fn">ChainedHashTable</span> / <span class="fn">Shadow</span></div>
+            <div class="export-tag"><span class="fn">makeShadowCloneable()</span></div>
+            <div class="export-tag"><span class="fn">autoGuard()</span> / <span class="fn">secureModule()</span></div>
+            <div class="export-tag"><span class="fn">TieLedger</span> + aging</div>
+            <div class="export-tag"><span class="fn">RetryLedger</span></div>
+            <div class="export-tag"><span class="fn">NoCloneLedger</span></div>
+            <div class="export-tag"><span class="fn">explicitTry()</span></div>
+            <div class="export-tag"><span class="fn">StrictThrottler</span></div>
+            <div class="export-tag"><span class="fn">RuntimeInvariantError</span></div>
+            <div class="export-tag"><span class="fn">ThrottlingExhaustedError</span></div>
+            <div class="export-tag"><span class="fn">TimeoutExceededError</span></div>
+            <div class="export-tag"><span class="fn">OperationCancelledError</span></div>
+            <div class="export-tag"><span class="fn">QueueOverflowError</span></div>
+          </div>
+
+          <pre class="code"><span class="cm">// npm install, no deps, then:</span>
+<span class="kw">import</span> { ScopedResourceManager, ChainedHashTable } <span class="kw">from</span> <span class="str">"./shadowClone.js"</span>;
+
+<span class="kw">const</span> mgr = <span class="kw">new</span> ScopedResourceManager(<span class="kw">new</span> ChainedHashTable(), { resourceId: <span class="str">"MemoryLobe"</span> });
+
+<span class="kw">const</span> result = <span class="kw">await</span> mgr.withScope(<span class="str">"user:alice"</span>, <span class="kw">async</span> (res, isEphemeral, signal) => {
+  <span class="kw">if</span> (signal.aborted) <span class="kw">return</span>; <span class="cm">// cooperative early exit</span>
+  res.set(<span class="str">"user:alice"</span>, <span class="num">42</span>);
+  <span class="kw">return</span> res.get(<span class="str">"user:alice"</span>);
+}, <span class="num">1000</span>); <span class="cm">// timeoutMs</span>
+
+<span class="cm">// cancel one specific call from the outside:</span>
+<span class="kw">const</span> controller = <span class="kw">new</span> AbortController();
+mgr.withScope(<span class="str">"user:alice"</span>, op, <span class="num">1000</span>, { signal: controller.signal });
+controller.abort(); <span class="cm">// rejects with OperationCancelledError</span></pre>
+
+          <p>&gt; <strong style="color:var(--amber)">NOTE:</strong> the real module's clone merge-back is last-writer-wins per key and only happens on a <em>successful</em> clone operation — a thrown or timed-out clone is discarded unmerged. That distinction is exactly what the SCOPE_GUARD scenario below lets you toggle and observe.</p>
+          <p>&gt; <strong style="color:var(--amber)">NOTE (v5.3.0):</strong> a timed-out operation keeps running in the background — JS can't preempt it — so the scope's lock/clone-slot now stays held until it actually settles, not until the race is merely lost. See RETRY_CANCEL for the retry-vs-cancel distinction this enables.</p>
+
+          <div class="about-links">
+            <a class="txt-link" href="https://github.com/MiguelAutomate/shadowClone" target="_blank" rel="noopener noreferrer">source &amp; tests on github</a>
+            <a class="txt-link" href="./README.md" target="_blank" rel="noopener noreferrer">read the readme</a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>[ shadowClone.js — contention guard console ]</footer>
+  </div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Decision logic mirrors the branch structure of ScopedResourceManager in
+// shadowClone.js (withScope / _dispatch / _runPrimary / _runClone /
+// _enqueue / StrictThrottler / TieLedger / RetryLedger / NoCloneLedger,
+// and — new in v5.3.0 — the zombie-safe release timing and the
+// TimeoutExceededError-vs-OperationCancelledError split). This console
+// reimplements the branching, not the async machinery — no real timers,
+// no real AbortController, no real Promise-based queue — so the flow can
+// be driven synchronously by hand. See shadowClone.js and
+// shadowClone.test.mjs for the real thing.
+// ---------------------------------------------------------------------------
+
+// — GUARD: mirrors _dispatch()'s primary/clone/queue admission + mergeShadow,
+// plus the v5.3.0 zombie-safe release (a timeout doesn't free the lock/slot
+// until the abandoned operation actually settles) and NoCloneLedger.
+function decideGuard({ scopeLocked, activeClones, maxConcurrentClones, operationOutcome, timesOut, noCloneListed }) {
+  if (!scopeLocked) {
+    if (timesOut) {
+      return { outcome: "TIMEOUT", detail: "scope free — ran directly on the primary resource (_runPrimary), but exceeded its timeout budget. The caller gets TimeoutExceededError immediately via the signal-aborting race, but activeLocks is NOT released until the abandoned operation actually settles (v5.3.0) — a same-scope call made right now would get a clone, not overlap as a second primary." };
+    }
+    return { outcome: "PRIMARY", detail: "scope free — operation ran directly against the primary resource (_runPrimary)." };
+  }
+  if (noCloneListed) {
+    return { outcome: "QUEUED", detail: "scope busy AND this scope is listed in NoCloneLedger — _dispatch() skips the clone path entirely and always falls through to the queue, even with clone slots free, so it never observes a stale snapshot." };
+  }
+  if (activeClones < maxConcurrentClones) {
+    if (timesOut) {
+      return { outcome: "TIMEOUT", detail: "scope busy, clone slot free — ran on a shadow clone, but exceeded its timeout budget. Merge is skipped entirely no matter what the clone's operation eventually returns; activeClones-- waits for the clone's real settle, not the lost race." };
+    }
+    if (operationOutcome === "success") {
+      return { outcome: "CLONE_MERGED", detail: "scope busy, clone slot free — ran on a shadow clone; operation succeeded, so its dirty keys were merged back onto the primary resource (mergeShadow) before the clone dropped." };
+    }
+    return { outcome: "CLONE_DISCARDED", detail: "scope busy, clone slot free — ran on a shadow clone; operation threw, so its writes were discarded unmerged — a half-finished write never reaches the primary." };
+  }
+  return { outcome: "QUEUED", detail: "scope busy AND every clone slot is taken — enqueued in _pendingQueue until a slot frees or maxQueueSize is hit (_enqueue)." };
+}
+
+// — AXIS: mirrors the three independent bounding checks, in the order
+// withScope() actually performs them: rate, then admission/concurrency,
+// then duration (which only manifests once the operation is running).
+function decideAxis({ requestsUsed, maxRequests, activeClones, maxConcurrentClones, queueLength, maxQueueSize, operationMs, timeoutMs }) {
+  if (requestsUsed >= maxRequests) {
+    return { outcome: "THROTTLED", detail: "StrictThrottler.consumeToken() — request budget for this fixed window is exhausted — ThrottlingExhaustedError, thrown before any admission logic runs." };
+  }
+  if (activeClones >= maxConcurrentClones && queueLength >= maxQueueSize) {
+    return { outcome: "QUEUE_OVERFLOW", detail: "every clone slot is taken AND _pendingQueue is already at maxQueueSize — QueueOverflowError: explicit back-pressure, not a silent drop." };
+  }
+  if (operationMs > timeoutMs) {
+    return { outcome: "TIMEOUT", detail: "the operation would still be running when Promise.race() against timeoutMs resolves first — TimeoutExceededError." };
+  }
+  return { outcome: "SUCCESS", detail: "under budget on all three axes — rate, concurrency/queue, and duration — operation completes normally." };
+}
+
+// — QUEUE / TieLedger: effective-weight-desc ordering (weight + aging bonus
+// for time waited), coinflip only when effective weights are truly equal.
+function effectiveWeight(item, s) {
+  return item.weight + (s.tick - item.enqueuedAt) * s.agingRate;
+}
+function tieLedgerComparator(a, b, s) {
+  const wa = effectiveWeight(a, s);
+  const wb = effectiveWeight(b, s);
+  if (wa === wb) return Math.random() - 0.5;
+  return wb - wa;
+}
+
+// — RETRY_CANCEL: mirrors withScope()'s outer retry loop (v5.3.0). A
+// cancellation is checked first and is NEVER retried, regardless of
+// RetryLedger config — that's the whole point of it being a distinct
+// error class from TimeoutExceededError.
+function decideRetryCancel({ cancelled, timesOut, attempt, maxRetries }) {
+  if (cancelled) {
+    return { outcome: "CANCELLED", detail: `OperationCancelledError — the caller's AbortSignal fired (attempt ${attempt + 1} abandoned). Never retried, regardless of RetryLedger config.` };
+  }
+  if (!timesOut) {
+    return { outcome: "SUCCESS", detail: `attempt ${attempt + 1} resolved within its timeout budget — withScope() returns the result normally.` };
+  }
+  if (attempt < maxRetries) {
+    return { outcome: "RETRYING", detail: `attempt ${attempt + 1} timed out, but this scope's RetryLedger allows ${maxRetries} retries (attempt ${attempt} < ${maxRetries}) — withScope() re-runs the ENTIRE dispatch: fresh throttle check, fresh primary/clone/queue admission decision, not just a blind repeat.` };
+  }
+  return { outcome: "TIMEOUT", detail: `attempt ${attempt + 1} timed out and the RetryLedger budget (${maxRetries} retries) is exhausted — TimeoutExceededError propagates to the caller.` };
+}
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+let currentPath = "GUARD";
+const state = {
+  GUARD: {
+    scopeLocked: true,
+    activeClones: 1,
+    maxConcurrentClones: 3,
+    operationOutcome: "success",
+    timesOut: false,
+    noCloneListed: false,
+  },
+  AXIS: {
+    requestsUsed: 3,
+    maxRequests: 5,
+    activeClones: 2,
+    maxConcurrentClones: 2,
+    queueLength: 0,
+    maxQueueSize: 3,
+    operationMs: 120,
+    timeoutMs: 200,
+  },
+  QUEUE: {
+    maxConcurrentClones: 1,
+    activeClones: 1,
+    maxQueueSize: 4,
+    nextId: 3,
+    tick: 2,
+    agingRate: 0,
+    queue: [
+      { id: 1, scopeKey: "SaveData", weight: 100, enqueuedAt: 0 },
+      { id: 2, scopeKey: "ReadData", weight: 10, enqueuedAt: 0 },
+    ],
+  },
+  RETRY: {
+    cancelled: false,
+    timesOut: true,
+    attempt: 0,
+    maxRetries: 2,
+  },
+};
+
+const panel = document.getElementById("panel");
+const output = document.getElementById("output");
+const usecasesEl = document.getElementById("usecases");
+
+const USE_CASES = {
+  GUARD: {
+    label: "SCOPE_GUARD — withScope() use cases",
+    items: [
+      "<strong>Per-user session cache</strong> — concurrent requests writing to the same user's session never block each other",
+      "<strong>Multi-tenant state</strong> — a slow tenant's in-flight write can't stall a fast tenant on the same store",
+      "<strong>Hot-key writes under load</strong> — demonstrates why merge-back only happens on success: a failed write must never leak into the primary",
+      "<strong>Zombie-safe timeouts (v5.3.0)</strong> — toggle TIMES OUT to see why the lock/slot outlives the losing race instead of freeing instantly",
+      "<strong>Strict-order scopes</strong> — NoCloneLedger forces a scope to always queue, for state that can't tolerate a stale snapshot",
+    ],
+  },
+  AXIS: {
+    label: "TRIPLE_AXIS — independent bounding use cases",
+    items: [
+      "<strong>Abuse / DoS resistance</strong> — StrictThrottler caps total throughput independent of how fast individual calls run",
+      "<strong>SLA enforcement</strong> — TimeoutExceededError bounds worst-case latency regardless of load",
+      "<strong>Memory ceiling</strong> — maxConcurrentClones + maxQueueSize bound how much ephemeral clone state can exist at once",
+      "<strong>Health checks</strong> — getMetrics() exposes this exact shape live, cheap enough to poll from a readiness probe",
+    ],
+  },
+  QUEUE: {
+    label: "TIE_LEDGER — weighted queue use cases",
+    items: [
+      "<strong>Writes over reads</strong> — give SaveData a higher weight than ReadData so writes cut the line under contention",
+      "<strong>Priority tiers</strong> — paid/critical scopes dequeue before best-effort ones when clone slots are scarce",
+      "<strong>Explicit back-pressure</strong> — once maxQueueSize is hit, callers get QueueOverflowError instead of hanging indefinitely",
+      "<strong>Starvation-proofing (v5.3.0)</strong> — raise agingRate above 0 and watch a low-weight task's effective weight eventually overtake a static high-weight one",
+    ],
+  },
+  RETRY: {
+    label: "RETRY_CANCEL — RetryLedger vs. AbortSignal use cases (v5.3.0)",
+    items: [
+      "<strong>Transient contention</strong> — a scope opted into RetryLedger re-attempts a timed-out call with a fresh admission decision, not a blind repeat",
+      "<strong>User-cancellable requests</strong> — a disconnecting client's AbortSignal cancels its one in-flight call without tearing down the manager",
+      "<strong>Never conflating the two</strong> — OperationCancelledError is a distinct class from TimeoutExceededError specifically so cancellation is never mistaken for a retryable fault",
+    ],
+  },
+};
+
+function renderUseCases() {
+  const uc = USE_CASES[currentPath];
+  usecasesEl.innerHTML = `
+    <span class="group-label">${uc.label}</span>
+    <ul>${uc.items.map(i => `<li>${i}</li>`).join("")}</ul>
+  `;
+}
+
+function toggleBtn(kind, on, onLabel, offLabel) {
+  return `<button type="button" class="vote-toggle" data-kind="${kind}" data-state="${on ? "on" : "off"}">
+    ${on ? onLabel : offLabel}
+  </button>`;
+}
+
+function sliderRow(label, kind, val, min, max, step = 1) {
+  return `
+    <div class="group">
+      <span class="group-label"><span>${label}</span><span class="val" data-show="${kind}">${val}</span></span>
+      <input type="range" data-kind="${kind}" min="${min}" max="${max}" step="${step}" value="${val}">
+    </div>`;
+}
+
+function renderPanel() {
+  if (currentPath === "GUARD") {
+    const s = state.GUARD;
+    panel.innerHTML = `
+      <h3>SCOPE_GUARD — withScope()</h3>
+      <p class="path-desc">A caller asks for a scope. If it's free, it runs on the real resource. If it's busy, it gets a shadow clone instead of waiting — and that clone's writes are merged back only if the operation succeeds. NoCloneLedger and a timed-out operation (v5.3.0's zombie-safe release) each carve out their own branch below.</p>
+      <div class="group">
+        <span class="group-label">Is this scope already locked by another call?</span>
+        <div class="toggles">${toggleBtn("scopeLocked", s.scopeLocked, "LOCKED (busy)", "FREE")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">Is this scope listed in NoCloneLedger (always queue, never clone)?</span>
+        <div class="toggles">${toggleBtn("noCloneListed", s.noCloneListed, "LISTED (queue-only)", "NOT LISTED")}</div>
+      </div>
+      ${sliderRow("Active clones", "activeClones", s.activeClones, 0, s.maxConcurrentClones)}
+      ${sliderRow("Max concurrent clones", "maxConcurrentClones", s.maxConcurrentClones, 1, 6)}
+      <div class="group">
+        <span class="group-label">Does the operation exceed its timeout budget?</span>
+        <div class="toggles">${toggleBtn("timesOut", s.timesOut, "TIMES OUT", "COMPLETES IN TIME")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">If it completes in time, does it succeed or throw?</span>
+        <div class="toggles">${toggleBtn("operationOutcome", s.operationOutcome === "success", "SUCCEEDS", "THROWS")}</div>
+      </div>
+      <button type="button" class="execute-btn" id="run-btn">withScope()</button>
+    `;
+  } else if (currentPath === "AXIS") {
+    const s = state.AXIS;
+    panel.innerHTML = `
+      <h3>TRIPLE_AXIS — rate · concurrency · duration</h3>
+      <p class="path-desc">Three independent bounding checks, each with its own typed error. Push any one past its limit and see which fires first — they're evaluated in the same order withScope() itself uses.</p>
+      ${sliderRow("Requests used this window", "requestsUsed", s.requestsUsed, 0, s.maxRequests)}
+      ${sliderRow("Max requests / window", "maxRequests", s.maxRequests, 1, 10)}
+      ${sliderRow("Active clones", "activeClones", s.activeClones, 0, s.maxConcurrentClones)}
+      ${sliderRow("Max concurrent clones", "maxConcurrentClones", s.maxConcurrentClones, 1, 6)}
+      ${sliderRow("Pending queue length", "queueLength", s.queueLength, 0, s.maxQueueSize)}
+      ${sliderRow("Max queue size", "maxQueueSize", s.maxQueueSize, 0, 10)}
+      ${sliderRow("Operation duration (ms)", "operationMs", s.operationMs, 0, 2000, 10)}
+      ${sliderRow("Timeout budget (ms)", "timeoutMs", s.timeoutMs, 10, 2000, 10)}
+      <button type="button" class="execute-btn" id="run-btn">withScope(scopeKey, op, timeoutMs)</button>
+    `;
+  } else if (currentPath === "QUEUE") {
+    const s = state.QUEUE;
+    const sorted = [...s.queue].sort((a, b) => effectiveWeight(b, s) - effectiveWeight(a, s));
+    panel.innerHTML = `
+      <h3>TIE_LEDGER — weighted queue ordering + aging</h3>
+      <p class="path-desc">Add scopes to the pending queue with a TieLedger weight, then process it one entry at a time. Higher <em>effective</em> weight dequeues first; equal effective weights coinflip. Dequeue only succeeds once a clone slot is actually free. Each "+ enqueue" / "PROCESS_NEXT()" click advances a simulated clock tick — raise agingRate above 0 to see a low-weight task's effective weight climb the longer it waits.</p>
+      ${sliderRow("Active clones", "activeClones", s.activeClones, 0, s.maxConcurrentClones)}
+      ${sliderRow("Max concurrent clones", "maxConcurrentClones", s.maxConcurrentClones, 1, 4)}
+      ${sliderRow("Max queue size", "maxQueueSize", s.maxQueueSize, 1, 8)}
+      ${sliderRow("TieLedger agingRate (bonus per tick waited)", "agingRate", s.agingRate, 0, 20)}
+      <div class="group">
+        <span class="group-label">Pending queue (${s.queue.length}/${s.maxQueueSize}) — sim. tick ${s.tick} — sorted by effective weight</span>
+        <div class="queue-list">
+          ${sorted.length ? sorted.map(q => `<div class="queue-cell"><span class="qk">${q.scopeKey}</span><span class="qw">weight ${q.weight}${s.agingRate ? ` +${((s.tick - q.enqueuedAt) * s.agingRate).toFixed(0)} aged = ${effectiveWeight(q, s).toFixed(0)}` : ""}</span></div>`).join("") : '<span class="queue-empty">queue is empty</span>'}
+        </div>
+      </div>
+      <div class="queue-row">
+        <input type="text" id="new-scope" placeholder="scopeKey" value="NewTask" style="max-width:140px;">
+        <input type="number" id="new-weight" placeholder="weight" value="50" style="max-width:90px;">
+        <button type="button" class="queue-add-btn" id="queue-add">+ enqueue</button>
+        <button type="button" class="queue-process-btn" id="queue-process">PROCESS_NEXT()</button>
+      </div>
+    `;
+  } else {
+    const s = state.RETRY;
+    panel.innerHTML = `
+      <h3>RETRY_CANCEL — withScope()'s outer retry loop (v5.3.0)</h3>
+      <p class="path-desc">Every attempt goes through Diagram 1's admission logic first; this mirrors the loop wrapped around it. A timeout is retried only if the scope's RetryLedger allows another attempt. A cancellation is checked first and short-circuits everything — it's never retried, no matter the RetryLedger config.</p>
+      <div class="group">
+        <span class="group-label">Has the caller's AbortSignal fired (withScope options.signal)?</span>
+        <div class="toggles">${toggleBtn("cancelled", s.cancelled, "CANCELLED", "NOT CANCELLED")}</div>
+      </div>
+      <div class="group">
+        <span class="group-label">Does this attempt exceed its timeout budget?</span>
+        <div class="toggles">${toggleBtn("timesOut", s.timesOut, "TIMES OUT", "COMPLETES IN TIME")}</div>
+      </div>
+      ${sliderRow("Current attempt (0-based)", "attempt", s.attempt, 0, s.maxRetries)}
+      ${sliderRow("RetryLedger.getMaxRetries(scopeKey)", "maxRetries", s.maxRetries, 0, 5)}
+      <button type="button" class="execute-btn" id="run-btn">withScope()</button>
+    `;
+  }
+  attachPanelHandlers();
+}
+
+function attachPanelHandlers() {
+  panel.querySelectorAll(".vote-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const kind = btn.dataset.kind;
+      const s = state[currentPath];
+      if (kind === "scopeLocked") s.scopeLocked = !s.scopeLocked;
+      if (kind === "operationOutcome") s.operationOutcome = s.operationOutcome === "success" ? "throws" : "success";
+      if (kind === "timesOut") s.timesOut = !s.timesOut;
+      if (kind === "noCloneListed") s.noCloneListed = !s.noCloneListed;
+      if (kind === "cancelled") s.cancelled = !s.cancelled;
+      renderPanel();
+    });
+  });
+
+  panel.querySelectorAll('input[type="range"]').forEach(input => {
+    input.addEventListener("input", () => {
+      const kind = input.dataset.kind;
+      const s = state[currentPath];
+      s[kind] = Number(input.value);
+      // keep dependent bounds sane
+      if (kind === "maxConcurrentClones" && s.activeClones > s.maxConcurrentClones) s.activeClones = s.maxConcurrentClones;
+      if (kind === "maxRequests" && s.requestsUsed > s.maxRequests) s.requestsUsed = s.maxRequests;
+      if (kind === "maxQueueSize" && s.queueLength !== undefined && s.queueLength > s.maxQueueSize) s.queueLength = s.maxQueueSize;
+      if (kind === "maxRetries" && s.attempt > s.maxRetries) s.attempt = s.maxRetries;
+      renderPanel();
+    });
+  });
+
+  const runBtn = document.getElementById("run-btn");
+  if (runBtn) runBtn.addEventListener("click", execute);
+
+  if (currentPath === "QUEUE") {
+    const addBtn = document.getElementById("queue-add");
+    if (addBtn) addBtn.addEventListener("click", () => {
+      const s = state.QUEUE;
+      const scopeKey = document.getElementById("new-scope").value.trim() || "Task";
+      const weight = Number(document.getElementById("new-weight").value) || 0;
+      if (s.queue.length >= s.maxQueueSize) {
+        renderOutput({ outcome: "QUEUE_OVERFLOW", detail: `QueueOverflowError: maxQueueSize (${s.maxQueueSize}) exceeded — enqueue rejected.` }, { scopeKey, weight, queue: s.queue });
+        return;
+      }
+      s.queue.push({ id: s.nextId++, scopeKey, weight, enqueuedAt: s.tick });
+      s.tick += 1; // simulated clock tick — lets agingRate have something to bite on
+      renderPanel();
+    });
+    const processBtn = document.getElementById("queue-process");
+    if (processBtn) processBtn.addEventListener("click", () => {
+      const s = state.QUEUE;
+      s.tick += 1;
+      if (s.queue.length === 0) {
+        renderOutput({ outcome: "WAITING", detail: "queue is empty — nothing to dequeue." }, {});
+        return;
+      }
+      if (s.activeClones >= s.maxConcurrentClones) {
+        renderOutput({ outcome: "WAITING", detail: "front of queue is ready, but every clone slot is still taken — stays queued until _processQueue() is triggered again by a slot freeing." }, { queue: s.queue });
+        return;
+      }
+      s.queue.sort((a, b) => tieLedgerComparator(a, b, s));
+      const dequeued = s.queue.shift();
+      const eff = effectiveWeight(dequeued, s);
+      renderOutput({ outcome: "CLONE_MERGED", detail: `dequeued "${dequeued.scopeKey}" (weight ${dequeued.weight}, effective ${eff.toFixed(0)} after ${s.tick - dequeued.enqueuedAt} ticks waited) — ran on a shadow clone and merged back on success.` }, { dequeued, effectiveWeight: eff, remainingQueue: s.queue });
+      renderPanel();
+    });
+  }
+}
+
+function toVotes() {} // (unused placeholder kept out — no-op)
+
+function execute() {
+  let result, raw;
+
+  if (currentPath === "GUARD") {
+    result = decideGuard(state.GUARD);
+    raw = { ...state.GUARD, ...result };
+  } else if (currentPath === "AXIS") {
+    result = decideAxis(state.AXIS);
+    raw = { ...state.AXIS, ...result };
+    // mirrors what manager.getMetrics() would report for this exact state
+    raw.metrics = {
+      queueLength: state.AXIS.queueLength,
+      activeClones: state.AXIS.activeClones,
+      maxConcurrentClones: state.AXIS.maxConcurrentClones,
+      lockedScopes: state.AXIS.activeClones > 0 ? ["scope:demo"] : [],
+      inFlight: state.AXIS.activeClones,
+      shutDown: false
+    };
+  } else if (currentPath === "RETRY") {
+    result = decideRetryCancel(state.RETRY);
+    raw = { ...state.RETRY, ...result };
+  }
+
+  renderOutput(result, raw);
+}
+
+function renderOutput(result, raw) {
+  output.innerHTML = `
+    <span class="prompt">&gt; shadow-clone --scenario=${currentPath.toLowerCase()} --execute</span>
+    <div class="outcome-line outcome-${result.outcome}">RESULT: ${result.outcome}</div>
+    <p class="outcome-detail">${result.detail}</p>
+    <details class="raw"><summary>raw output</summary><pre>${JSON.stringify(raw, null, 2)}</pre></details>
+  `;
+}
+
+document.querySelectorAll(".path-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".path-btn").forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected", "false"); });
+    btn.classList.add("active");
+    btn.setAttribute("aria-selected", "true");
+    currentPath = btn.dataset.path;
+    panel.setAttribute("aria-labelledby", btn.id);
+    output.innerHTML = `<span class="prompt">&gt; awaiting execution...</span>`;
+    renderPanel();
+    renderUseCases();
+  });
+});
+
+renderPanel();
+renderUseCases();
+</script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT: SHADOW-CLONE // v5.3.0 PRODUCTION</title>
+    <style>
+        body {
+            background-color: #050505;
+            color: #33ff00;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            line-height: 1.4;
+            text-shadow: 0 0 5px #33ff00;
+        }
+
+        h1, h2, h3 {
+            text-transform: uppercase;
+            border-bottom: 2px dashed #33ff00;
+            padding-bottom: 5px;
+        }
+        
+        a {
+            color: #33ff00;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #33ff00;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid #33ff00;
+            padding: 20px;
+            box-shadow: 0 0 20px #004400;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .alert {
+            color: #ff3333;
+            text-shadow: 0 0 5px #ff3333;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #005500;
+        }
+
+        .grug-col {
+            background-color: #112211;
+            padding: 15px;
+            border-right: 1px dashed #33ff00;
+        }
+
+        .academic-col {
+            background-color: #001100;
+            padding: 15px;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 100px;
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(51, 255, 0, 0.2) 50%, rgba(0,0,0,0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 10s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100%; }
+        }
+        
+        .toc {
+            border: 1px dashed #33ff00;
+            padding: 15px;
+            margin-bottom: 30px;
+            background: #001100;
+        }
+        
+        .toc ul {
+            list-style-type: square;
+        }
+
+        /* Mermaid chart container styling */
+        .mermaid-wrapper {
+            background-color: #020a02;
+            border: 1px solid #33ff00;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px #002200;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="scan-line"></div>
+
+    <p>>>> LOGIN: ADMIN_ROOT</p>
+    <p>>>> PASSWORD: ***********</p>
+    <p>>>> DECRYPTING SCHEMATIC... <span class="alert">[COMPLETE]</span></p>
+
+    <h1>PROJECT: SHADOW_CLONE // V5.3.0</h1>
+    <p><strong>STATUS:</strong> PRODUCTION / HARDENED</p>
+    <p><strong>ARCHETYPE:</strong> Universal Resource-Contention Guard & Lock-Free State Manager</p>
+    <p><strong>MISSION:</strong> Eliminate deadlocks and blocking via ephemeral localized state duplication.</p>
+    <p><strong>CHANGELOG (v2.2 → v5.1.0):</strong> queueing replaces outright rejection at the concurrent-clone cap &nbsp;•&nbsp; weighted <code>TieLedger</code> + coinflip queue ordering &nbsp;•&nbsp; <code>secureModule()</code> one-line whole-module wrapping &nbsp;•&nbsp; scope provenance IDs (<code>ResourceID:ScopeID:CloneID</code>) &nbsp;•&nbsp; restored in-clone <code>set()</code> with out-of-scope guarding &nbsp;•&nbsp; construction-time input validation &nbsp;•&nbsp; graceful <code>shutdown()</code> draining &nbsp;•&nbsp; a clone's successful writes merge back onto the primary resource (<code>mergeShadow</code>) instead of being discarded when the clone drops.</p>
+    <p><strong>CHANGELOG (v5.1.0 → v5.2.0):</strong> opt-in <code>RetryLedger</code> (per-scope retry-on-timeout) &nbsp;•&nbsp; opt-in <code>NoCloneLedger</code> (per-scope queue-only, never clone).</p>
+    <p><strong>CHANGELOG (v5.2.0 → v5.3.0):</strong> every operation now receives a third argument, <code>signal: AbortSignal</code>, that fires on timeout or external cancellation &nbsp;•&nbsp; a timed-out primary/clone's lock/slot is held until the abandoned operation <em>actually</em> settles instead of releasing on the losing race, closing a real overlap window &nbsp;•&nbsp; <code>withScope(..., { signal })</code> lets a caller cancel one specific active or queued call, rejecting with the new <code>OperationCancelledError</code> (never retried) &nbsp;•&nbsp; <code>TieLedger</code> takes an optional <code>agingRate</code> so a low-weight scope can't starve forever &nbsp;•&nbsp; <code>manager.getMetrics()</code> observability snapshot &nbsp;•&nbsp; <code>manager.shutdown()</code> now returns a Promise that resolves once every in-flight operation has settled, with an optional <code>{ force: true }</code>.</p>
+    <p>&gt;&gt;&gt; <a href="./Demo-ShadowClone.html">LAUNCH INTERACTIVE CONSOLE</a> &nbsp;&mdash;&nbsp; drive withScope(), the triple-axis guards, TieLedger, and the retry/cancel path by hand.</p>
+
+    <div class="toc">
+        <h2>TABLE OF CONTENTS</h2>
+        <ul>
+            <li><a href="#mod1">MODULE 1: THE INVISIBLE SHIELD (autoGuard / secureModule)</a></li>
+            <li><a href="#mod2">MODULE 2: JUTSU MECHANICS (ScopedResourceManager)</a></li>
+            <li><a href="#mod3">MODULE 3: PRECISION SURGERY (Namespaced Hash Tables)</a></li>
+            <li><a href="#mod4">MODULE 4: THE TRIPLE-AXIS DEFENSE (Rate, Duration, Memory)</a></li>
+            <li><a href="#mod6">MODULE 6: THE WAITING LINE (Queueing & TieLedger)</a></li>
+            <li><a href="#mod5">MODULE 5: THE NO-SILENT-FAILURE PACT (explicitTry, Error Taxonomy & shutdown)</a></li>
+            <li><a href="#mod7">MODULE 7: OPT-IN LEDGERS (RetryLedger & NoCloneLedger)</a></li>
+            <li><a href="#mod8">MODULE 8: THE ZOMBIE PROTOCOL (Cancellation, Aging & Observability) — v5.3.0</a></li>
+            <li><a href="#flowcharts">SYSTEM FLOWCHARTS (Schematics)</a></li>
+        </ul>
+    </div>
+
+    <!-- SECTION 1: AUTOGUARD -->
+    <h2 id="mod1">MODULE 1: THE INVISIBLE SHIELD (autoGuard / secureModule)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>ONE LINE FIX ALL.</strong></p>
+            <p>Grug have many functions. Grug tired of writing locks for every function. Grug wrap whole box of functions in <code>autoGuard</code>. Now only functions named <code>antiLock_*</code> get shield — unless Grug say <code>guardAll: true</code>, then every function protected. For entire file at once, Grug use <code>secureModule(rawModule, config)</code> — one call, whole imported file safe, no per-function naming needed. Friend import Grug's code, friend get safe code without doing anything. Magic.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Transparent Contention-Guarding Proxy.</strong></p>
+            <p>The <code>autoGuard</code> function acts as a universal higher-order wrapper via JavaScript Proxies. By default it guards only <code>antiLock_</code>-prefixed exports; passing <code>guardAll: true</code> extends the Proxy trap to every function on the target. <code>secureModule(rawModule, config)</code> is the zero-configuration entry point built on top of it: it instantiates a private <code>ScopedResourceManager</code> wired to a <code>TieLedger</code>, sets <code>guardAll: true</code> internally, and returns a fully-guarded module in one call. This isolates the entire configuration surface to the producer module, requiring zero boilerplate from the consumer.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 2: SHADOW CLONING -->
+    <h2 id="mod2">MODULE 2: JUTSU MECHANICS (ScopedResourceManager)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>MAKE FAKE ROOM FOR FRIEND.</strong></p>
+            <p>Grug using workbench. Friend want use workbench too. Instead of make friend wait (boring) or fight (bad), Grug snap fingers. Make clone of workbench just for friend. Friend do work on clone — and if friend finish the work properly, whatever friend built gets carried back to the real workbench before the clone poofs. Clone only poofs empty-handed if friend's work went wrong (crash or ran out of time). Nobody wait. Nobody fight. Nobody's work vanishes for no reason.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Phase-Lock Avoidance via Ephemeral MVCC.</strong></p>
+            <p>The core architectural invariant is the total absence of blocking locks on a busy-but-not-saturated scope. If a resource scope is actively locked (<code>activeLocks.has(scopeKey)</code>) and clone capacity remains, the manager immediately triggers <code>shadowClone()</code> to generate an isolated, deep-copied ephemeral view of just that scope. Secondary operations occur purely on this disposable reference. On successful completion, the clone's dirty (written) keys are reconciled onto the primary resource via <code>mergeShadow()</code> — last-writer-wins per key against whatever else touched that key meanwhile — before the clone reference is dropped in a <code>finally</code> block; a clone whose operation throws or times out is dropped unmerged, so a half-finished write never reaches the primary. Only once <em>both</em> the primary lock and every clone slot are exhausted does a caller wait — and even then it waits in an explicit, ordered queue (Module 6) rather than being rejected.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 3: NAMESPACING & HASH TABLES -->
+    <h2 id="mod3">MODULE 3: PRECISION SURGERY (Namespaced Hash Tables)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>STAY IN YOUR YARD.</strong></p>
+            <p>Clone only copy YOUR yard, not whole world. If your name is "user:alice", you get clone of "user:alice" — and you can read AND write inside it, just like real thing, and it goes back to the real yard when you're done. But if you try touch "user:bob" inside clone, either to look or to change, clone yell at you and crash. Keeps Grug from accidentally messing up things that aren't his, and keeps a write from silently vanishing into nowhere when clone poofs.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Scope-Bounded Deep Cloning & Strict Invariants.</strong></p>
+            <p>Unlike traditional full-table cloning, <code>ChainedHashTable.shadowClone</code> utilizes explicit namespace rules (e.g., <code>scopeKey</code> or <code>scopeKey:*</code>) rather than arbitrary hash bucket co-location. The generated <code>Shadow</code> object exposes both <code>get()</code> and <code>set()</code>, and both route through <code>_assertInScope()</code> before touching <code>entries</code>. Any attempt to read <em>or</em> write a key outside the locked namespace triggers a catastrophic <code>RuntimeInvariantError</code>, preventing silent data reconciliation failures where an out-of-scope write would otherwise vanish when the clone is dropped. Underlying values are duplicated with <code>structuredClone()</code> (falling back to a JSON round-trip on older runtimes), itself wrapped so an unclonable value fails as a <code>RuntimeInvariantError</code> at the clone site instead of a bare engine exception downstream.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 4: RESOURCE AXES -->
+    <h2 id="mod4">MODULE 4: THE TRIPLE-AXIS DEFENSE (Rate, Duration, Memory)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>THREE RULES OF CAVE.</strong></p>
+            <p>1. <i>Rate</i>: Don't knock on door too fast (Throttle).<br>
+            2. <i>Time</i>: Don't stay inside too long (Timeout).<br>
+            3. <i>Space</i>: Don't make too many clones or cave get crowded (Max Clones).<br>
+            Break rule? You get kicked out. No infinite waiting.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Independent Multi-Axis Resource Bounding.</strong></p>
+            <p>System stability relies on bounding three orthogonal vectors of exhaustion:<br>
+            <strong>1. Rate:</strong> <code>StrictThrottler</code> enforces a fixed-window request limit.<br>
+            <strong>2. Duration:</strong> <code>Promise.race()</code> pairs the operation with a strict millisecond timeout budget.<br>
+            <strong>3. Memory:</strong> <code>maxConcurrentClones</code> caps the instantiation of ephemeral shadows. Losing control of any single axis results in catastrophic unbounded scaling; this architecture guards all three.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 6: QUEUEING & TIE LEDGER -->
+    <h2 id="mod6">MODULE 6: THE WAITING LINE (Queueing & TieLedger)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>NOBODY TURNED AWAY, EVERYONE GETS A NUMBER.</strong></p>
+            <p>Old way: cave full of clones (20 max), new friend show up, Grug say "NO, go away" (<code>EphemeralMemoryExhaustedError</code>). Rude. New way: friend get a number and wait in line. When clone finishes and poofs, next number in line goes. If two friends tied for next spot, Grug flip coin — unless Grug wrote down ahead of time that some jobs (like <code>SaveData</code>) always cut the line over others (like <code>ReadData</code>). Line only breaks if it gets TOO long (<code>maxQueueSize</code>) — then Grug finally says no, but tells friend exactly why (<code>QueueOverflowError</code>), never just silently drops them.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Bounded FIFO Admission Control with Weighted Tie-Breaking.</strong></p>
+            <p>Once both the primary lock and every clone slot for a scope are exhausted, <code>_enqueue()</code> pushes the request onto <code>_pendingQueue</code> with an <code>enqueueTime</code> and returns an unsettled Promise. <code>_processQueue()</code> re-sorts the queue on every drain using the manager's <code>_queueComparator</code> — FIFO by default, or a <code>TieLedger.getComparator()</code> when supplied. <code>TieLedger</code> orders by a caller-supplied <code>priorityWeights</code> map keyed by <code>scopeKey</code>; equal (or absent) weights fall through to <code>coinflipComparator</code>, a <code>Math.random() - 0.5</code> shuffle. The deprecated <code>EphemeralMemoryExhaustedError</code> reject-at-capacity path from v2.2 has been fully replaced by this admission queue; the only remaining rejection is <code>QueueOverflowError</code>, thrown synchronously at <code>maxQueueSize</code> so back-pressure is explicit rather than silent.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 5: ERRORS -->
+    <h2 id="mod5">MODULE 5: THE NO-SILENT-FAILURE PACT (explicitTry, Error Taxonomy & shutdown)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>NO SECRET BROKEN THINGS.</strong></p>
+            <p>When thing break, it MUST scream. No returning 'null' and pretending everything okay. But screaming crash program. So Grug put scream in a box (<code>explicitTry</code>). You open box, check if it has data or a scream inside. Safe to hold. Even setup time now screams properly — bad settings (like negative timeout, or empty name) caught the moment cave built, not later when friend already mid-task. And when Grug close cave for the night (<code>shutdown()</code>), nobody left waiting in line forever wondering — every friend still in queue gets told "cave closed" right then, loud and clear.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Typed Exceptions & Result Envelope Pattern.</strong></p>
+            <p>The module rejects silent failures (boolean flags, magic nulls) in favor of a strict typed error taxonomy (<code>RuntimeInvariantError</code>, <code>ThrottlingExhaustedError</code>, <code>TimeoutExceededError</code>, <code>OperationCancelledError</code>, <code>QueueOverflowError</code>). To prevent untamed exception bubbling, the boundary function <code>explicitTry</code> captures these errors into a structured Result object (<code>{ok, data, error}</code>), forcing the consumer into explicit error-handling paths. The pact now extends to two lifecycle edges that v2.2 left implicit: (1) <strong>construction</strong> — every <code>ScopedResourceManager</code> option (<code>maxRequests</code>, <code>windowMs</code>, <code>maxQueueSize</code>, <code>resourceId</code>, <code>queueComparator</code>) is validated in the constructor, failing at instantiation rather than deep inside a later call; and (2) <strong>shutdown</strong> — <code>shutdown(reason, {force})</code> synchronously drains <code>_pendingQueue</code> (rejecting every waiting task with a <code>RuntimeInvariantError</code> and flipping <code>_shutDown</code> so subsequent <code>withScope()</code> calls fail loudly), then returns a Promise that only resolves once every in-flight primary/clone has also settled — see Module 8 for why that distinction matters.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 7: LEDGERS -->
+    <h2 id="mod7">MODULE 7: OPT-IN LEDGERS (RetryLedger & NoCloneLedger)</h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>SOME JOBS GET SECOND CHANCE. SOME JOBS NEVER CLONE.</strong></p>
+            <p>Sometimes friend's job run out of time (<code>TimeoutExceededError</code>) but Grug thinks cave was just busy for a moment, not really broken. For THOSE jobs — the ones Grug write down in <code>RetryLedger</code> — Grug let friend try again, up to a number Grug picked, before finally giving up. Off by default: retrying broken thing can make broken thing MORE broken, so Grug only turn it on when Grug sure timeout was bad luck, not bad job.</p>
+            <p>Other jobs need to see EVERY change in order, one after another, no fake copies. Grug write those down in <code>NoCloneLedger</code>. Even when clone room is empty, those jobs wait in line for real workbench — never get a fake one.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Per-Scope Opt-In Policy Ledgers.</strong></p>
+            <p><code>RetryLedger.getMaxRetries(scopeKey)</code> maps a scope to an extra-attempt budget (0 for any unlisted scope — off by default). <code>withScope()</code>'s outer loop catches only <code>TimeoutExceededError</code>; if the scope's budget isn't exhausted, it re-runs the <em>entire</em> dispatch — fresh throttle check, fresh primary/clone/queue admission decision — rather than blindly re-invoking the same branch. Any other thrown error, including the new <code>OperationCancelledError</code>, propagates immediately and is never retried.</p>
+            <p><code>NoCloneLedger.isQueueOnly(scopeKey)</code> is consulted in <code>_dispatch()</code> before the clone-capacity check: a listed scope skips the clone path entirely and always falls through to the queue, even with slots free. This exists for operations that need strict linearizability on their scope — a snapshot-at-clone-time view would let them silently miss a write that happened between clone and merge.</p>
+        </div>
+    </div>
+
+    <!-- SECTION 8: v5.3.0 ZOMBIE PROTOCOL -->
+    <h2 id="mod8">MODULE 8: THE ZOMBIE PROTOCOL (Cancellation, Aging & Observability) <span style="color:#00f2ff;">— v5.3.0</span></h2>
+    <div class="comparison-table">
+        <div class="grug-col">
+            <h3>GRUG EXPLAIN</h3>
+            <p><strong>GRUG CANNOT KILL WHAT GRUG STARTED.</strong></p>
+            <p>Grug learn hard truth: once friend start job, Grug cannot reach in and stop friend's hands. Even after Grug yell "TIME UP" and walk away, friend might keep hammering in the dark, unseen, on the SAME workbench Grug just handed to someone new. Very bad — two friends hammering same wood, one of them invisible. So now: Grug does NOT hand workbench to next friend until first friend's hands actually stop moving, even if that's long after "TIME UP" was yelled. Grug also gives every friend a little bell (<code>signal</code>) that rings the moment their time is up — smart friend hears bell, drops hammer immediately, so workbench frees up fast instead of Grug waiting for friend to finish anyway.</p>
+            <p>Friend outside can also ring a SPECIFIC bell to cancel just ONE job, whether it's still in line or already hammering — different scream than "you were too slow" (<code>OperationCancelledError</code>, not <code>TimeoutExceededError</code>), so Grug never accidentally gives a cancelled job a second try.</p>
+            <p>Line-cutting weights don't fade with waiting — until now: Grug can tell <code>TieLedger</code> to add a little more cutting-power to a job for every tick it waits, so a cheap job doesn't wait behind expensive jobs FOREVER. And Grug can peek at the whole cave any time (<code>getMetrics()</code>) without touching anything, and closing the cave now waits for every hammering friend to actually finish, not just tells them to stop.</p>
+        </div>
+        <div class="academic-col">
+            <h3>ACADEMIC ANALYSIS</h3>
+            <p><strong>SUBJECT: Cooperative Cancellation & the Zombie-Overlap Fix.</strong></p>
+            <p>Prior versions released <code>activeLocks</code>/<code>activeClones</code> the instant a <code>Promise.race()</code> lost to its timeout. Since JS has no preemption, the losing <code>operation()</code> call keeps executing in the background — meaning a brand-new caller could begin mutating the primary resource concurrently with an operation the manager itself had already abandoned. As of v5.3.0, release is wired to the abandoned call's <em>own eventual settle</em> (via a `.then` on the execution promise, tracked in <code>_inFlight</code>), not to the race outcome — closing that overlap window at the cost of a scope staying "busy" past <code>timeoutMs</code> if its operation ignores cancellation.</p>
+            <p>Every operation's third argument is now an <code>AbortSignal</code>, fired by an internal <code>AbortController</code> the instant its attempt times out — an operation checking <code>signal.aborted</code> can exit immediately instead of running pointlessly, closing that window itself. <code>withScope()</code>'s new <code>{signal}</code> option merges a caller-supplied external <code>AbortSignal</code> into the same race: it cancels a still-queued task immediately (spliced out of <code>_pendingQueue</code>) or an active one cooperatively, rejecting with <code>OperationCancelledError</code> — deliberately a distinct class from <code>TimeoutExceededError</code> so a configured <code>RetryLedger</code> can never mistake an explicit cancellation for a transient fault.</p>
+            <p><code>TieLedger</code>'s comparator now accepts an <code>agingRate</code>: effective priority becomes <code>weight + waitedMs * agingRate</code>, guaranteeing eventual dequeue for a low-weight scope regardless of sustained higher-weight traffic (0, the default, reproduces the prior static-weight behavior exactly). <code>getMetrics()</code> exposes a point-in-time <code>{ queueLength, activeClones, maxConcurrentClones, lockedScopes, inFlight, shutDown }</code> snapshot. <code>shutdown(reason, { force })</code> now returns a Promise resolved via <code>Promise.allSettled()</code> over every tracked in-flight settle-promise — "shut down" means truly idle — with <code>force: true</code> additionally calling <code>abort()</code> on every live controller first.</p>
+        </div>
+    </div>
+
+    <h2 id="flowcharts">SYSTEM FLOWCHARTS</h2>
+    <p>>>> RENDERING MERMAID.JS LOGIC MATRICES...</p>
+
+    <h3>1. PRIMARY CONCURRENCY MATRIX ("withScope" — single dispatch attempt)</h3>
+    <p>One pass through the retry loop in Diagram 4. <code>signal</code> is a per-attempt <code>AbortController.signal</code>, fired by this diagram's own timeout branch, then merged against any caller-supplied external signal (Diagram 5).</p>
+    <div class="mermaid-wrapper">
+        <div class="mermaid">
+        graph TD
+            Start([Incoming Request: scopeKey]) --> Shut{Manager shut down?}
+            Shut -- Yes --> Err0[Throw RuntimeInvariantError]
+            Shut -- No --> Throttle{Strict Throttler}
+
+            Throttle -- Exhausted --> Err1[Throw ThrottlingExhaustedError]
+            Throttle -- Pass --> LockCheck{Is scopeKey actively locked?}
+
+            LockCheck -- Yes --> NoCloneCheck{NoCloneLedger.isQueueOnly?}
+            LockCheck -- No --> LockPrimary[activeLocks.add]
+
+            NoCloneCheck -- Yes --> Enqueue[Enqueue task<br/>see Diagram 3: Queue &amp; TieLedger]
+            NoCloneCheck -- No --> CloneCheck{Active Clones >= maxConcurrentClones?}
+
+            CloneCheck -- Yes --> Enqueue
+            CloneCheck -- No --> SpawnClone[Spawn Shadow Clone<br/>isEphemeral = true]
+
+            LockPrimary --> BindPrimary[Bind to Primary Resource<br/>isEphemeral = false]
+
+            SpawnClone --> Race["_race(): Promise.Race(execution, timeoutMs, externalSignal)<br/>timer cleared in finally"]
+            BindPrimary --> Race
+            Enqueue -.->|slot frees later| LockCheck
+
+            Race --> ExecOp[execution: operation resource, isEphemeral, signal]
+            Race --> Sleep[Sleep timeoutMs]
+
+            Sleep -- Timeout Reached --> AbortFire["controller.abort() fires<br/>execution keeps running regardless"]
+            AbortFire --> Err3[Throw TimeoutExceededError<br/>to the caller]
+            ExecOp -- Success/Fail --> Settle((execution SETTLES<br/>— may be well after Err3 was thrown))
+
+            Settle --> EphCheck{isEphemeral == true?}
+            EphCheck -- Yes --> DropClone["mergeShadow() if race resolved,<br/>then ref.drop() / activeClones-- / processQueue<br/>— gated on THIS settle, not on the race"]
+            EphCheck -- No --> Unlock["activeLocks.delete / processQueue<br/>— gated on THIS settle, not on the race"]
+
+            DropClone --> End([Return Result / Throw Error, per Diagram 4's retry check])
+            Unlock --> End
+            Err3 -.->|caller sees this immediately;<br/>lock/slot release happens later, at Settle| End
+
+            classDef errorNode fill:#440000,stroke:#ff3333,stroke-width:2px,color:#ff3333;
+            classDef warnNode fill:#442200,stroke:#ffb800,stroke-width:2px,color:#ffb800;
+            class Err0,Err1,Err3 errorNode;
+            class AbortFire warnNode;
+        </div>
+    </div>
+
+    <h3>2. SHADOW CLONE NAMESPACE VALIDATION (get &amp; set)</h3>
+    <div class="mermaid-wrapper">
+        <div class="mermaid">
+        graph TD
+            Start([Clone.get key OR Clone.set key,value]) --> AssertScope["_assertInScope(key)"]
+            AssertScope --> ValCheck{"key === scopeKey OR<br/>key.startsWith(scopeKey + ':') ?"}
+            
+            ValCheck -- YES --> Exec[Execute Read / Write<br/>against entries array]
+            ValCheck -- NO --> Err[Throw RuntimeInvariantError<br/>PREVENTS SILENT DATA LOSS]
+            
+            classDef errorNode fill:#440000,stroke:#ff3333,stroke-width:2px,color:#ff3333;
+            class Err errorNode;
+        </div>
+    </div>
+
+    <h3>3. QUEUE, TIE LEDGER &amp; SHUTDOWN</h3>
+    <div class="mermaid-wrapper">
+        <div class="mermaid">
+        graph TD
+            Enq([Task enqueued]) --> SizeCheck{"_pendingQueue.length &gt;= maxQueueSize?"}
+            SizeCheck -- Yes --> Err4[Throw QueueOverflowError]
+            SizeCheck -- No --> Push["Push task: scopeKey, operation,<br/>enqueueTime, externalSignal"]
+
+            Push --> ListenCheck{externalSignal supplied?}
+            ListenCheck -- Yes --> Listen[listen for abort while queued]
+            ListenCheck -- No --> Sort
+            Listen -.->|caller aborts before its turn| Cancelled["splice out of queue<br/>Throw OperationCancelledError<br/>— task never runs"]
+            Listen --> Sort["_processQueue(): sort by comparator"]
+
+            Sort --> HasLedger{TieLedger supplied?}
+            HasLedger -- Yes --> Weigh["effective weight =<br/>priorityWeights[scopeKey] + waitedMs * agingRate"]
+            HasLedger -- No --> Fifo[FIFO: compare enqueueTime]
+            Weigh --> TieCheck{Effective weights equal?}
+            TieCheck -- Yes --> Coinflip["coinflipComparator:<br/>Math.random() - 0.5"]
+            TieCheck -- No --> HigherFirst[Higher effective weight runs first]
+
+            Fifo --> Peek[Peek task at front]
+            Coinflip --> Peek
+            HigherFirst --> Peek
+
+            Peek --> CanRun{Scope free OR clone slot free?}
+            CanRun -- Yes --> Dequeue[Shift + run as Primary or Clone]
+            CanRun -- No --> Wait[Wait for next processQueue trigger]
+
+            Shutdown(["manager.shutdown(reason, force)"]) --> Drain["Splice entire _pendingQueue"]
+            Drain --> RejectAll[Reject every drained task<br/>with RuntimeInvariantError]
+            RejectAll --> Close["_shutDown = true<br/>future withScope() calls rejected"]
+            Close --> ForceCheck{force === true?}
+            ForceCheck -- Yes --> AbortAll["controller.abort() on every<br/>tracked in-flight AbortController"]
+            ForceCheck -- No --> WaitIdle
+            AbortAll --> WaitIdle["await Promise.allSettled(_inFlight)"]
+            WaitIdle --> Idle([shutdown Promise resolves<br/>— manager is truly idle])
+
+            classDef errorNode fill:#440000,stroke:#ff3333,stroke-width:2px,color:#ff3333;
+            class Err4,Cancelled errorNode;
+        </div>
+    </div>
+
+    <h3>4. RETRY LOOP &amp; CANCELLATION MATRIX ("withScope" — outer wrapper, v5.3.0)</h3>
+    <p>Wraps Diagram 1's single-attempt dispatch. Distinguishes a transient timeout (retryable, per-scope, via <code>RetryLedger</code>) from an explicit cancellation (never retried, regardless of ledger config).</p>
+    <div class="mermaid-wrapper">
+        <div class="mermaid">
+        graph TD
+            Enter(["withScope(scopeKey, op, timeoutMs, options.signal)"]) --> PreAbort{"signal already aborted?"}
+            PreAbort -- Yes --> ErrCancel0[Throw OperationCancelledError<br/>immediately, before any attempt]
+            PreAbort -- No --> Init["attempt = 0<br/>maxRetries = retryLedger ? getMaxRetries(scopeKey) : 0"]
+
+            Init --> LoopCheck{"signal aborted since last check?"}
+            LoopCheck -- Yes --> ErrCancel1[Throw OperationCancelledError]
+            LoopCheck -- No --> Dispatch[["_dispatch(): Diagram 1<br/>one full attempt, timeoutMs budget"]]
+
+            Dispatch -- Resolves --> Return([Return result])
+            Dispatch -- "Throws OperationCancelledError" --> ErrCancel2["Propagate immediately<br/>— NEVER retried, regardless of RetryLedger"]
+            Dispatch -- "Throws TimeoutExceededError" --> RetryCheck{"attempt &lt; maxRetries?"}
+            Dispatch -- "Throws anything else" --> ErrOther["Propagate immediately, unretried<br/>(RuntimeInvariantError, QueueOverflowError, ...)"]
+
+            RetryCheck -- Yes --> Inc["attempt += 1<br/>fresh throttle check, fresh admission decision"]
+            Inc --> LoopCheck
+            RetryCheck -- No --> ErrTimeout[Propagate TimeoutExceededError<br/>— retry budget exhausted]
+
+            classDef errorNode fill:#440000,stroke:#ff3333,stroke-width:2px,color:#ff3333;
+            class ErrCancel0,ErrCancel1,ErrCancel2,ErrTimeout,ErrOther errorNode;
+        </div>
+    </div>
+
+    <h3>5. ZOMBIE-SAFE RELEASE TIMELINE (v5.3.0)</h3>
+    <p>The fix at the center of Diagram 1's "Settle" node: a timed-out call's lock/slot is no longer released the instant the race is lost. Concrete timeline for an un-cooperative 60ms operation racing a 10ms timeout.</p>
+    <div class="mermaid-wrapper">
+        <div class="mermaid">
+        sequenceDiagram
+            participant Caller
+            participant Mgr as ScopedResourceManager
+            participant Op as execution (real operation call)
+
+            Caller->>Mgr: withScope(scopeKey, operation, 10)
+            Mgr->>Mgr: activeLocks.add(scopeKey)
+            Mgr->>Op: operation(resource, false, controller.signal)
+            Note over Op: still running at 10ms — un-cooperative, ignores signal
+
+            Mgr->>Mgr: setTimeout(10ms) fires
+            Mgr->>Op: controller.abort()
+            Mgr-->>Caller: reject(TimeoutExceededError)
+            Note over Mgr: activeLocks STILL holds scopeKey — Op hasn't settled
+
+            Note over Caller: a NEW withScope() call on scopeKey right now<br/>gets routed to a clone, never a second primary
+
+            Op-->>Mgr: Op finally settles (~60ms — 50ms after the caller moved on)
+            Mgr->>Mgr: activeLocks.delete(scopeKey)
+            Mgr->>Mgr: _processQueue()
+            Note over Mgr: only NOW is scopeKey actually free
+        </div>
+    </div>
+
+    <br>
+    <p>>>> shadowClone.js v5.3.0 — VERSION export verified. Regression suite: <code>npm test</code> (57/57 PASS).</p>
+    <p>>>> END OF FILE.</p>
+    <p class="alert">>>> ARCHITECTURE IS DEPLOYED. UNAUTHORIZED MODIFICATIONS WILL BE LOGGED.</p>
+
+</div>
+
+<!-- Mermaid.js Library Injection -->
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    
+    // Initialize Mermaid with custom terminal-inspired theme
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        themeVariables: {
+            primaryColor: '#001100',
+            primaryTextColor: '#33ff00',
+            primaryBorderColor: '#33ff00',
+            lineColor: '#33ff00',
+            secondaryColor: '#112211',
+            tertiaryColor: '#050505',
+            mainBkg: '#050505',
+            nodeBorder: '#33ff00',
+            clusterBkg: '#112211',
+            clusterBorder: '#33ff00',
+            titleColor: '#33ff00',
+            edgeLabelBackground: '#001100'
+        }
+    });
+</script>
+</body>
+</html>
