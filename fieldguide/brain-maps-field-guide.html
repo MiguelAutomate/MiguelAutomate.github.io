@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#EFF1EA">
+<title>The Gap Between the Signal and the Reach — Seven Brain Maps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Spectral:wght@200;300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --paper:#EFF1EA;
+  --paper-raised:#F8F9F4;
+  --card:#FBFBF7;
+  --line:#CBD2C4;
+  --line-soft:#DDE2D7;
+  --ink:#1F2A26;
+  --ink-soft:#46544E;
+  --ink-dim:#75837C;
+  --fern:#3F6E51;
+  --fern-wash:#E4EDE5;
+  --mulberry:#7A4B66;
+  --mulberry-wash:#F1E5EB;
+  --rose:#9B4A5E;
+  --rose-wash:#F0DBE0;
+  --iris:#4E5FA0;
+  --iris-wash:#E5E9F4;
+  --gold:#8C6F2C;
+  --gold-wash:#F5F1E4;
+  --petal:#E9D6DF;
+  --display:"Fraunces",Georgia,serif;
+  --body:"Spectral",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --rail:1.05rem;                 /* phone gutter */
+  --measure:64ch;
+}
+@media (min-width:700px){:root{--rail:2rem}}
+@media (min-width:1000px){:root{--rail:3rem}}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+body{
+  margin:0;background:var(--paper);color:var(--ink-soft);
+  font-family:var(--body);font-weight:300;font-size:17px;line-height:1.68;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+img,svg{max-width:100%}
+
+/* ── botanical field ─────────────────────────────────────── */
+.bloom-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.4}
+@media (min-width:700px){.bloom-field{opacity:.55}}
+.sheet{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:0 var(--rail)}
+
+/* ── masthead ────────────────────────────────────────────── */
+.masthead{padding:2.2rem 0 1.4rem}
+@media (min-width:700px){.masthead{padding:4rem 0 1.6rem}}
+.eyebrow{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;margin-bottom:1.2rem}
+.eyebrow span:not(:first-child){color:var(--ink-dim)}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(1.85rem,8.5vw,3.4rem);line-height:1.08;
+  letter-spacing:-.018em;color:var(--ink);margin:0;font-variation-settings:"SOFT" 100,"WONK" 1}
+h1 em{font-style:italic;color:var(--fern)}
+.deck{font-size:1.02rem;margin:1.2rem 0 0}
+.deck strong{color:var(--ink);font-weight:600}
+.byline{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);line-height:1.9;margin-top:1.3rem;padding-top:.9rem;border-top:1px solid var(--line)}
+
+/* ── read-first panel ────────────────────────────────────── */
+.safety{margin:1.8rem 0 0;border:1px solid var(--mulberry);background:var(--card)}
+.safety-hd{padding:.9rem 1.1rem;border-bottom:1px solid rgba(122,75,102,.34);background:var(--mulberry-wash)}
+.safety-hd b{display:block;font-family:var(--mono);font-size:.61rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mulberry);margin-bottom:.2rem}
+.safety-hd span{font-family:var(--display);font-size:1.06rem;color:var(--ink);font-weight:500;line-height:1.3}
+.safety-grid{display:grid;grid-template-columns:1fr;gap:1px;background:rgba(122,75,102,.22)}
+@media (min-width:760px){.safety-grid{grid-template-columns:repeat(3,1fr)}}
+.safety-grid > div{background:var(--card);padding:1.1rem}
+.safety-grid h4{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mulberry);margin:0 0 .45rem;font-weight:500}
+.safety-grid p{margin:0 0 .6rem;font-size:.9rem;line-height:1.58;max-width:none}
+.safety-grid p:last-child{margin:0}
+.safety-foot{padding:.95rem 1.1rem;border-top:1px solid rgba(122,75,102,.34);
+  font-family:var(--mono);font-size:.68rem;line-height:1.85;color:var(--ink-soft)}
+.safety-foot b{color:var(--gold);font-weight:500;white-space:nowrap}
+
+/* ── sticky rail ─────────────────────────────────────────── */
+.railwrap{position:sticky;top:0;z-index:40;
+  background:linear-gradient(var(--paper) 76%,rgba(239,241,234,0));
+  padding:.55rem 0 .9rem;margin-top:1.8rem}
+.rail{display:flex;gap:.45rem;border-top:1px solid var(--line);padding-top:.55rem;
+  overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.rail::-webkit-scrollbar{display:none}
+.rail a{flex:0 0 auto;text-decoration:none;padding:.5rem .7rem;border:1px solid var(--line);
+  background:var(--card);border-radius:2px;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);
+  white-space:nowrap;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.rail a b{color:var(--gold);font-weight:500}
+.rail a[aria-current="true"]{background:var(--fern);border-color:var(--fern);color:#F4F7F2}
+.rail a[aria-current="true"] b{color:#CFE2D3}
+.rail a:focus-visible{outline:2px solid var(--iris);outline-offset:2px}
+
+/* ── sections ────────────────────────────────────────────── */
+section{padding:2rem 0 .5rem;border-top:1px solid var(--line-soft);scroll-margin-top:4.2rem}
+section:first-of-type{border-top:none}
+.sec-no{font-family:var(--mono);font-size:.62rem;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.5rem}
+h2{font-family:var(--display);font-weight:500;font-size:clamp(1.45rem,5.6vw,2.1rem);line-height:1.17;
+  letter-spacing:-.012em;color:var(--ink);margin:0 0 .85rem;font-variation-settings:"SOFT" 100,"WONK" 1}
+h3{font-family:var(--display);font-weight:600;font-size:1.1rem;color:var(--ink);margin:1.9rem 0 .5rem}
+p{max-width:var(--measure);margin:0 0 1rem}
+strong{color:var(--ink);font-weight:600}
+em{color:var(--fern);font-style:italic}
+a{color:var(--iris)}
+ul{max-width:var(--measure);padding-left:1.05rem;margin:0 0 1rem}
+li{margin-bottom:.5rem}
+.pull-quote{margin:1.8rem 0;padding:.2rem 0 .2rem 1.1rem;border-left:2px solid var(--fern);
+  font-family:var(--display);font-size:clamp(1.15rem,4.6vw,1.45rem);line-height:1.34;color:var(--ink);
+  font-weight:400;font-variation-settings:"SOFT" 100,"WONK" 1}
+
+/* ══ PLATES — vertical flow, phone-native ═══════════════════ */
+.plate{margin:1.6rem 0 0;background:var(--card);border:1px solid var(--line)}
+.plate-hd{padding:.85rem 1rem;border-bottom:1px solid var(--line-soft);background:var(--paper-raised)}
+.plate-no{display:block;font-family:var(--display);font-weight:600;font-size:1rem;color:var(--ink)}
+.plate-ti{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--gold);margin-top:.15rem}
+.plate-body{padding:1.1rem .85rem}
+.plate-cap{padding:.85rem 1rem .95rem;border-top:1px solid var(--line-soft);background:var(--paper-raised);
+  font-size:.88rem;line-height:1.6;color:var(--ink-soft)}
+.plate-cap b{color:var(--ink);font-weight:600}
+.plate-cap p{max-width:none;margin:0}
+
+/* the step: one box in the flow */
+.step{position:relative;border:1px solid var(--line);border-left:3px solid var(--ink-dim);
+  background:var(--paper-raised);padding:.7rem .8rem;margin-bottom:1.75rem}
+.step:last-child{margin-bottom:0}
+.step h5{margin:0;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);line-height:1.3}
+.step p{margin:.25rem 0 0;font-size:.87rem;line-height:1.52;color:var(--ink-soft);max-width:none}
+/* connector: line + chevron, drawn only between siblings */
+.step:not(:last-child)::before{content:"";position:absolute;left:1.15rem;bottom:-1.35rem;
+  width:2px;height:.95rem;background:var(--line)}
+.step:not(:last-child)::after{content:"";position:absolute;left:.85rem;bottom:-1.62rem;
+  width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;
+  border-top:6px solid var(--line)}
+
+.step.pull{border-left-color:var(--mulberry);background:var(--mulberry-wash)}
+.step.risk{border-left-color:var(--rose);background:var(--rose-wash)}
+.step.catch{border-left-color:var(--fern);background:var(--fern-wash)}
+.step.redirect{border-left-color:var(--iris);background:var(--iris-wash)}
+.step.out{border-left-color:var(--fern);border-color:var(--fern);background:var(--fern-wash);border-left-width:5px}
+
+/* the fork */
+.fork{position:relative;margin-bottom:1.75rem}
+.fork:last-child{margin-bottom:0}
+.fork-q{border:1px solid var(--gold);border-left-width:3px;background:var(--gold-wash);
+  padding:.7rem .8rem;position:relative;margin-bottom:1.5rem}
+.fork-q b{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:.2rem}
+.fork-q h5{margin:0;font-family:var(--display);font-size:1.02rem;font-weight:600;color:var(--ink);line-height:1.3}
+.fork-q p{margin:.25rem 0 0;font-size:.87rem;line-height:1.52;max-width:none}
+.fork-q::before{content:"";position:absolute;left:1.15rem;bottom:-1.5rem;width:2px;height:1.5rem;background:var(--line)}
+
+.branches{display:grid;grid-template-columns:1fr;gap:1.4rem}
+@media (min-width:720px){
+  .branches{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;align-items:start}
+}
+.branch{position:relative;padding-left:.7rem;border-left:1px dashed var(--line)}
+.edge{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink);background:var(--card);border:1px solid var(--line);
+  padding:.35rem .55rem;margin-bottom:.85rem;line-height:1.45;border-radius:2px}
+.branch.bad .edge{border-color:var(--rose);color:var(--rose)}
+.branch.good .edge{border-color:var(--fern);color:var(--fern)}
+
+/* loop-back note */
+.loopback{margin-top:1rem;border:1px dashed var(--mulberry);padding:.6rem .7rem;
+  font-family:var(--mono);font-size:.65rem;line-height:1.6;color:var(--mulberry)}
+.loopback.good{border-color:var(--fern);color:var(--fern)}
+
+/* option chips (pick one of four) */
+.options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1.5rem;position:relative}
+@media (min-width:520px){.options{grid-template-columns:1fr 1fr}}
+.options > div{border:1px solid var(--iris);border-left-width:3px;background:var(--iris-wash);padding:.65rem .75rem}
+.options h5{margin:0;font-family:var(--display);font-size:.98rem;font-weight:600;color:var(--ink);line-height:1.3}
+.options p{margin:.2rem 0 0;font-size:.85rem;line-height:1.5;max-width:none}
+.merge{position:relative;font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-dim);text-align:center;margin-bottom:1.4rem}
+
+/* ── card grids ──────────────────────────────────────────── */
+.cards{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);
+  border:1px solid var(--line);margin:1.4rem 0 0}
+@media (min-width:640px){.cards{grid-template-columns:1fr 1fr}}
+@media (min-width:980px){.cards.three{grid-template-columns:repeat(3,1fr)}}
+.cards > div{background:var(--card);padding:1.05rem 1.1rem}
+.cards h4{font-family:var(--display);font-size:1.02rem;font-weight:600;color:var(--ink);margin:0 0 .15rem}
+.cards .why{font-family:var(--mono);font-size:.59rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--fern);margin:0 0 .5rem}
+.cards p{font-size:.9rem;line-height:1.58;margin:0;max-width:none}
+.cards p + p{margin-top:.5rem}
+
+.scripts{border:1px solid var(--line);background:var(--card);padding:1.1rem;margin:1.4rem 0 0}
+.scripts dt{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin-top:1.05rem}
+.scripts dt:first-child{margin-top:0}
+.scripts dd{margin:.3rem 0 0;font-family:var(--display);font-size:1.02rem;color:var(--ink);line-height:1.45}
+
+/* ── the wave timer ──────────────────────────────────────── */
+.timer{margin:1.6rem 0 0;border:1px solid var(--fern);background:var(--card)}
+.timer-art{padding:1.1rem;display:flex;justify-content:center;background:var(--fern-wash)}
+.timer-art svg{width:132px;height:132px}
+.timer-petal{fill:var(--petal);stroke:var(--mulberry);stroke-width:1.1;opacity:.16;transition:opacity .5s ease,fill .5s ease}
+.timer-petal.lit{opacity:1;fill:#F2E2E9}
+.timer-copy{padding:1.1rem}
+.timer-copy p{font-size:.92rem;margin:0 0 .85rem;max-width:none}
+.timer-count{font-family:var(--mono);font-size:2.1rem;color:var(--ink);margin:0 0 .15rem!important}
+.timer-state{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--fern);min-height:2.4em;margin:0 0 .9rem!important;line-height:1.6}
+.timer-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.timer-btn{flex:1 1 auto;min-height:48px;font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--fern);color:#F6F8F3;border:none;padding:.8rem 1rem;
+  cursor:pointer;border-radius:2px;transition:background .2s ease}
+.timer-btn:active{background:#2E5239}
+.timer-btn:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
+.timer-btn.ghost{flex:0 0 auto;background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+
+/* ── pocket card ─────────────────────────────────────────── */
+.pocket{margin:1.5rem 0 0;border:2px solid var(--ink);background:var(--paper-raised);padding:1.1rem}
+.pocket-hd{font-family:var(--mono);font-size:.6rem;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+.pocket ol{margin:0;padding-left:1.15rem;max-width:none}
+.pocket li{font-family:var(--display);font-size:1.06rem;color:var(--ink);line-height:1.4;margin-bottom:.8rem}
+.pocket li:last-child{margin-bottom:0}
+.pocket li span{display:block;font-family:var(--body);font-size:.89rem;color:var(--ink-soft);
+  line-height:1.55;margin-top:.15rem}
+
+.refs{font-size:.9rem}
+
+/* ── back to top ─────────────────────────────────────────── */
+.totop{display:block;margin:1.4rem 0 0;text-align:center;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);text-decoration:none;
+  padding:.7rem;border:1px solid var(--line)}
+
+footer{position:relative;z-index:1;margin-top:2.5rem;padding:1.3rem 0 2.5rem;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.09em;color:var(--ink-dim);
+  text-transform:uppercase;line-height:2}
+footer span{display:block}
+
+/* ── fillable: make it yours ─────────────────────────────── */
+.notice{border:1px solid var(--gold);background:var(--gold-wash);padding:.8rem .9rem;margin:1.2rem 0 0;
+  font-family:var(--mono);font-size:.68rem;line-height:1.7;color:var(--ink)}
+.fields{border:1px solid var(--line);background:var(--card);padding:1.1rem;margin:1.4rem 0 0}
+.field{margin-bottom:1.15rem}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-family:var(--mono);font-size:.61rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:.15rem}
+.field .hint{display:block;font-size:.82rem;line-height:1.5;color:var(--ink-dim);margin-bottom:.4rem}
+.field input,.field textarea,.log-form input,.log-form textarea{
+  width:100%;font-family:var(--body);font-size:16px;line-height:1.5;color:var(--ink);
+  background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--iris);
+  padding:.6rem .7rem;min-height:46px;border-radius:2px;-webkit-appearance:none}
+.field textarea,.log-form textarea{min-height:74px;resize:vertical}
+.field input:focus,.field textarea:focus,.log-form input:focus,.log-form textarea:focus{
+  outline:2px solid var(--iris);outline-offset:1px;background:#fff}
+.field-row{display:grid;grid-template-columns:1fr;gap:.55rem}
+@media (min-width:560px){.field-row{grid-template-columns:1fr 1fr}}
+.saved{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--fern);min-height:1.3em;margin:.7rem 0 0}
+
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.btn{flex:1 1 auto;min-height:48px;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--fern);color:#F6F8F3;border:none;padding:.8rem 1rem;
+  cursor:pointer;border-radius:2px}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.btn:active{opacity:.85}
+.btn:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
+
+/* ── slip / pattern log ──────────────────────────────────── */
+.log-form{border:1px solid var(--line);background:var(--card);padding:1.1rem;margin:1.4rem 0 0}
+.log-form .field{margin-bottom:.9rem}
+.entries{margin:1.2rem 0 0;list-style:none;padding:0}
+.entries li{border:1px solid var(--line);border-left:3px solid var(--mulberry);background:var(--paper-raised);
+  padding:.75rem .85rem;margin-bottom:.6rem}
+.entries .when{font-family:var(--mono);font-size:.6rem;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--gold);display:block;margin-bottom:.3rem}
+.entries p{font-size:.9rem;line-height:1.5;margin:0 0 .25rem;max-width:none}
+.entries p b{color:var(--ink);font-weight:600}
+.entries .drop{background:none;border:none;color:var(--ink-dim);font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.11em;text-transform:uppercase;padding:.5rem 0 0;cursor:pointer}
+.empty{font-family:var(--mono);font-size:.66rem;color:var(--ink-dim);line-height:1.7;margin-top:1rem}
+
+/* ── wallet card ─────────────────────────────────────────── */
+.wallet{border:2px solid var(--ink);background:#fff;padding:.95rem 1rem;margin:1.4rem 0 0;max-width:26rem}
+.wallet h5{margin:0 0 .5rem;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);
+  padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+.wallet ol{margin:0 0 .6rem;padding-left:1.05rem}
+.wallet li{font-size:.86rem;line-height:1.45;color:var(--ink);margin-bottom:.3rem}
+.wallet .mine{font-family:var(--mono);font-size:.68rem;line-height:1.65;color:var(--ink);
+  border-top:1px solid var(--line);padding-top:.5rem;margin-top:.3rem}
+.wallet .mine b{color:var(--gold);font-weight:500}
+.wallet .helpline{font-family:var(--mono);font-size:.62rem;line-height:1.6;color:var(--ink-soft);
+  border-top:1px solid var(--line);margin-top:.5rem;padding-top:.45rem}
+
+@media print{
+  .bloom-field,.railwrap,.timer-btns,.totop,.btnrow,.log-form,.saved{display:none}
+  body{background:#fff;font-size:10.5pt}
+  .plate,.cards,.pocket,.step,.fork,.wallet{break-inside:avoid}
+  .branches{grid-template-columns:1fr 1fr}
+  body.card-only .masthead,body.card-only footer,body.card-only main > section{display:none!important}
+  body.card-only main > #swallet{display:block!important;border:none;padding:0}
+  body.card-only #swallet h2,body.card-only #swallet .sec-no,body.card-only #swallet p{display:none}
+  body.card-only .wallet{display:block!important;max-width:none;border-width:1px}
+}
+</style>
+</head>
+<body>
+
+<svg class="bloom-field" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- carnation, drawn once per colourway: fringed petals, banded calyx, narrow leaves -->
+    <g id="carnation-rose">
+      <path d="M0 0 C 1.5 18, 0.5 34, -2 52" fill="none" stroke="#7A9A82" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M0 20 C -7 25, -12 33, -13 43 C -6 38, -1 30, 0 20 Z" fill="#C6D6C6" fill-opacity=".55" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M1 29 C 8 33, 12 40, 12 49 C 6 43, 1 36, 1 29 Z" fill="#C6D6C6" fill-opacity=".55" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-17 -8 C -19 -18, -14 -26, -8 -28 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 C 17 -26, 19 -17, 17 -8 C 9 -2, -9 -2, -17 -8 Z"
+        fill="#E9D6DF" fill-opacity=".78" stroke="#B78BA0" stroke-width="1"/>
+      <path d="M-11 -10 C -12 -18, -8 -23, -4 -24 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 C 10 -23, 12 -17, 11 -10 C 6 -6, -6 -6, -11 -10 Z"
+        fill="#DCBECF" fill-opacity=".7" stroke="#B78BA0" stroke-width=".8"/>
+      <g fill="none" stroke="#B78BA0" stroke-width=".7" stroke-opacity=".8">
+        <path d="M0 -7 L -6 -20"/><path d="M0 -7 L 0 -22"/><path d="M0 -7 L 6 -20"/>
+      </g>
+      <path d="M-4.6 2 L -5.4 -7 C -5.4 -10, 5.4 -10, 5.4 -7 L 4.6 2 Z" fill="#BCCFBC" fill-opacity=".85" stroke="#7A9A82" stroke-width="1"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-5.4 -7 l -2.4 -4.5"/><path d="M5.4 -7 l 2.4 -4.5"/><path d="M0 -9 l 0 -4"/>
+      </g>
+    </g>
+
+    <g id="carnation-pale">
+      <path d="M0 0 C 1.5 18, 0.5 34, -2 52" fill="none" stroke="#7A9A82" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M0 20 C -7 25, -12 33, -13 43 C -6 38, -1 30, 0 20 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M1 29 C 8 33, 12 40, 12 49 C 6 43, 1 36, 1 29 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-17 -8 C -19 -18, -14 -26, -8 -28 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 C 17 -26, 19 -17, 17 -8 C 9 -2, -9 -2, -17 -8 Z"
+        fill="#F4EEF0" fill-opacity=".8" stroke="#C3A3B4" stroke-width="1"/>
+      <path d="M-11 -10 C -12 -18, -8 -23, -4 -24 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 C 10 -23, 12 -17, 11 -10 C 6 -6, -6 -6, -11 -10 Z"
+        fill="#E9D6DF" fill-opacity=".8" stroke="#C3A3B4" stroke-width=".8"/>
+      <g fill="none" stroke="#C3A3B4" stroke-width=".7" stroke-opacity=".75">
+        <path d="M0 -7 L -6 -20"/><path d="M0 -7 L 0 -22"/><path d="M0 -7 L 6 -20"/>
+      </g>
+      <path d="M-4.6 2 L -5.4 -7 C -5.4 -10, 5.4 -10, 5.4 -7 L 4.6 2 Z" fill="#BCCFBC" fill-opacity=".8" stroke="#7A9A82" stroke-width="1"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-5.4 -7 l -2.4 -4.5"/><path d="M5.4 -7 l 2.4 -4.5"/><path d="M0 -9 l 0 -4"/>
+      </g>
+    </g>
+
+    <!-- unopened carnation bud: long calyx, petal tips just showing -->
+    <g id="carnation-bud">
+      <path d="M0 0 C 1 14, 0 26, -1.5 38" fill="none" stroke="#7A9A82" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 16 C -6 20, -10 27, -11 35 C -5 30, -1 24, 0 16 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-4 0 L -4.6 -13 C -4.6 -16, 4.6 -16, 4.6 -13 L 4 0 Z" fill="#BCCFBC" fill-opacity=".85" stroke="#7A9A82" stroke-width="1"/>
+      <path d="M-4.4 -14 C -3 -21, 3 -21, 4.4 -14 C 2 -12, -2 -12, -4.4 -14 Z" fill="#E9D6DF" fill-opacity=".8" stroke="#B78BA0" stroke-width=".9"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-4.6 -13 l -2.2 -4"/><path d="M4.6 -13 l 2.2 -4"/>
+      </g>
+    </g>
+
+    <pattern id="pressed" width="220" height="220" patternUnits="userSpaceOnUse" patternTransform="rotate(-7)">
+      <use href="#carnation-rose" transform="translate(44,72) rotate(-9)"/>
+      <use href="#carnation-pale" transform="translate(158,158) rotate(11) scale(.88)"/>
+      <use href="#carnation-bud" transform="translate(150,52) rotate(18) scale(.95)"/>
+      <use href="#carnation-rose" transform="translate(196,84) rotate(-14) scale(.62)"/>
+      <use href="#carnation-bud" transform="translate(34,180) rotate(-16) scale(.8)"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#pressed)"/>
+</svg>
+
+<div class="sheet">
+
+  <header class="masthead" id="top">
+    <div class="eyebrow"><span>Field guide</span><span>Seven plates</span><span>Made for one person</span></div>
+    <h1>The gap between the signal and <em>the reach</em></h1>
+    <p class="deck">Every map in here covers one short stretch of time: the seconds between something
+      setting your nervous system off and your hand doing what it always does. <strong>That gap is real,
+      it is short, and it can be widened with practice.</strong> None of these pages ask you to be
+      stronger. They ask you to be earlier.</p>
+    <p class="byline">A companion, not a treatment plan · Keep it on your phone · Read one plate, not all seven</p>
+
+    <div class="safety">
+      <div class="safety-hd"><b>Read first</b><span>Three things that skill alone doesn't cover</span></div>
+      <div class="safety-grid">
+        <div>
+          <h4>Alcohol and benzodiazepines</h4>
+          <p>If either is part of the picture, <strong>do not stop abruptly on your own.</strong>
+            Those two withdrawals are the ones that can cause seizures and can be fatal — even at
+            doses that felt ordinary.</p>
+          <p>The exit is a supervised taper. A clinician has to be in that loop.</p>
+        </div>
+        <div>
+          <h4>Opioids after a break</h4>
+          <p>Tolerance drops fast. The dose that felt normal two weeks ago can be an overdose today,
+            which is why the risk spikes <strong>after</strong> a good stretch, not during a bad one.</p>
+          <p>Keep naloxone within reach, tell someone nearby where it is, and don't use alone.</p>
+        </div>
+        <div>
+          <h4>An unsafe house isn't a coping problem</h4>
+          <p>If someone you live with is a current source of harm, no breathing exercise fixes that.
+            Grounding helps you survive a moment. <strong>It does not make a room safe.</strong></p>
+          <p>That one needs a plan, and at least one person who knows about it who does not live there.</p>
+        </div>
+      </div>
+      <div class="safety-foot">
+        US · <b>SAMHSA 1-800-662-4357</b> — free, confidential, 24/7, treatment referral.
+        <b>988</b> — Suicide &amp; Crisis Lifeline, call or text.
+        <b>1-800-799-7233</b> — domestic violence hotline, or text START to 88788.
+        These pages are educational, written by a friend. They are not medical advice.
+      </div>
+    </div>
+  </header>
+
+  <div class="railwrap">
+    <nav class="rail" aria-label="Sections">
+      <a href="#s0"><b>00</b> How to read</a>
+      <a href="#sb"><b>01</b> The battery</a>
+      <a href="#s1"><b>I</b> The loop</a>
+      <a href="#s2"><b>II</b> The wave</a>
+      <a href="#s3"><b>III</b> The memory</a>
+      <a href="#s4"><b>IV</b> The invitation</a>
+      <a href="#s5"><b>V</b> The vape</a>
+      <a href="#s6"><b>VI</b> After a slip</a>
+      <a href="#s7"><b>VII</b> Load state</a>
+      <a href="#sp8"><b>VIII</b> The rebuild</a>
+      <a href="#s8"><b>09</b> Redirects</a>
+      <a href="#smine"><b>10</b> Make it yours</a>
+      <a href="#slog"><b>11</b> Pattern log</a>
+      <a href="#s9"><b>12</b> Pocket card</a>
+      <a href="#swallet"><b>13</b> Wallet card</a>
+      <a href="#sfriend"><b>14</b> For your person</a>
+    </nav>
+  </div>
+
+  <main>
+
+  <!-- ══ 00 ══ -->
+  <section id="s0">
+    <div class="sec-no">00 · How to read a plate</div>
+    <h2>Three colours, one shape, every time</h2>
+    <p>Every map reads straight down the screen, and they all have the same skeleton — so you only
+      have to learn it once. The colours mean the same thing on all seven plates:</p>
+    <div class="cards three">
+      <div>
+        <h4>The pull</h4>
+        <p class="why">Plum · what's happening to you</p>
+        <p>Cues, cravings, memories arriving on their own, a phone lighting up at 11 p.m. You didn't
+          choose any of this and you are not in trouble for it.</p>
+      </div>
+      <div>
+        <h4>The catch</h4>
+        <p class="why">Green · the moment you notice</p>
+        <p>The most trainable step there is. Not resisting — <em>noticing</em>. Naming it out loud
+          counts: "that's the craving," "that's the memory, not the room."</p>
+      </div>
+      <div>
+        <h4>The redirect</h4>
+        <p class="why">Blue · what you do instead</p>
+        <p>Something with a body attached — sing, pray out loud, walk, wash, call. It has to occupy
+          the same channel the pull is using, or it won't hold.</p>
+      </div>
+    </div>
+    <p class="pull-quote">You don't have to want it less. You have to get there earlier.</p>
+    <p>One more thing about the shape. Every plate has a fork in it, and the fork is never
+      <em>use or don't use</em>. It's always something smaller and earlier: pick up the phone or leave
+      it, walk in the front door or sit in the car two minutes first, answer at 11 p.m. or let it ring.
+      By the time the fork reads <em>use or don't</em>, the map has been running for twenty minutes.
+      These plates are drawn to show the earlier forks, because those are the winnable ones.</p>
+  </section>
+
+  <!-- ══ 01 · battery ══ -->
+  <section id="sb">
+    <div class="sec-no">01 · The battery</div>
+    <h2>You hold a charge, and there are only three things to do with it</h2>
+    <p>Think of yourself as a battery. Everything you do with a day either puts charge in, pulls
+      charge out, or shorts the whole cell. Most choices aren't dramatic — they're small, and they're
+      constant, and they all land in one of three columns.</p>
+    <div class="cards three">
+      <div>
+        <h4>Charge it</h4>
+        <p class="why">Positive · builds capacity</p>
+        <p>Positive choices, positive actions, positive prayer. Showing up somewhere you said you'd be.
+          Doing something for a person who can't do it alone. Charge is built by actions, not moods —
+          you don't wait to feel it first.</p>
+      </div>
+      <div>
+        <h4>Drain it</h4>
+        <p class="why">Negative · leaks capacity</p>
+        <p>Talking down about yourself. Rooms you already know are bad. People who need you at your
+          worst so they feel better at theirs. Nothing collapses here — it just quietly costs, all day.</p>
+      </div>
+      <div>
+        <h4>Short it out</h4>
+        <p class="why">Killing it · zero capacity</p>
+        <p>The substance, the all-nighter, the secret. Not a slow drain — a dead cell. And a dead cell
+          can't make a good decision about anything else on this page, which is why this one comes first.</p>
+      </div>
+    </div>
+
+    <p class="pull-quote">Words are energy. Said out loud, they're instructions — and something is
+      always listening.</p>
+
+    <h3>The power of words</h3>
+    <div class="cards three">
+      <div>
+        <h4>No jokes</h4>
+        <p class="why">The punchline isn't filed separately</p>
+        <p>Joking down on yourself programs your mind exactly like a serious remark does. "I'm such a
+          mess, lol" installs the same line as "I'm a mess." Everyone laughs and it still goes in.</p>
+      </div>
+      <div>
+        <h4>Words are instructions</h4>
+        <p class="why">Spoken beats thought</p>
+        <p>What you say out loud is the loudest input your own nervous system gets all day. That's why
+          the redirects in here are spoken ones — a prayer said aloud, a song sung out. Same lever,
+          pointed the other way.</p>
+      </div>
+      <div>
+        <h4>What you won't change, you've chosen</h4>
+        <p class="why">Silence is a decision too</p>
+        <p>A habit you refuse to look at is a habit you've agreed to keep. Not looking isn't neutral;
+          it's the quietest way of saying yes.</p>
+      </div>
+    </div>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Two exceptions worth knowing</span>
+        <span class="plate-ti">So this never turns into a stick to hit yourself with</span>
+      </div>
+      <div class="plate-body">
+        <div class="step catch">
+          <h5>A memory that arrives on its own is not something you said</h5>
+          <p>You didn't speak it, invite it, or cause it by thinking wrong. Intrusive memories are the
+            alarm going off, not self-talk. <em>Your</em> words are what you say back to it — that's
+            Plate III, and that's the part that's yours.</p>
+        </div>
+        <div class="step catch">
+          <h5>Some sentences in your head were installed by someone else</h5>
+          <p>A line an adult said about you once — especially when you were young, especially one that
+            was protecting them and not you — can keep running for years as if it were your own
+            verdict. It isn't yours. You're allowed to hand it back and stop repeating it for them.</p>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>The distinction that matters:</b> you are responsible for how you
+        speak about yourself. You are not responsible for what got done to you, or for the alarm your
+        body still runs because of it. Those are two different files, and shame keeps trying to merge
+        them.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ I ══ -->
+  <section id="s1">
+    <div class="sec-no">Plate I</div>
+    <h2>The loop that runs before you decide anything</h2>
+    <p>This is the general engine. Everything else here is one specific version of it. The claim on
+      this plate: <strong>the reach is not a decision you keep losing.</strong> It's a route driven so
+      many times that it stopped asking. Which is why trying harder at the <em>end</em> of the loop
+      keeps failing, and trying earlier works.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate I · The engine</span>
+        <span class="plate-ti">Collected · every day, all day</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>A cue lands</h5>
+          <p>A place, a time, a person, a smell, a feeling — most often boredom or dread.</p>
+        </div>
+        <div class="step pull">
+          <h5>The signal fires</h5>
+          <p>Body first: chest, jaw, hands, breath. Faster than any thought about it.</p>
+        </div>
+        <div class="step pull">
+          <h5>Wanting, not liking</h5>
+          <p>The pull is strongest for the thing that stopped being enjoyable a while ago.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>The gap</h5>
+            <p>Seconds long. This is the whole ballgame.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Unnoticed — the usual route</span>
+              <div class="step risk">
+                <h5>Automatic reach</h5>
+                <p>The hand moves before the sentence in your head finishes.</p>
+              </div>
+              <div class="step risk">
+                <h5>Relief</h5>
+                <p>Brief, real, and it teaches the loop that the cue was right.</p>
+              </div>
+              <div class="loopback">↺ The cue is reinforced. Next time it fires sooner, and the gap is narrower.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Caught and named</span>
+              <div class="step catch">
+                <h5>The catch</h5>
+                <p>"That's the craving." Out loud is stronger than silent.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Redirect with a body attached</h5>
+                <p>Sing it · pray it out loud · move rooms · hands into a task · call a person.</p>
+              </div>
+              <div class="step out">
+                <h5>The pull decays unfed</h5>
+                <p>Every unreinforced episode weakens the cue a little.</p>
+              </div>
+              <div class="loopback good">↺ The cue is demoted. Next time it's quieter, and the gap is wider.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Read this bit twice:</b> relief is what teaches the loop. Every time
+        the reach works, the cue that started it gets a promotion. Every time it's ridden out, that cue
+        gets demoted. Nothing is neutral — which is exhausting, but it also means the hard ones you
+        survive are doing real work, even when it feels like nothing happened.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ II ══ -->
+  <section id="s2">
+    <div class="sec-no">Plate II</div>
+    <h2>The wave, and the ninety seconds in the middle of it</h2>
+    <p>A craving isn't a straight line that climbs until you give in. It's a wave: it rises, it crests,
+      and if nothing feeds it, it comes down on its own — usually inside twenty to thirty minutes.
+      The trap is that the crest feels permanent while you're standing in it.</p>
+    <p>The first minute or two is the part where doing nothing feels physically impossible. That's what
+      the timer is for. Ninety seconds isn't the whole craving — <strong>it's the length of the part
+      you have to get past before your own reasoning comes back online.</strong></p>
+
+    <div class="timer">
+      <div class="timer-art">
+        <svg viewBox="-60 -60 120 120" role="img" aria-labelledby="timerttl">
+          <title id="timerttl">A flower that opens one petal at a time as the ninety seconds pass</title>
+          <g id="petals"></g>
+          <circle r="7" fill="#D8B96A" fill-opacity=".85" stroke="#8C6F2C" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="timer-copy">
+        <p class="timer-count" id="count">1:30</p>
+        <p class="timer-state" id="state">Ride it out — you don't have to do anything else</p>
+        <p>Breathe out longer than you breathe in. Count the exhale if it helps. You're not trying to
+          make the wave stop. You're standing still while it passes.</p>
+        <div class="timer-btns">
+          <button class="timer-btn" id="go" type="button">Start ninety seconds</button>
+          <button class="timer-btn ghost" id="reset" type="button">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate II · The wave</span>
+        <span class="plate-ti">Collected · 20–30 minutes, start to finish</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>The pull starts</h5>
+          <p>Often follows a feeling you'd rather not name: bored, lonely, angry, ashamed, tired.</p>
+        </div>
+        <div class="step pull">
+          <h5>It climbs</h5>
+          <p>Body sensations sharpen. Thinking narrows to one subject.</p>
+        </div>
+        <div class="step risk">
+          <h5>The crest</h5>
+          <p>"This is not going to pass." It always says that. It is always wrong.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>What happens at the crest</h5>
+            <p>Three routes. Only one of them ends the wave.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Feed it</span>
+              <div class="step risk">
+                <h5>Fed</h5>
+                <p>The wave drops fast — and the next one arrives sooner and steeper.</p>
+              </div>
+            </div>
+            <div class="branch bad">
+              <span class="edge">Argue with it in your head</span>
+              <div class="step pull">
+                <h5>Negotiating</h5>
+                <p>"Just one." "I've earned it." "Tomorrow." Arguing keeps the wave at the crest.</p>
+              </div>
+              <div class="loopback">↺ Straight back to the crest, every round.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">90 seconds, nothing else required</span>
+              <div class="step catch">
+                <h5>Hold, don't wrestle</h5>
+                <p>Long exhale. Name it out loud. Let it be loud without obeying it.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Change something physical</h5>
+                <p>Different room · outside · the sink · sing the loud part of a song.</p>
+              </div>
+              <div class="step out">
+                <h5>It comes down</h5>
+                <p>Usually inside 20–30 minutes. Rarely dramatic — you just notice it's gone.</p>
+              </div>
+              <div class="loopback good">↺ Deposit made. The cue that started this is now weaker.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>On arguing:</b> negotiating with a craving keeps you at the crest,
+        because every round of "just one" is a rehearsal of using. Naming it and doing something else
+        isn't avoidance — it's the only move that lets the wave finish.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ III ══ -->
+  <section id="s3">
+    <div class="sec-no">Plate III</div>
+    <h2>The memory that arrives without being asked</h2>
+    <p>This is the plate that matters most, so it's the longest. A traumatic memory doesn't arrive as
+      a thought you chose. It arrives as a body event — heart, breath, gut, heat, a sudden urge to
+      leave — and the words come afterward, if at all. By the time you're thinking <em>about</em> it,
+      the nervous system has already been running for a few seconds.</p>
+    <p>So the catch has to be aimed at the body signal, not the story. <strong>You're looking for the
+      moment your chest changes, not the moment the memory finishes playing.</strong></p>
+    <p>Two honest notes. Redirecting gets you through a moment safely — it is not the same as
+      processing what happened, and isn't meant to be; memories that keep arriving uninvited respond
+      to real treatment. And this plate assumes the danger is in the memory. If the danger is also in
+      the house right now, the panel at the top of this guide is the relevant page.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate III · Catch and turn</span>
+        <span class="plate-ti">Collected · the hallway, the voice, 2 a.m.</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>Something sets it off</h5>
+          <p>A voice through a wall · a tone · a door · a smell · a room · being alone with quiet.</p>
+        </div>
+        <div class="step pull">
+          <h5>The body goes first</h5>
+          <p>Chest tightens · breath goes shallow · heat or cold · jaw · stomach drops.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Do you catch the body signal?</h5>
+            <p>Train this one thing and everything downstream gets easier.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Missed</span>
+              <div class="step risk">
+                <h5>Pulled under</h5>
+                <p>The memory plays. Time slips. It stops feeling like memory.</p>
+              </div>
+              <div class="step risk">
+                <h5>The exit that's nearest</h5>
+                <p>Vape · use · leave with whoever's calling · anything that makes now stop.</p>
+              </div>
+              <div class="loopback">↺ Teaches the brain that only substances end this. The trigger keeps its power.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Caught</span>
+              <div class="step catch">
+                <h5>Mark it out loud</h5>
+                <p>"That's the memory. It is not happening now." Say the date. Say the room you're in.</p>
+              </div>
+              <div class="step catch">
+                <h5>Anchor the senses in the present</h5>
+                <p>Snap your fingers · feet flat on the floor · five things you can see · hands on
+                  something textured.</p>
+              </div>
+
+              <div class="fork-q">
+                <b>Pick the turn</b>
+                <h5>One of your four</h5>
+                <p>Chosen in advance, not invented mid-flood.</p>
+              </div>
+              <div class="options">
+                <div>
+                  <h5>Pray it</h5>
+                  <p>One fixed prayer, said aloud. The same words every time — you shouldn't have to
+                    compose anything right now.</p>
+                </div>
+                <div>
+                  <h5>Sing it</h5>
+                  <p>Out loud, full breath. Long exhales settle the body; the words occupy the channel
+                    the memory needs.</p>
+                </div>
+                <div>
+                  <h5>Hands</h5>
+                  <p>A task with steps. Dishes · sweeping · braiding hair · folding · walking somewhere
+                    with a destination.</p>
+                </div>
+                <div>
+                  <h5>Call the person</h5>
+                  <p>The one on your list, decided while calm. You don't have to explain why you called.</p>
+                </div>
+              </div>
+              <div class="merge">↓ all four arrive here ↓</div>
+
+              <div class="step out">
+                <h5>The wave passes through</h5>
+                <p>Slower than you want. It still passes. Shaking or tears afterwards are normal.</p>
+              </div>
+              <div class="step out">
+                <h5>Note what set it off</h5>
+                <p>One line, later, when steady. Patterns show up in a week of one-liners.</p>
+              </div>
+              <div class="loopback good">↺ The trigger becomes predictable — which means it becomes plannable.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Why the turn is picked in advance:</b> when the nervous system is
+        flooded, the part of the brain that generates options is the part that's least available.
+        Choosing between four things you already decided on is possible in that state. Inventing a plan
+        is not. Write the four down; don't rely on remembering them.</p></div>
+    </div>
+
+    <h3>Why prayer and singing work here, mechanically</h3>
+    <p>These aren't consolation prizes on the list. They're on it because of how they work on a
+      flooded nervous system — and because they're already hers.</p>
+    <div class="cards">
+      <div>
+        <h4>Singing out loud</h4>
+        <p class="why">Breath + verbal channel</p>
+        <p>Singing forces a long, controlled exhale, one of the few voluntary levers on the body's
+          alarm system. Slower out-breaths pull the physical response down.</p>
+        <p>It also occupies the verbal working memory that rumination runs on. You can't silently
+          rehearse a memory and sing words at once — there's one channel, and the song has it.</p>
+      </div>
+      <div>
+        <h4>Prayer, aloud, fixed wording</h4>
+        <p class="why">Structure + no composing required</p>
+        <p>Same mechanism, plus one more: a prayer you know by heart needs nothing from the part of
+          you that's currently offline. No decisions, no words to find.</p>
+        <p>Pick one and keep it as <em>the</em> one. Familiarity is doing real work — it runs without
+          you having to build it.</p>
+      </div>
+      <div>
+        <h4>Hands and steps</h4>
+        <p class="why">Occupies the picture-making part</p>
+        <p>Intrusive memories arrive largely as images. Tasks demanding visual and spatial attention
+          compete for that same capacity — which is why washing dishes or walking a known route dulls
+          a memory while sitting still sharpens it.</p>
+      </div>
+      <div>
+        <h4>The finger snap</h4>
+        <p class="why">A marker, not a cure</p>
+        <p>A snap is punctuation: a sharp, present-tense sound that says <em>caught it</em> and starts
+          the sequence. It works because of what follows it, so always follow it with the actual turn.
+          On its own it fades.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ IV ══ -->
+  <section id="s4">
+    <div class="sec-no">Plate IV</div>
+    <h2>"Come out with us" — the invitation, mapped</h2>
+    <p>The fork here isn't at the door of the party. It's much earlier, and it's usually a phone.
+      This plate shows how many decisions are already made before anyone actually asks you anything.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate IV · The invitation</span>
+        <span class="plate-ti">Collected · Friday, 9:40 p.m.</span>
+      </div>
+      <div class="plate-body">
+        <div class="step catch">
+          <h5>Before any of it: the pre-decision</h5>
+          <p>Made on a calm Tuesday, not a loud Friday. Decide the answer once, so tonight isn't a debate.</p>
+        </div>
+        <div class="step pull">
+          <h5>The phone lights up</h5>
+          <p>Warm, genuine, and pointed straight at the loneliest hour of the week.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Answer live, or reply on your own terms?</h5>
+            <p>This is the real decision point of the night.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Answer live, unprepared</span>
+              <div class="step risk">
+                <h5>Pressure in real time</h5>
+                <p>Warmth, teasing, "one drink", "you're boring now". The hardest possible conditions
+                  to think in.</p>
+              </div>
+              <div class="step risk">
+                <h5>"Maybe, I'll see"</h5>
+                <p>Reads as yes to them. Keeps the night open in your head.</p>
+              </div>
+              <div class="step risk">
+                <h5>Going "just for a bit"</h5>
+                <p>Now the plan depends on being at full strength at 1 a.m.</p>
+              </div>
+              <div class="step catch">
+                <h5>If you're already there</h5>
+                <p>Own drink in your own hand · exit time said out loud on arrival · one person there
+                  who knows · ride booked before you walk in.</p>
+              </div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Text back, no negotiation</span>
+              <div class="step redirect">
+                <h5>Send the line you already wrote</h5>
+                <p>Short. Warm. No reason given — reasons are things people argue with.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Offer the daytime version</h5>
+                <p>"Not tonight — coffee Sunday?" Keeps the friend, declines the room.</p>
+              </div>
+              <div class="step pull">
+                <h5>The hole the night leaves</h5>
+                <p>Real, and the actual danger. An empty Friday is its own cue.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Fill it on purpose, in advance</h5>
+                <p>Someone in the room · choir or worship night · a long call · a place that closes at 10.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="merge">↓ both routes end here ↓</div>
+        <div class="step out">
+          <h5>Friendship kept, night survived</h5>
+          <p>Some friendships won't survive the no. That is information, not your failure.</p>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Why no reason:</b> a reason is an invitation to solve the reason.
+        "I'm not drinking tonight" can be negotiated. "Can't tonight — love you, let's do Sunday"
+        cannot, because there's nothing in it to argue with.</p></div>
+    </div>
+
+    <h3>Lines worth having already written</h3>
+    <dl class="scripts">
+      <dt>The decline</dt>
+      <dd>"Can't tonight — have a good one. Coffee Sunday?"</dd>
+      <dt>The follow-up push</dt>
+      <dd>"Nah, I'm good. Send me pictures."</dd>
+      <dt>The one who won't let it go</dt>
+      <dd>"I've said no. Ask me about Sunday instead."</dd>
+      <dt>Already there and it turned</dt>
+      <dd>"I'm heading out — early start. Text you tomorrow."</dd>
+      <dt>To the person on your list, at any hour</dt>
+      <dd>"You up? Don't need advice, just don't want to be alone right now."</dd>
+    </dl>
+  </section>
+
+  <!-- ══ V ══ -->
+  <section id="s5">
+    <div class="sec-no">Plate V</div>
+    <h2>The vape is a repetition problem, not a willpower problem</h2>
+    <p>Nicotine is unusual: small dose, fast delivery, repeated dozens or hundreds of times a day.
+      That's a lot of reps, and reps are exactly how a cue gets welded to an action. It also means the
+      vape has attached itself to <em>everything</em> — the car, the coffee, the phone, the step
+      outside, the pause between two tasks.</p>
+    <p>So this one responds better to changing the environment than to resisting in the moment.
+      Distance beats discipline, because discipline has to win a hundred times a day and distance only
+      has to be set up once.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate V · The reach</span>
+        <span class="plate-ti">Collected · roughly every 40 minutes</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>A micro-cue</h5>
+          <p>Getting in the car · finishing food · phone in hand · a gap between two things · stepping outside.</p>
+        </div>
+        <div class="step pull">
+          <h5>The hand is already moving</h5>
+          <p>No craving "thought" required. Pocket, then mouth, then noticing.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Where is it right now?</h5>
+            <p>The most important question on this plate — and it's answered hours earlier.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">In reach</span>
+              <div class="step risk">
+                <h5>Used before deciding</h5>
+                <p>One more rep. The cue that started it gets stronger.</p>
+              </div>
+              <div class="loopback">↺ The pairing tightens. The next micro-cue comes sooner.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Another room · a bag · the boot of the car</span>
+              <div class="step catch">
+                <h5>Friction buys the gap back</h5>
+                <p>Twenty seconds of walking is enough for a decision to actually happen.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Give the hands and mouth something else</h5>
+                <p>Water · gum · seeds · a cold drink — anything that occupies the same ritual.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Break the pairing itself</h5>
+                <p>Step outside without it. Drive the same route without it. The link needs the
+                  repetition to survive.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Take reps out on purpose</h5>
+                <p>Drop pairings one at a time — "not in the car" before "not at all".</p>
+              </div>
+              <div class="step out">
+                <h5>Ask about nicotine replacement</h5>
+                <p>Patches and gum aren't cheating. They handle the chemistry so you can work on the
+                  hundred small habits.</p>
+              </div>
+              <div class="loopback good">↺ Fewer cues left standing. Not zero craving — fewer places in the day where it lives.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>On nicotine replacement:</b> vaping while also wearing a patch is
+        worth a conversation with a pharmacist or clinician rather than a guess — dosing matters. But
+        cutting the chemistry problem down so you can fight the habit problem is a legitimate strategy,
+        not a shortcut.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ VI ══ -->
+  <section id="s6">
+    <div class="sec-no">Plate VI</div>
+    <h2>After a slip: the fork that decides what it costs</h2>
+    <p>A slip is one episode. What turns one episode into three weeks is almost never the substance —
+      it's the sentence that comes next. <em>I've ruined it. I'm exactly what I thought I was. Might
+      as well finish the night.</em> That sentence does more damage than the slip did, and it's the
+      single most changeable thing on any of these plates.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate VI · The interpretation</span>
+        <span class="plate-ti">Collected · the ten minutes after</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>A slip</h5>
+          <p>One episode. Nothing more than that, yet.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>The interpretation</h5>
+            <p>The highest-leverage moment in this entire guide.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">"I've ruined it — I'm that person"</span>
+              <div class="step risk">
+                <h5>Shame takes over</h5>
+                <p>Feels like honesty. Behaves like fuel.</p>
+              </div>
+              <div class="step risk">
+                <h5>"Might as well finish"</h5>
+                <p>The slip becomes a week. This step is optional and it never feels optional.</p>
+              </div>
+              <div class="step risk">
+                <h5>Hiding it</h5>
+                <p>Secrecy removes the people who would have caught it.</p>
+              </div>
+              <div class="loopback">↺ Straight back into shame, with more evidence for it each round.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">"That cue was stronger than I planned for"</span>
+              <div class="step catch">
+                <h5>Treated as data</h5>
+                <p>Which cue? What hour? Who was there? What was missing that day?</p>
+              </div>
+              <div class="step redirect">
+                <h5>Tell one person the same day</h5>
+                <p>Speed matters more than the wording. Same day, not next month.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Change one specific thing</h5>
+                <p>Not "try harder" — a different route, a blocked number, a filled Friday.</p>
+              </div>
+              <div class="step out">
+                <h5>Resume now</h5>
+                <p>Not Monday. Not the first of the month. The next hour is the whole point.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>A note for the friend reading this:</b> if she tells you about a
+        slip the same day, that's the plan working, not the plan failing. How that conversation goes
+        decides whether she tells you about the next one.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ VII ══ -->
+  <section id="s7">
+    <div class="sec-no">Plate VII</div>
+    <h2>Some days you're carrying more, and the gap gets narrower</h2>
+    <p>The same cue isn't equally dangerous on every day. Sleep debt, hunger, an argument, a long
+      stretch alone — each measurably reduces how much control you have over the gap. Read this one in
+      the morning, not in the moment.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate VII · Load state</span>
+        <span class="plate-ti">Collected · in the morning, before anything</span>
+      </div>
+      <div class="plate-body">
+        <div class="step catch">
+          <h5>The day starts</h5>
+          <p>Before plans, before the phone.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Four questions</h5>
+            <p>Slept? Eaten? Alone all day? Anything unresolved with anyone?</p>
+          </div>
+          <div class="branches">
+            <div class="branch good">
+              <span class="edge">Mostly fine</span>
+              <div class="step out">
+                <h5>Ordinary day</h5>
+                <p>Normal plans hold. The gap is its usual width.</p>
+              </div>
+            </div>
+            <div class="branch bad">
+              <span class="edge">Two or more are off</span>
+              <div class="step pull">
+                <h5>High-load day</h5>
+                <p>The gap is narrower today — through no fault of yours.</p>
+              </div>
+              <div class="fork-q">
+                <b>Do this instead</b>
+                <h5>Change the day, not your willpower</h5>
+                <p>Any of these. All of them if it's bad.</p>
+              </div>
+              <div class="options">
+                <div>
+                  <h5>Eat something first</h5>
+                  <p>Hunger is the most common fake craving there is.</p>
+                </div>
+                <div>
+                  <h5>Say it early</h5>
+                  <p>Tell one person it's a hard day before anything happens.</p>
+                </div>
+                <div>
+                  <h5>Skip the optional exposure</h5>
+                  <p>The party, the route, the visit. Not today.</p>
+                </div>
+                <div>
+                  <h5>Plan the evening now</h5>
+                  <p>An empty evening on a high-load day is itself a cue.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="merge">↓ both routes end here ↓</div>
+        <div class="step out">
+          <h5>Day held</h5>
+          <p>Nothing heroic happened. That's what a good day actually looks like.</p>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Hunger deserves its own line:</b> low blood sugar produces
+        restlessness, irritability and a vague sense of needing something — nearly indistinguishable
+        from craving from the inside. Eat first, then check whether the craving is still there.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ VIII ══ -->
+  <section id="sp8">
+    <div class="sec-no">Plate VIII</div>
+    <h2>The pathway is strong — that's the good news, not the bad</h2>
+    <p>Think of the brain as an engine. The part that runs the memory every day was built by bad
+      engineering — nobody consulted you about it — but it was still <em>built</em>, by repetition,
+      the same way every other route in there was built. Which means the machinery works fine. It's
+      the destination that's wrong.</p>
+    <p>A route that strong took thousands of trips to lay down. That's usually said as bad news. Read
+      it the other way: <strong>you already have proof that repetition builds something permanent in
+      you.</strong> The only open question is what you point it at.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Plate VIII · Re-engineering the route</span>
+        <span class="plate-ti">Collected · over months, not moments</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>The same route runs again</h5>
+          <p>Thought lands on the worst thing, the way water finds the same channel every time.</p>
+        </div>
+        <div class="step catch">
+          <h5>The route is strong — that's engineering, not fate</h5>
+          <p>Strong pathways are the ones repetition built. Nothing about that mechanism only works
+            in the wrong direction.</p>
+        </div>
+
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Two choices, and there is no third</h5>
+            <p>Keep the pattern, or point the same equipment somewhere else.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Keep the same thinking pattern</span>
+              <div class="step risk">
+                <h5>Rehearsal</h5>
+                <p>Every replay is a trip down the road. Traffic keeps the road paved.</p>
+              </div>
+              <div class="step risk">
+                <h5>The route widens; everything else stays narrow</h5>
+                <p>Not because you're weak. Because it's the only one getting used.</p>
+              </div>
+              <div class="loopback">↺ The engine keeps running the design you didn't choose.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Point the same equipment at what you want</span>
+              <div class="step catch">
+                <h5>Refuse the rehearsal</h5>
+                <p>Catch it, name it, turn — Plate III. Not suppression. Redirection.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Decide what you actually want to think about</h5>
+                <p>Specific, not vague. A person, a place, a thing you're building, a morning you want
+                  to have again.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Then go make the memory on purpose</h5>
+                <p>You can't rehearse a life you haven't lived yet. Go to the thing. Take the person
+                  who can't get there alone. Sing where other people are singing. Those become the
+                  files you'll have to reach for later.</p>
+              </div>
+              <div class="step redirect">
+                <h5>Repeat it deliberately</h5>
+                <p>Same route, same days, on purpose. Boring repetition is the entire mechanism —
+                  it's the only thing that ever built the old one.</p>
+              </div>
+              <div class="step out">
+                <h5>The new route gets cheaper to travel</h5>
+                <p>Slowly, then noticeably. One day the default lands somewhere else and you won't
+                  catch the moment it changed.</p>
+              </div>
+              <div class="loopback good">↺ The upgrade you made yourself, with the equipment you already had.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>You don't delete the old road.</b> It stays on the map, and pretending
+        otherwise sets you up to feel betrayed when it shows up again. The work isn't erasing — it's
+        outnumbering. Build a better-lit road and use it so often that it becomes the one you take
+        without deciding.</p></div>
+    </div>
+  </section>
+
+  <!-- ══ 09 ══ -->
+  <section id="s8">
+    <div class="sec-no">09 · The redirect menu</div>
+    <h2>Pick four. Write them down. Don't add a fifth.</h2>
+    <p>A redirect only works if it's decided in advance and it occupies the same channel the pull is
+      using. Four is the right number — enough that one is always available, few enough to remember
+      while flooded.</p>
+    <div class="cards">
+      <div>
+        <h4>Sing it</h4>
+        <p class="why">Breath · verbal channel · already yours</p>
+        <p>Out loud, standing, the loud part. In the car, in the shower, at the sink. Choir or worship
+          night counts double — it also fills an evening.</p>
+      </div>
+      <div>
+        <h4>Pray it</h4>
+        <p class="why">Fixed words · no composing required</p>
+        <p>The same prayer every time, said aloud, short enough to finish. The last line can be the
+          handoff into whatever you do next.</p>
+      </div>
+      <div>
+        <h4>Move rooms, or leave the building</h4>
+        <p class="why">Changes the cue field entirely</p>
+        <p>A craving is partly made of where you're standing. Walking to a known destination and back
+          beats sitting still and being strong.</p>
+      </div>
+      <div>
+        <h4>Hands into a task with steps</h4>
+        <p class="why">Occupies the picture-making capacity</p>
+        <p>Dishes, sweeping, laundry, braiding, cooking one specific thing. Order matters more than
+          scale — the steps do the work.</p>
+      </div>
+      <div>
+        <h4>Call the person on the list</h4>
+        <p class="why">Breaks the secrecy the loop needs</p>
+        <p>Chosen while calm, told in advance they're on the list. "Just talk to me for ten minutes"
+          is a complete sentence.</p>
+      </div>
+      <div>
+        <h4>Go where you're expected — and take someone</h4>
+        <p class="why">Two jobs at once</p>
+        <p>A service, a Sunday school, a standing morning with family. It fills the hour that would
+          otherwise be empty, and it puts you somewhere people notice whether you came.</p>
+        <p>Bringing someone who can't get there without you does something extra: it makes the trip
+          about them, on the days it can't be about you.</p>
+      </div>
+      <div>
+        <h4>Write one line about it</h4>
+        <p class="why">Turns a flood into information</p>
+        <p>Time, what happened just before, what the body did. A week of one-liners shows patterns
+          invisible from inside any single day.</p>
+      </div>
+    </div>
+    <p class="pull-quote">The redirect isn't a distraction. It's the thing that gets to happen instead.</p>
+  </section>
+
+  <!-- ══ 10 · fillable ══ -->
+  <section id="smine">
+    <div class="sec-no">10 · Make it yours</div>
+    <h2>The blanks are the part that works</h2>
+    <p>Everything above this is general. This part isn't, and it's the only part that's actually
+      load-bearing. Fill it in on a calm day — not while you need it — because the whole point is that
+      the answers already exist by the time you're looking for them.</p>
+    <p>What you type saves on this phone, in this file. Nobody else sees it, and nothing is sent
+      anywhere.</p>
+    <div class="notice" id="storeWarn" hidden></div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="f1">My four redirects</label>
+        <span class="hint">One per line. Four, not six. Pick the ones you'd actually do at 2 a.m.</span>
+        <textarea id="f1" data-save="redirects" placeholder="1.&#10;2.&#10;3.&#10;4."></textarea>
+      </div>
+      <div class="field">
+        <label for="f2">The prayer I say — the same one, every time</label>
+        <span class="hint">Short enough to finish out loud. Write it here so you never have to find it.</span>
+        <textarea id="f2" data-save="prayer"></textarea>
+      </div>
+      <div class="field">
+        <label for="f3">The song I sing when it starts</label>
+        <span class="hint">The one with a loud part. Full breath, out loud, wherever you are.</span>
+        <input id="f3" data-save="song" type="text">
+      </div>
+      <div class="field">
+        <label>Three people I can call — and what I'll open with</label>
+        <span class="hint">Ask them first, on a good day, so the call is never a surprise.</span>
+        <div class="field-row">
+          <input data-save="p1" type="text" placeholder="Name + number">
+          <input data-save="p1w" type="text" placeholder="What I'll say first">
+        </div>
+        <div class="field-row" style="margin-top:.55rem">
+          <input data-save="p2" type="text" placeholder="Name + number">
+          <input data-save="p2w" type="text" placeholder="What I'll say first">
+        </div>
+        <div class="field-row" style="margin-top:.55rem">
+          <input data-save="p3" type="text" placeholder="Name + number">
+          <input data-save="p3w" type="text" placeholder="What I'll say first">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f5">My two riskiest hours of the week</label>
+        <span class="hint">Be specific — the day and the hour. These get planned before they arrive.</span>
+        <input id="f5" data-save="hours" type="text" placeholder="e.g. Friday 9 p.m., Sunday afternoon">
+      </div>
+      <div class="field">
+        <label for="f6">What I'll do in those hours instead</label>
+        <textarea id="f6" data-save="fill"></textarea>
+      </div>
+      <div class="field">
+        <label for="f7">My decline line, word for word</label>
+        <span class="hint">Short. Warm. No reason — reasons are things people argue with.</span>
+        <input id="f7" data-save="decline" type="text">
+      </div>
+      <div class="field">
+        <label for="f8">What I'm building this for</label>
+        <span class="hint">Not "to quit". Something specific you want to be able to do, or be, or show up for.</span>
+        <textarea id="f8" data-save="why"></textarea>
+      </div>
+      <p class="saved" id="savedFlag"></p>
+      <div class="btnrow">
+        <button class="btn ghost" id="copyMine" type="button">Copy all of this as text</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 11 · log ══ -->
+  <section id="slog">
+    <div class="sec-no">11 · Pattern log</div>
+    <h2>One line, after. Not a scorecard.</h2>
+    <p>This is for hard moments — the ones you got through and the ones you didn't. Both are worth
+      logging, for the same reason: a week of one-liners shows patterns that are completely invisible
+      from inside any single day.</p>
+    <p>There's deliberately no day counter in here. A number that resets turns one hard night into
+      losing everything, and that maths is exactly what Plate VI is about.</p>
+
+    <div class="log-form">
+      <div class="field">
+        <label for="lg1">What was happening just before?</label>
+        <input id="lg1" type="text" placeholder="Where, who, what hour">
+      </div>
+      <div class="field">
+        <label for="lg2">What did the body do first?</label>
+        <input id="lg2" type="text" placeholder="Chest, breath, jaw, stomach…">
+      </div>
+      <div class="field">
+        <label for="lg3">What happened, and what helped?</label>
+        <textarea id="lg3" placeholder="No judgement in here. Just what happened."></textarea>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="addLog" type="button">Save this entry</button>
+        <button class="btn ghost" id="copyLog" type="button">Copy log</button>
+      </div>
+    </div>
+    <ul class="entries" id="entries"></ul>
+    <p class="empty" id="logEmpty">No entries yet. The first one is usually the hardest to write and
+      the most useful to have.</p>
+  </section>
+
+  <!-- ══ 12 ══ -->
+  <section id="s9">
+    <div class="sec-no">12 · Pocket card</div>
+    <h2>If you only keep one screen</h2>
+    <div class="pocket">
+      <div class="pocket-hd">Screenshot this · six lines · in order</div>
+      <ol>
+        <li>Catch the body, not the story.
+          <span>Chest, breath, jaw, stomach. That's the signal, and it comes before the words do.</span></li>
+        <li>Say what it is, out loud.
+          <span>"That's the craving." "That's the memory — it's not happening now." Name the room you're in.</span></li>
+        <li>Turn — one of your four.
+          <span>Sing · pray · move · hands. Chosen on a calm day, not invented in the middle of this one.</span></li>
+        <li>Ninety seconds, then twenty minutes.
+          <span>You're not making it stop. You're standing still while it passes. It does pass.</span></li>
+        <li>Tell someone the same day.
+          <span>Good day or bad day. The secrecy is the part that makes the next one harder.</span></li>
+        <li>Don't say it about yourself — not even as a joke.
+          <span>Words are instructions. The punchline gets filed the same as the sentence. Charge it, don't drain it.</span></li>
+      </ol>
+    </div>
+
+    <h3>Where the ideas come from</h3>
+    <p>None of this was invented for this document. If any of it is worth chasing further:</p>
+    <ul class="refs">
+      <li><strong>The three-stage addiction cycle</strong> — Koob &amp; Volkow's model of binge,
+        withdrawal and preoccupation, and the shift from wanting to needing.</li>
+      <li><strong>Relapse prevention and the abstinence violation effect</strong> — Marlatt and
+        colleagues, on why the interpretation of a slip predicts what happens next.</li>
+      <li><strong>Urge surfing</strong> — from mindfulness-based relapse prevention: cravings as waves
+        that crest and decay when unreinforced.</li>
+      <li><strong>Dual-task interference and intrusive memories</strong> — Holmes and colleagues, on
+        visual-spatial tasks reducing the vividness and frequency of intrusive images.</li>
+      <li><strong>Slow exhalation and autonomic state</strong> — the physiology behind why singing and
+        spoken prayer settle the body faster than silent effort.</li>
+      <li><strong>Trauma-focused treatment</strong> — for memories that keep arriving uninvited there
+        are therapies with strong evidence behind them. This guide isn't one of them, and isn't meant
+        to be a substitute.</li>
+    </ul>
+    <a class="totop" href="#top">↑ Back to the top</a>
+  </section>
+
+  <!-- ══ 13 · wallet ══ -->
+  <section id="swallet">
+    <div class="sec-no">13 · Wallet card</div>
+    <h2>The paper one, for when the phone is the problem</h2>
+    <p>The phone is also where the invitations arrive, so there's a version that lives in a wallet
+      instead. It fills itself in from what you wrote in section 10. Print it, fold it, done.</p>
+
+    <div class="wallet" id="walletCard">
+      <h5>Catch · Name · Turn</h5>
+      <ol>
+        <li>Catch the <b>body</b>, not the story.</li>
+        <li>Say it out loud: "that's the craving" / "that's the memory — not now."</li>
+        <li>Turn — one of my four. Don't pick a new one now.</li>
+        <li>90 seconds, then 20 minutes. It comes down on its own.</li>
+        <li>Tell someone the same day. Good day or bad.</li>
+        <li>Nothing about myself — not even as a joke.</li>
+      </ol>
+      <div class="mine" id="walletMine"><b>My four:</b> — · <b>Prayer:</b> — · <b>Song:</b> — · <b>Call:</b> —</div>
+      <div class="helpline">SAMHSA 1-800-662-4357 · 988 call or text · DV 1-800-799-7233</div>
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="printCard" type="button">Print just this card</button>
+    </div>
+  </section>
+
+  <!-- ══ 14 · for the helper ══ -->
+  <section id="sfriend">
+    <div class="sec-no">14 · For your person</div>
+    <h2>The page for whoever is walking this with you</h2>
+    <p>Hand this section to them. It's short on purpose, and it's the part most guides leave out —
+      the people helping usually get no instructions at all, and then get blamed when instinct turns
+      out to be wrong.</p>
+
+    <h3>After a slip, say</h3>
+    <div class="cards">
+      <div>
+        <h4>"Thanks for telling me today."</h4>
+        <p class="why">Rewards the disclosure, not the outcome</p>
+        <p>Whether she tells you about the next one is being decided in this exact sentence. Lead with
+          this before anything else, even if you're gutted.</p>
+      </div>
+      <div>
+        <h4>"What was happening right before?"</h4>
+        <p class="why">Turns shame into data</p>
+        <p>A real question with a real answer. It puts you both on the same side of the problem
+          instead of across from each other.</p>
+      </div>
+      <div>
+        <h4>"What do you want to do in the next hour?"</h4>
+        <p class="why">The only timeframe that matters</p>
+        <p>Not tomorrow, not "from now on". Promises about the future are how the conversation escapes
+          the room without anything changing.</p>
+      </div>
+    </div>
+
+    <h3>Don't say</h3>
+    <ul>
+      <li><strong>"I thought you were doing so well."</strong> Turns her honesty into your
+        disappointment, and teaches her that telling you costs more than hiding.</li>
+      <li><strong>"You promised."</strong> Relitigating a promise mid-crisis has never once produced
+        a different outcome.</li>
+      <li><strong>Counting her days for her.</strong> If the streak becomes the currency between you,
+        a slip stops being one night and becomes the loss of the whole relationship.</li>
+      <li><strong>Nothing at all, with a hurt face.</strong> Silence gets read as disgust, and she'll
+        fill it in with the worst version.</li>
+    </ul>
+
+    <h3>When she's angry at you for caring</h3>
+    <p>It happens, it's common, and it isn't really about you. Don't argue and don't disappear — the
+      leaving is what confirms the fear underneath it. <em>"I'm not going anywhere. I'll be here when
+      you want to talk"</em> is a complete response, and you can say it and then genuinely go do
+      something else.</p>
+
+    <h3>Your own limits, said out loud</h3>
+    <p>You can't be the friend, the coach, the accountability, and the emergency contact all at once —
+      those roles conflict eventually, and when they do she loses all of them in one go. Say what
+      you're not able to be. Then help her get a second person who isn't you: a counselor, a sponsor,
+      someone from church, anyone whose only job is her.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">If you think it's an overdose</span>
+        <span class="plate-ti">Don't wait to be sure</span>
+      </div>
+      <div class="plate-body">
+        <div class="step risk">
+          <h5>Signs</h5>
+          <p>Can't be woken · breathing slow, gurgling or stopped · lips or fingertips going blue or
+            grey · limp body · skin cold and clammy.</p>
+        </div>
+        <div class="step catch">
+          <h5>Call emergency services first</h5>
+          <p>Most US states have Good Samaritan laws that protect the caller. Say the person is
+            unresponsive and not breathing normally.</p>
+        </div>
+        <div class="step catch">
+          <h5>Give naloxone if you have it</h5>
+          <p>It does nothing if opioids aren't involved, so give it when in doubt. A second dose may
+            be needed after a few minutes.</p>
+        </div>
+        <div class="step redirect">
+          <h5>On their side, and stay</h5>
+          <p>Recovery position so they can't choke. Stay until help arrives — naloxone wears off
+            before the opioid does.</p>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Get naloxone before you need it.</b> Most US pharmacies sell it
+        without a prescription, and many health departments give it out free. Keep it where someone
+        else could find it, and tell them where it is.</p></div>
+    </div>
+
+    <a class="totop" href="#top">↑ Back to the top</a>
+  </section>
+
+  </main>
+
+  <footer>
+    <span>Seven plates · Catch · Name · Turn</span>
+    <span>SAMHSA 1-800-662-4357 · 988 · free, confidential, 24/7</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ── the ninety-second flower ── */
+  var TOTAL = 90, PETALS = 12;
+  var petalGroup = document.getElementById("petals");
+  var countEl = document.getElementById("count");
+  var stateEl = document.getElementById("state");
+  var goBtn = document.getElementById("go");
+  var resetBtn = document.getElementById("reset");
+  var ticker = null, left = TOTAL;
+
+  if (petalGroup && countEl && goBtn && stateEl && resetBtn) {
+    var NS = "http://www.w3.org/2000/svg";
+    for (var i = 0; i < PETALS; i++) {
+      var pt = document.createElementNS(NS, "ellipse");
+      pt.setAttribute("cx", "0"); pt.setAttribute("cy", "-30");
+      pt.setAttribute("rx", "9"); pt.setAttribute("ry", "26");
+      pt.setAttribute("transform", "rotate(" + (i * (360 / PETALS)) + ")");
+      pt.setAttribute("class", "timer-petal");
+      petalGroup.appendChild(pt);
+    }
+    var petals = petalGroup.querySelectorAll(".timer-petal");
+
+    function paint() {
+      var m = Math.floor(left / 60), s = left % 60;
+      countEl.textContent = m + ":" + (s < 10 ? "0" : "") + s;
+      var lit = Math.round(((TOTAL - left) / TOTAL) * PETALS);
+      for (var j = 0; j < petals.length; j++) { petals[j].classList.toggle("lit", j < lit); }
+    }
+    function stop() { if (ticker) { window.clearInterval(ticker); ticker = null; } }
+    function reset() {
+      stop(); left = TOTAL; paint();
+      goBtn.textContent = "Start ninety seconds";
+      stateEl.textContent = "Ride it out — you don't have to do anything else";
+    }
+    goBtn.addEventListener("click", function () {
+      if (ticker) {
+        stop(); goBtn.textContent = "Keep going";
+        stateEl.textContent = "Paused — start again whenever";
+        return;
+      }
+      if (left === 0) { reset(); }
+      goBtn.textContent = "Pause";
+      stateEl.textContent = "Breathe out longer than you breathe in";
+      ticker = window.setInterval(function () {
+        left = left - 1;
+        if (left <= 0) {
+          left = 0; paint(); stop();
+          goBtn.textContent = "Go again";
+          stateEl.textContent = "Still here. That was the hard part";
+          return;
+        }
+        paint();
+        if (left === 60) { stateEl.textContent = "Let it be loud without obeying it"; }
+        if (left === 30) { stateEl.textContent = "It's already coming down"; }
+      }, 1000);
+    });
+    resetBtn.addEventListener("click", reset);
+    paint();
+  }
+
+  /* ── storage: real if available, loud if not ── */
+  var KEY = "brainmaps.v1.";
+  var store = (function () {
+    var mem = {}, ok = false;
+    try {
+      window.localStorage.setItem(KEY + "__t", "1");
+      window.localStorage.removeItem(KEY + "__t");
+      ok = true;
+    } catch (e) { ok = false; }
+    return {
+      ok: ok,
+      get: function (k) {
+        try { return ok ? window.localStorage.getItem(KEY + k) : (mem[k] || null); }
+        catch (e) { return mem[k] || null; }
+      },
+      set: function (k, v) {
+        try { if (ok) { window.localStorage.setItem(KEY + k, v); } else { mem[k] = v; } }
+        catch (e) { mem[k] = v; return false; }
+        return true;
+      }
+    };
+  })();
+
+  var warn = document.getElementById("storeWarn");
+  if (warn && !store.ok) {
+    warn.hidden = false;
+    warn.textContent = "Heads up: this viewer won't remember what you type. Save this file to your "
+      + "phone and open it from there, or use \u201cCopy all of this as text\u201d before you leave the page.";
+  }
+
+  /* ── fillable fields ── */
+  var savedFlag = document.getElementById("savedFlag");
+  var fields = Array.prototype.slice.call(document.querySelectorAll("[data-save]"));
+  var flagTimer = null;
+  fields.forEach(function (el) {
+    var v = store.get(el.getAttribute("data-save"));
+    if (v !== null) { el.value = v; }
+    el.addEventListener("input", function () {
+      var okw = store.set(el.getAttribute("data-save"), el.value);
+      if (savedFlag) {
+        savedFlag.textContent = okw && store.ok ? "Saved on this phone" : "Not saved — copy it out before you leave";
+        window.clearTimeout(flagTimer);
+        flagTimer = window.setTimeout(function () { savedFlag.textContent = ""; }, 2200);
+      }
+      fillWallet();
+    });
+  });
+  function val(k) { var el = document.querySelector('[data-save="' + k + '"]'); return el && el.value.trim(); }
+
+  function copyText(text, btn, done) {
+    var revert = btn.textContent;
+    function flash(msg) {
+      btn.textContent = msg;
+      window.setTimeout(function () { btn.textContent = revert; }, 1800);
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { flash(done); }, function () { flash("Couldn't copy — select it by hand"); });
+        return;
+      }
+    } catch (e) { /* falls through */ }
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var okc = false;
+    try { okc = document.execCommand("copy"); } catch (e2) { okc = false; }
+    document.body.removeChild(ta);
+    flash(okc ? done : "Couldn't copy — select it by hand");
+  }
+
+  var copyMine = document.getElementById("copyMine");
+  if (copyMine) {
+    copyMine.addEventListener("click", function () {
+      var t = "MY PLAN\n\nFour redirects:\n" + (val("redirects") || "—")
+        + "\n\nPrayer:\n" + (val("prayer") || "—")
+        + "\nSong: " + (val("song") || "—")
+        + "\n\nPeople to call:\n"
+        + "1. " + (val("p1") || "—") + " — " + (val("p1w") || "")
+        + "\n2. " + (val("p2") || "—") + " — " + (val("p2w") || "")
+        + "\n3. " + (val("p3") || "—") + " — " + (val("p3w") || "")
+        + "\n\nRiskiest hours: " + (val("hours") || "—")
+        + "\nInstead, I will: " + (val("fill") || "—")
+        + "\n\nDecline line: " + (val("decline") || "—")
+        + "\n\nWhat I'm building this for:\n" + (val("why") || "—");
+      copyText(t, copyMine, "Copied");
+    });
+  }
+
+  /* ── wallet card fills itself in ── */
+  var walletMine = document.getElementById("walletMine");
+  function fillWallet() {
+    if (!walletMine) { return; }
+    var four = (val("redirects") || "").split("\n").map(function (s) {
+      return s.replace(/^\s*\d+[.)]?\s*/, "").trim();
+    }).filter(Boolean).join(" · ");
+    var people = [val("p1"), val("p2"), val("p3")].filter(Boolean).join(" · ");
+    walletMine.innerHTML = "<b>My four:</b> " + (four || "—")
+      + "<br><b>Prayer:</b> " + (val("prayer") ? val("prayer").split("\n")[0] : "—")
+      + "<br><b>Song:</b> " + (val("song") || "—")
+      + "<br><b>Call:</b> " + (people || "—")
+      + "<br><b>I'm doing this for:</b> " + (val("why") ? val("why").split("\n")[0] : "—");
+  }
+  fillWallet();
+
+  var printCard = document.getElementById("printCard");
+  if (printCard) {
+    printCard.addEventListener("click", function () {
+      document.body.classList.add("card-only");
+      window.setTimeout(function () {
+        try { window.print(); } catch (e) { /* nothing to do */ }
+        window.setTimeout(function () { document.body.classList.remove("card-only"); }, 600);
+      }, 60);
+    });
+  }
+  window.addEventListener("afterprint", function () { document.body.classList.remove("card-only"); });
+
+  /* ── pattern log ── */
+  var entriesEl = document.getElementById("entries");
+  var logEmpty = document.getElementById("logEmpty");
+  var addLog = document.getElementById("addLog");
+  var copyLog = document.getElementById("copyLog");
+  var lg1 = document.getElementById("lg1"), lg2 = document.getElementById("lg2"), lg3 = document.getElementById("lg3");
+
+  function readLog() {
+    var raw = store.get("log");
+    if (!raw) { return []; }
+    try { var a = JSON.parse(raw); return Object.prototype.toString.call(a) === "[object Array]" ? a : []; }
+    catch (e) { return []; }
+  }
+  function writeLog(a) { store.set("log", JSON.stringify(a)); }
+  function renderLog() {
+    if (!entriesEl) { return; }
+    var a = readLog();
+    entriesEl.innerHTML = "";
+    if (logEmpty) { logEmpty.style.display = a.length ? "none" : "block"; }
+    a.forEach(function (e, i) {
+      var li = document.createElement("li");
+      var when = document.createElement("span");
+      when.className = "when"; when.textContent = e.when || "";
+      li.appendChild(when);
+      [["Before", e.before], ["Body", e.body], ["What happened", e.what]].forEach(function (pair) {
+        if (!pair[1]) { return; }
+        var p = document.createElement("p");
+        var b = document.createElement("b"); b.textContent = pair[0] + ": ";
+        p.appendChild(b); p.appendChild(document.createTextNode(pair[1]));
+        li.appendChild(p);
+      });
+      var del = document.createElement("button");
+      del.type = "button"; del.className = "drop"; del.textContent = "Remove";
+      del.addEventListener("click", function () {
+        var cur = readLog(); cur.splice(i, 1); writeLog(cur); renderLog();
+      });
+      li.appendChild(del);
+      entriesEl.appendChild(li);
+    });
+  }
+  if (addLog) {
+    addLog.addEventListener("click", function () {
+      var before = lg1 ? lg1.value.trim() : "", body = lg2 ? lg2.value.trim() : "", what = lg3 ? lg3.value.trim() : "";
+      if (!before && !body && !what) {
+        addLog.textContent = "Write something first";
+        window.setTimeout(function () { addLog.textContent = "Save this entry"; }, 1800);
+        return;
+      }
+      var d = new Date();
+      var stamp = d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
+        + " · " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+      var a = readLog();
+      a.unshift({ when: stamp, before: before, body: body, what: what });
+      writeLog(a); renderLog();
+      if (lg1) { lg1.value = ""; } if (lg2) { lg2.value = ""; } if (lg3) { lg3.value = ""; }
+      addLog.textContent = store.ok ? "Saved" : "Added — but copy it out, it won't persist here";
+      window.setTimeout(function () { addLog.textContent = "Save this entry"; }, 2000);
+    });
+  }
+  if (copyLog) {
+    copyLog.addEventListener("click", function () {
+      var a = readLog();
+      if (!a.length) { copyText("(no entries yet)", copyLog, "Nothing to copy"); return; }
+      var t = a.map(function (e) {
+        return e.when + "\nBefore: " + (e.before || "-") + "\nBody: " + (e.body || "-")
+          + "\nWhat happened: " + (e.what || "-");
+      }).join("\n\n");
+      copyText("PATTERN LOG\n\n" + t, copyLog, "Copied");
+    });
+  }
+  renderLog();
+
+  /* ── rail highlighting + keeping the current chip in view ── */
+  var rail = document.querySelector(".rail");
+  var links = Array.prototype.slice.call(document.querySelectorAll(".rail a"));
+  var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
+  var lastId = null;
+  function setCurrent(id) {
+    if (id === lastId) { return; }
+    lastId = id;
+    links.forEach(function (a) {
+      var on = a.getAttribute("href") === "#" + id;
+      a.setAttribute("aria-current", on ? "true" : "false");
+      if (on && rail) {
+        var l = a.offsetLeft, r = l + a.offsetWidth;
+        if (l < rail.scrollLeft || r > rail.scrollLeft + rail.clientWidth) {
+          rail.scrollTo({ left: Math.max(0, l - 16), behavior: "smooth" });
+        }
+      }
+    });
+  }
+  if ("IntersectionObserver" in window && targets.length) {
+    var seen = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
+      for (var k = 0; k < targets.length; k++) { if (seen[targets[k].id]) { setCurrent(targets[k].id); break; } }
+    }, { rootMargin: "-20% 0px -70% 0px", threshold: 0 });
+    targets.forEach(function (t) { io.observe(t); });
+  }
+  setCurrent("s0");
+})();
+</script>
+</body>
+</html>
