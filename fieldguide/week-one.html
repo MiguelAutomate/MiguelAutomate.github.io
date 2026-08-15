@@ -1,1 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#EFF1EA">
+<title>Week One — Catch · Name · Turn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Spectral:wght@200;300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EFF1EA;--paper-raised:#F8F9F4;--card:#FBFBF7;
+  --line:#CBD2C4;--line-soft:#DDE2D7;
+  --ink:#1F2A26;--ink-soft:#46544E;--ink-dim:#75837C;
+  --fern:#3F6E51;--fern-wash:#E4EDE5;
+  --mulberry:#7A4B66;--mulberry-wash:#F1E5EB;
+  --rose:#9B4A5E;--rose-wash:#F0DBE0;
+  --iris:#4E5FA0;--iris-wash:#E5E9F4;
+  --gold:#8C6F2C;--gold-wash:#F5F1E4;
+  --display:"Fraunces",Georgia,serif;--body:"Spectral",Georgia,serif;--mono:"IBM Plex Mono",ui-monospace,monospace;
+  --rail:1.05rem;--measure:62ch;
+}
+@media (min-width:700px){:root{--rail:2rem}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.001ms!important}}
+body{margin:0;background:var(--paper);color:var(--ink-soft);font-family:var(--body);font-weight:300;
+  font-size:17px;line-height:1.68;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.bloom-field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.4}
+@media (min-width:700px){.bloom-field{opacity:.5}}
+.sheet{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 var(--rail)}
 
+.masthead{padding:2.2rem 0 1.2rem}
+.eyebrow{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold);display:flex;flex-wrap:wrap;gap:.3rem 1.1rem;margin-bottom:1.1rem}
+.eyebrow span:not(:first-child){color:var(--ink-dim)}
+h1{font-family:var(--display);font-weight:500;font-size:clamp(1.9rem,8.5vw,3rem);line-height:1.08;
+  letter-spacing:-.018em;color:var(--ink);margin:0;font-variation-settings:"SOFT" 100,"WONK" 1}
+h1 em{font-style:italic;color:var(--fern)}
+.deck{font-size:1.02rem;margin:1.1rem 0 0;max-width:var(--measure)}
+.deck strong{color:var(--ink);font-weight:600}
+.byline{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);line-height:1.9;margin-top:1.2rem;padding-top:.85rem;border-top:1px solid var(--line)}
+
+.safety{margin:1.6rem 0 0;border:1px solid var(--mulberry);background:var(--card)}
+.safety-hd{padding:.85rem 1rem;border-bottom:1px solid rgba(122,75,102,.34);background:var(--mulberry-wash)}
+.safety-hd b{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--mulberry);margin-bottom:.2rem}
+.safety-hd span{font-family:var(--display);font-size:1.02rem;color:var(--ink);font-weight:500;line-height:1.3}
+.safety-grid{display:grid;grid-template-columns:1fr;gap:1px;background:rgba(122,75,102,.22)}
+@media (min-width:700px){.safety-grid{grid-template-columns:repeat(3,1fr)}}
+.safety-grid > div{background:var(--card);padding:1rem}
+.safety-grid h4{font-family:var(--mono);font-size:.59rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mulberry);margin:0 0 .4rem;font-weight:500}
+.safety-grid p{margin:0;font-size:.88rem;line-height:1.55;max-width:none}
+.safety-foot{padding:.9rem 1rem;border-top:1px solid rgba(122,75,102,.34);font-family:var(--mono);
+  font-size:.67rem;line-height:1.85;color:var(--ink-soft)}
+.safety-foot b{color:var(--gold);font-weight:500;white-space:nowrap}
+
+.railwrap{position:sticky;top:0;z-index:40;background:linear-gradient(var(--paper) 76%,rgba(239,241,234,0));
+  padding:.55rem 0 .9rem;margin-top:1.6rem}
+.rail{display:flex;gap:.45rem;border-top:1px solid var(--line);padding-top:.55rem;overflow-x:auto;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail a{flex:0 0 auto;text-decoration:none;padding:.5rem .7rem;border:1px solid var(--line);background:var(--card);
+  border-radius:2px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-dim);white-space:nowrap}
+.rail a b{color:var(--gold);font-weight:500}
+.rail a[aria-current="true"]{background:var(--fern);border-color:var(--fern);color:#F4F7F2}
+.rail a[aria-current="true"] b{color:#CFE2D3}
+
+section{padding:1.9rem 0 .4rem;border-top:1px solid var(--line-soft);scroll-margin-top:4rem}
+section:first-of-type{border-top:none}
+.sec-no{font-family:var(--mono);font-size:.62rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+h2{font-family:var(--display);font-weight:500;font-size:clamp(1.45rem,5.6vw,2rem);line-height:1.17;
+  letter-spacing:-.012em;color:var(--ink);margin:0 0 .8rem;font-variation-settings:"SOFT" 100,"WONK" 1}
+h3{font-family:var(--display);font-weight:600;font-size:1.08rem;color:var(--ink);margin:1.8rem 0 .5rem}
+p{max-width:var(--measure);margin:0 0 1rem}
+strong{color:var(--ink);font-weight:600}
+em{color:var(--fern);font-style:italic}
+.pull-quote{margin:1.6rem 0;padding:.2rem 0 .2rem 1.1rem;border-left:2px solid var(--fern);
+  font-family:var(--display);font-size:clamp(1.12rem,4.4vw,1.4rem);line-height:1.34;color:var(--ink);
+  font-weight:400;font-variation-settings:"SOFT" 100,"WONK" 1}
+
+.plate{margin:1.5rem 0 0;background:var(--card);border:1px solid var(--line)}
+.plate-hd{padding:.8rem 1rem;border-bottom:1px solid var(--line-soft);background:var(--paper-raised)}
+.plate-no{display:block;font-family:var(--display);font-weight:600;font-size:1rem;color:var(--ink)}
+.plate-ti{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gold);margin-top:.15rem}
+.plate-body{padding:1.05rem .8rem}
+.plate-cap{padding:.8rem 1rem .9rem;border-top:1px solid var(--line-soft);background:var(--paper-raised);
+  font-size:.87rem;line-height:1.6}
+.plate-cap b{color:var(--ink);font-weight:600}
+.plate-cap p{max-width:none;margin:0}
+
+.step{position:relative;border:1px solid var(--line);border-left:3px solid var(--ink-dim);
+  background:var(--paper-raised);padding:.7rem .8rem;margin-bottom:1.75rem}
+.step:last-child{margin-bottom:0}
+.step h5{margin:0;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);line-height:1.3}
+.step p{margin:.25rem 0 0;font-size:.87rem;line-height:1.52;color:var(--ink-soft);max-width:none}
+.step:not(:last-child)::before{content:"";position:absolute;left:1.15rem;bottom:-1.35rem;width:2px;height:.95rem;background:var(--line)}
+.step:not(:last-child)::after{content:"";position:absolute;left:.85rem;bottom:-1.62rem;width:0;height:0;
+  border-left:5px solid transparent;border-right:5px solid transparent;border-top:6px solid var(--line)}
+.step.pull{border-left-color:var(--mulberry);background:var(--mulberry-wash)}
+.step.risk{border-left-color:var(--rose);background:var(--rose-wash)}
+.step.catch{border-left-color:var(--fern);background:var(--fern-wash)}
+.step.redirect{border-left-color:var(--iris);background:var(--iris-wash)}
+.step.out{border-left-color:var(--fern);border-color:var(--fern);background:var(--fern-wash);border-left-width:5px}
+
+.fork{position:relative;margin-bottom:1.75rem}
+.fork:last-child{margin-bottom:0}
+.fork-q{border:1px solid var(--gold);border-left-width:3px;background:var(--gold-wash);padding:.7rem .8rem;
+  position:relative;margin-bottom:1.5rem}
+.fork-q b{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.2rem}
+.fork-q h5{margin:0;font-family:var(--display);font-size:1.02rem;font-weight:600;color:var(--ink);line-height:1.3}
+.fork-q p{margin:.25rem 0 0;font-size:.87rem;line-height:1.52;max-width:none}
+.fork-q::before{content:"";position:absolute;left:1.15rem;bottom:-1.5rem;width:2px;height:1.5rem;background:var(--line)}
+.branches{display:grid;grid-template-columns:1fr;gap:1.4rem}
+@media (min-width:720px){.branches{grid-template-columns:1fr 1fr;gap:1rem;align-items:start}}
+.branch{position:relative;padding-left:.7rem;border-left:1px dashed var(--line)}
+.edge{display:inline-block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink);background:var(--card);border:1px solid var(--line);padding:.35rem .55rem;margin-bottom:.85rem;
+  line-height:1.45;border-radius:2px}
+.branch.bad .edge{border-color:var(--rose);color:var(--rose)}
+.branch.good .edge{border-color:var(--fern);color:var(--fern)}
+.loopback{margin-top:1rem;border:1px dashed var(--mulberry);padding:.6rem .7rem;font-family:var(--mono);
+  font-size:.65rem;line-height:1.6;color:var(--mulberry)}
+.loopback.good{border-color:var(--fern);color:var(--fern)}
+.options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1.5rem}
+@media (min-width:520px){.options{grid-template-columns:1fr 1fr}}
+.options > div{border:1px solid var(--iris);border-left-width:3px;background:var(--iris-wash);padding:.65rem .75rem}
+.options h5{margin:0;font-family:var(--display);font-size:.98rem;font-weight:600;color:var(--ink);line-height:1.3}
+.options p{margin:.2rem 0 0;font-size:.85rem;line-height:1.5;max-width:none}
+.merge{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-dim);
+  text-align:center;margin-bottom:1.4rem}
+
+.cards{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin:1.3rem 0 0}
+@media (min-width:640px){.cards{grid-template-columns:1fr 1fr}}
+.cards > div{background:var(--card);padding:1rem 1.05rem}
+.cards h4{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);margin:0 0 .15rem}
+.cards .why{font-family:var(--mono);font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fern);margin:0 0 .5rem}
+.cards p{font-size:.89rem;line-height:1.56;margin:0;max-width:none}
+
+.notice{border:1px solid var(--gold);background:var(--gold-wash);padding:.8rem .9rem;margin:1.1rem 0 0;
+  font-family:var(--mono);font-size:.68rem;line-height:1.7;color:var(--ink)}
+.fields{border:1px solid var(--line);background:var(--card);padding:1.05rem;margin:1.3rem 0 0}
+.field{margin-bottom:1.15rem}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-family:var(--mono);font-size:.61rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.15rem}
+.field .hint{display:block;font-size:.82rem;line-height:1.5;color:var(--ink-dim);margin-bottom:.4rem}
+.field input,.field textarea{width:100%;font-family:var(--body);font-size:16px;line-height:1.5;color:var(--ink);
+  background:var(--paper-raised);border:1px solid var(--line);border-left:3px solid var(--iris);padding:.6rem .7rem;
+  min-height:46px;border-radius:2px;-webkit-appearance:none}
+.field textarea{min-height:74px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:2px solid var(--iris);outline-offset:1px;background:#fff}
+.field-row{display:grid;grid-template-columns:1fr;gap:.55rem}
+@media (min-width:560px){.field-row{grid-template-columns:1fr 1fr}}
+.saved{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--fern);
+  min-height:1.3em;margin:.7rem 0 0}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.btn{flex:1 1 auto;min-height:48px;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--fern);color:#F6F8F3;border:none;padding:.8rem 1rem;cursor:pointer;border-radius:2px}
+.btn.ghost{background:transparent;color:var(--ink-soft);border:1px solid var(--line)}
+.btn:focus-visible{outline:2px solid var(--iris);outline-offset:3px}
+
+.pocket{margin:1.4rem 0 0;border:2px solid var(--ink);background:var(--paper-raised);padding:1.1rem}
+.pocket-hd{font-family:var(--mono);font-size:.6rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:.9rem;padding-bottom:.6rem;border-bottom:1px solid var(--line)}
+.pocket ol{margin:0;padding-left:1.15rem;max-width:none}
+.pocket li{font-family:var(--display);font-size:1.05rem;color:var(--ink);line-height:1.4;margin-bottom:.8rem}
+.pocket li:last-child{margin-bottom:0}
+.pocket li span{display:block;font-family:var(--body);font-size:.88rem;color:var(--ink-soft);line-height:1.55;margin-top:.15rem}
+.wallet{border:2px solid var(--ink);background:#fff;padding:.95rem 1rem;margin:1.3rem 0 0;max-width:26rem}
+.wallet h5{margin:0 0 .5rem;font-family:var(--display);font-size:1rem;font-weight:600;color:var(--ink);
+  padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+.wallet ol{margin:0 0 .6rem;padding-left:1.05rem}
+.wallet li{font-size:.86rem;line-height:1.45;color:var(--ink);margin-bottom:.3rem}
+.wallet .mine{font-family:var(--mono);font-size:.68rem;line-height:1.65;color:var(--ink);border-top:1px solid var(--line);
+  padding-top:.5rem;margin-top:.3rem}
+.wallet .mine b{color:var(--gold);font-weight:500}
+.wallet .helpline{font-family:var(--mono);font-size:.62rem;line-height:1.6;color:var(--ink-soft);
+  border-top:1px solid var(--line);margin-top:.5rem;padding-top:.45rem}
+
+.later{margin:1.6rem 0 0;border:1px dashed var(--line);padding:1rem;font-size:.92rem;line-height:1.6}
+.later p{max-width:none;margin:0}
+footer{position:relative;z-index:1;margin-top:2.2rem;padding:1.2rem 0 2.4rem;border-top:1px solid var(--line);
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.09em;color:var(--ink-dim);text-transform:uppercase;line-height:2}
+footer span{display:block}
+
+@media print{
+  .bloom-field,.railwrap,.btnrow{display:none}
+  body{background:#fff;font-size:10.5pt}
+  .plate,.cards,.pocket,.step,.fork,.wallet{break-inside:avoid}
+  body.card-only .masthead,body.card-only footer,body.card-only main > section{display:none!important}
+  body.card-only main > #card{display:block!important}
+  body.card-only #card h2,body.card-only #card .sec-no,body.card-only #card p,body.card-only #card .pocket{display:none}
+  body.card-only .wallet{display:block!important;max-width:none;border-width:1px}
+}
+</style>
+</head>
+<body>
+
+<svg class="bloom-field" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="carnation-rose">
+      <path d="M0 0 C 1.5 18, 0.5 34, -2 52" fill="none" stroke="#7A9A82" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M0 20 C -7 25, -12 33, -13 43 C -6 38, -1 30, 0 20 Z" fill="#C6D6C6" fill-opacity=".55" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M1 29 C 8 33, 12 40, 12 49 C 6 43, 1 36, 1 29 Z" fill="#C6D6C6" fill-opacity=".55" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-17 -8 C -19 -18, -14 -26, -8 -28 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 C 17 -26, 19 -17, 17 -8 C 9 -2, -9 -2, -17 -8 Z"
+        fill="#E9D6DF" fill-opacity=".78" stroke="#B78BA0" stroke-width="1"/>
+      <path d="M-11 -10 C -12 -18, -8 -23, -4 -24 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 C 10 -23, 12 -17, 11 -10 C 6 -6, -6 -6, -11 -10 Z"
+        fill="#DCBECF" fill-opacity=".7" stroke="#B78BA0" stroke-width=".8"/>
+      <g fill="none" stroke="#B78BA0" stroke-width=".7" stroke-opacity=".8">
+        <path d="M0 -7 L -6 -20"/><path d="M0 -7 L 0 -22"/><path d="M0 -7 L 6 -20"/>
+      </g>
+      <path d="M-4.6 2 L -5.4 -7 C -5.4 -10, 5.4 -10, 5.4 -7 L 4.6 2 Z" fill="#BCCFBC" fill-opacity=".85" stroke="#7A9A82" stroke-width="1"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-5.4 -7 l -2.4 -4.5"/><path d="M5.4 -7 l 2.4 -4.5"/><path d="M0 -9 l 0 -4"/>
+      </g>
+    </g>
+    <g id="carnation-pale">
+      <path d="M0 0 C 1.5 18, 0.5 34, -2 52" fill="none" stroke="#7A9A82" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M0 20 C -7 25, -12 33, -13 43 C -6 38, -1 30, 0 20 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M1 29 C 8 33, 12 40, 12 49 C 6 43, 1 36, 1 29 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-17 -8 C -19 -18, -14 -26, -8 -28 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 l2.2 4 l2.2 -4 C 17 -26, 19 -17, 17 -8 C 9 -2, -9 -2, -17 -8 Z"
+        fill="#F4EEF0" fill-opacity=".8" stroke="#C3A3B4" stroke-width="1"/>
+      <path d="M-11 -10 C -12 -18, -8 -23, -4 -24 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 C 10 -23, 12 -17, 11 -10 C 6 -6, -6 -6, -11 -10 Z"
+        fill="#E9D6DF" fill-opacity=".8" stroke="#C3A3B4" stroke-width=".8"/>
+      <path d="M-4.6 2 L -5.4 -7 C -5.4 -10, 5.4 -10, 5.4 -7 L 4.6 2 Z" fill="#BCCFBC" fill-opacity=".8" stroke="#7A9A82" stroke-width="1"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-5.4 -7 l -2.4 -4.5"/><path d="M5.4 -7 l 2.4 -4.5"/><path d="M0 -9 l 0 -4"/>
+      </g>
+    </g>
+    <g id="carnation-bud">
+      <path d="M0 0 C 1 14, 0 26, -1.5 38" fill="none" stroke="#7A9A82" stroke-width="1.1" stroke-linecap="round"/>
+      <path d="M0 16 C -6 20, -10 27, -11 35 C -5 30, -1 24, 0 16 Z" fill="#C6D6C6" fill-opacity=".5" stroke="#7A9A82" stroke-width=".8"/>
+      <path d="M-4 0 L -4.6 -13 C -4.6 -16, 4.6 -16, 4.6 -13 L 4 0 Z" fill="#BCCFBC" fill-opacity=".85" stroke="#7A9A82" stroke-width="1"/>
+      <path d="M-4.4 -14 C -3 -21, 3 -21, 4.4 -14 C 2 -12, -2 -12, -4.4 -14 Z" fill="#E9D6DF" fill-opacity=".8" stroke="#B78BA0" stroke-width=".9"/>
+      <g fill="none" stroke="#7A9A82" stroke-width="1" stroke-linecap="round">
+        <path d="M-4.6 -13 l -2.2 -4"/><path d="M4.6 -13 l 2.2 -4"/>
+      </g>
+    </g>
+    <pattern id="pressed" width="220" height="220" patternUnits="userSpaceOnUse" patternTransform="rotate(-7)">
+      <use href="#carnation-rose" transform="translate(44,72) rotate(-9)"/>
+      <use href="#carnation-pale" transform="translate(158,158) rotate(11) scale(.88)"/>
+      <use href="#carnation-bud" transform="translate(150,52) rotate(18) scale(.95)"/>
+      <use href="#carnation-rose" transform="translate(196,84) rotate(-14) scale(.62)"/>
+      <use href="#carnation-bud" transform="translate(34,180) rotate(-16) scale(.8)"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#pressed)"/>
+</svg>
+
+<div class="sheet">
+
+  <header class="masthead" id="top">
+    <div class="eyebrow"><span>Week one</span><span>Three things</span><span>That's all</span></div>
+    <h1>Catch it. Name it. <em>Turn.</em></h1>
+    <p class="deck">There's a longer guide, and it can wait. This is the part that actually gets used:
+      one map for when a memory shows up uninvited, one page you fill in yourself, and one card small
+      enough to keep on you. <strong>Read the map once. Fill in the page on a calm day. Screenshot the
+      card.</strong> Nothing else is assigned.</p>
+    <p class="byline">Written by a friend · Not a treatment plan · Nothing here is sent anywhere</p>
+
+    <div class="safety">
+      <div class="safety-hd"><b>Read first</b><span>Three things no skill on this page covers</span></div>
+      <div class="safety-grid">
+        <div>
+          <h4>Tapering</h4>
+          <p>If what you're coming off includes benzodiazepines or alcohol, stopping fast can cause
+            seizures and can be fatal. That taper needs a doctor setting the schedule — not willpower,
+            and not someone holding the bottle for you.</p>
+        </div>
+        <div>
+          <h4>After a break</h4>
+          <p>If opioids are in the picture, tolerance drops fast. The amount that felt normal two weeks
+            ago can be an overdose today. Naloxone in the house, and don't use alone.</p>
+        </div>
+        <div>
+          <h4>An unsafe house</h4>
+          <p>If someone you live with is a current source of harm, grounding helps you survive a
+            moment — it doesn't make a room safe. That needs a plan, and one person who knows about it
+            who doesn't live there.</p>
+        </div>
+      </div>
+      <div class="safety-foot">
+        <b>SAMHSA 1-800-662-4357</b> — free, confidential, 24/7. <b>988</b> — call or text.
+        <b>1-800-799-7233</b> — or text START to 88788.
+      </div>
+    </div>
+  </header>
+
+  <div class="railwrap">
+    <nav class="rail" aria-label="Sections">
+      <a href="#map"><b>01</b> The map</a>
+      <a href="#mine"><b>02</b> Your page</a>
+      <a href="#card"><b>03</b> The card</a>
+    </nav>
+  </div>
+
+  <main>
+
+  <!-- ══ 01 ══ -->
+  <section id="map">
+    <div class="sec-no">01 · The map</div>
+    <h2>The memory that arrives without being asked</h2>
+    <p>It doesn't come as a thought you chose. It comes as a body event first — heart, breath, gut,
+      heat, a sudden need to leave — and the words arrive afterwards, if they arrive at all. By the
+      time you're thinking <em>about</em> it, your nervous system has been running for a few seconds
+      already.</p>
+    <p>So the catch is aimed at the body, not the story. <strong>You're looking for the moment your
+      chest changes, not the moment the memory finishes playing.</strong> That's the whole skill, and
+      it's the only one worth practising this week.</p>
+
+    <div class="plate">
+      <div class="plate-hd">
+        <span class="plate-no">Catch and turn</span>
+        <span class="plate-ti">For the hallway, the voice, 2 a.m.</span>
+      </div>
+      <div class="plate-body">
+        <div class="step pull">
+          <h5>Something sets it off</h5>
+          <p>A voice through a wall · a tone · a door · a smell · a room · being alone with quiet.</p>
+        </div>
+        <div class="step pull">
+          <h5>The body goes first</h5>
+          <p>Chest tightens · breath goes shallow · heat or cold · jaw · stomach drops.</p>
+        </div>
+        <div class="fork">
+          <div class="fork-q">
+            <b>Fork</b>
+            <h5>Do you catch the body signal?</h5>
+            <p>Train this one thing and everything after it gets easier.</p>
+          </div>
+          <div class="branches">
+            <div class="branch bad">
+              <span class="edge">Missed</span>
+              <div class="step risk">
+                <h5>Pulled under</h5>
+                <p>The memory plays. Time slips. It stops feeling like memory.</p>
+              </div>
+              <div class="step risk">
+                <h5>The nearest exit</h5>
+                <p>Vape · use · leave with whoever's calling · anything that makes now stop.</p>
+              </div>
+              <div class="loopback">↺ It teaches the brain that only that ends this. The trigger keeps its power.</div>
+            </div>
+            <div class="branch good">
+              <span class="edge">Caught</span>
+              <div class="step catch">
+                <h5>Mark it out loud</h5>
+                <p>"That's the memory. It is not happening now." Say the date. Say the room you're in.</p>
+              </div>
+              <div class="step catch">
+                <h5>Anchor in the present</h5>
+                <p>Snap your fingers · feet flat on the floor · five things you can see · hands on
+                  something textured.</p>
+              </div>
+              <div class="fork-q">
+                <b>Pick the turn</b>
+                <h5>One of your four</h5>
+                <p>Chosen in advance — that's what section 02 is for.</p>
+              </div>
+              <div class="options">
+                <div><h5>Pray it</h5><p>The same prayer, said aloud, every time. You shouldn't have to
+                  compose anything right now.</p></div>
+                <div><h5>Sing it</h5><p>Out loud, full breath. Long exhales settle the body; the words
+                  take the channel the memory needs.</p></div>
+                <div><h5>Hands</h5><p>A task with steps. Dishes · sweeping · braiding · walking
+                  somewhere with a destination.</p></div>
+                <div><h5>Call</h5><p>The person on your list, decided while calm. No explaining why
+                  you called.</p></div>
+              </div>
+              <div class="merge">↓ all four arrive here ↓</div>
+              <div class="step out">
+                <h5>It passes through</h5>
+                <p>Slower than you want. It still passes. Shaking or tears afterwards are normal.</p>
+              </div>
+              <div class="loopback good">↺ Note what set it off, later, when you're steady. One line is enough.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="plate-cap"><p><b>Why the turn is chosen in advance:</b> when you're flooded, the part
+        of the brain that generates options is the part that's least available. Choosing between four
+        things you already decided on is possible in that state. Inventing a plan is not.</p></div>
+    </div>
+
+    <h3>Why prayer and singing are on that list</h3>
+    <p>Not as consolation. Because of what they do to a flooded nervous system — and because they're
+      already yours.</p>
+    <div class="cards">
+      <div>
+        <h4>Singing out loud</h4>
+        <p class="why">Breath + verbal channel</p>
+        <p>It forces a long, controlled exhale, one of the few voluntary levers on the body's alarm
+          system. It also takes the verbal channel rumination runs on — you can't silently rehearse a
+          memory and sing words at the same time.</p>
+      </div>
+      <div>
+        <h4>Prayer, aloud, fixed words</h4>
+        <p class="why">Structure + nothing to compose</p>
+        <p>Same mechanism, plus one more: a prayer you know by heart asks nothing of the part of you
+          that's currently offline. Keep one as <em>the</em> one — the familiarity is doing real work.</p>
+      </div>
+    </div>
+
+    <p class="pull-quote">You don't have to want it less. You have to get there earlier.</p>
+
+    <div class="later">
+      <p><b>One thing worth saying plainly:</b> a memory that arrives on its own isn't something you
+        did, thought, or invited. It's an alarm going off, not a character flaw and not a failure of
+        faith. What's yours is what you say back to it — that's this whole page, and that part is
+        genuinely in your hands.</p>
+    </div>
+  </section>
+
+  <!-- ══ 02 ══ -->
+  <section id="mine">
+    <div class="sec-no">02 · Your page</div>
+    <h2>The blanks are the part that works</h2>
+    <p>Everything above is general. This isn't. Fill it in on a calm day — not while you need it —
+      because the whole point is that the answers already exist by the time you're looking for them.</p>
+    <p>What you type is saved on this phone only. Nobody sees it and nothing is sent anywhere.</p>
+    <div class="notice" id="storeWarn" hidden></div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="f1">My four — in order</label>
+        <span class="hint">One per line. Four, not six. The ones you'd actually do at 2 a.m.</span>
+        <textarea id="f1" data-save="redirects" placeholder="1.&#10;2.&#10;3.&#10;4."></textarea>
+      </div>
+      <div class="field">
+        <label for="f2">The prayer I say — the same one, every time</label>
+        <span class="hint">Short enough to finish out loud. Written here so you never have to find it.</span>
+        <textarea id="f2" data-save="prayer"></textarea>
+      </div>
+      <div class="field">
+        <label for="f3">The song I sing when it starts</label>
+        <span class="hint">The one with a loud part.</span>
+        <input id="f3" data-save="song" type="text">
+      </div>
+      <div class="field">
+        <label>Three people I can call — and what I'll open with</label>
+        <span class="hint">Ask them first, on a good day, so the call is never a surprise.</span>
+        <div class="field-row">
+          <input data-save="p1" type="text" placeholder="Name + number">
+          <input data-save="p1w" type="text" placeholder="What I'll say first">
+        </div>
+        <div class="field-row" style="margin-top:.55rem">
+          <input data-save="p2" type="text" placeholder="Name + number">
+          <input data-save="p2w" type="text" placeholder="What I'll say first">
+        </div>
+        <div class="field-row" style="margin-top:.55rem">
+          <input data-save="p3" type="text" placeholder="Name + number">
+          <input data-save="p3w" type="text" placeholder="What I'll say first">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f5">My two hardest hours of the week</label>
+        <span class="hint">The day and the hour. These get planned before they arrive.</span>
+        <input id="f5" data-save="hours" type="text" placeholder="e.g. Friday 9 p.m., Sunday afternoon">
+      </div>
+      <div class="field">
+        <label for="f6">What I'll be doing in those hours instead</label>
+        <textarea id="f6" data-save="fill"></textarea>
+      </div>
+      <div class="field">
+        <label for="f8">What I'm doing this for</label>
+        <span class="hint">Not "to quit". Something specific you want to be able to do, or be, or show up for.</span>
+        <textarea id="f8" data-save="why"></textarea>
+      </div>
+      <p class="saved" id="savedFlag"></p>
+      <div class="btnrow">
+        <button class="btn ghost" id="copyMine" type="button">Copy all of this as text</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 03 ══ -->
+  <section id="card">
+    <div class="sec-no">03 · The card</div>
+    <h2>Six lines, in order</h2>
+    <div class="pocket">
+      <div class="pocket-hd">Screenshot this one</div>
+      <ol>
+        <li>Catch the body, not the story.
+          <span>Chest, breath, jaw, stomach. That's the signal — it comes before the words do.</span></li>
+        <li>Say what it is, out loud.
+          <span>"That's the memory — it's not happening now." Name the room you're in.</span></li>
+        <li>Turn — one of your four.
+          <span>Chosen on a calm day, not invented in the middle of this one.</span></li>
+        <li>Ninety seconds, then twenty minutes.
+          <span>You're not making it stop. You're standing still while it passes. It does pass.</span></li>
+        <li>Tell someone the same day.
+          <span>Good day or bad day. The secrecy is what makes the next one harder.</span></li>
+        <li>Nothing about yourself — not even as a joke.
+          <span>Words are instructions. The punchline gets filed exactly like the sentence.</span></li>
+      </ol>
+    </div>
+
+    <h3>The paper one</h3>
+    <p>The phone is also where the invitations arrive, so here's the version for a wallet. It fills
+      itself in from what you wrote above.</p>
+    <div class="wallet" id="walletCard">
+      <h5>Catch · Name · Turn</h5>
+      <ol>
+        <li>Catch the <b>body</b>, not the story.</li>
+        <li>Out loud: "that's the memory — not now."</li>
+        <li>Turn — one of my four. Don't pick a new one now.</li>
+        <li>90 seconds, then 20 minutes.</li>
+        <li>Tell someone the same day.</li>
+        <li>Nothing about myself — not even as a joke.</li>
+      </ol>
+      <div class="mine" id="walletMine"><b>My four:</b> —</div>
+      <div class="helpline">SAMHSA 1-800-662-4357 · 988 call or text · 1-800-799-7233</div>
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="printCard" type="button">Print just this card</button>
+    </div>
+
+    <div class="later">
+      <p><b>There's more, when you want it.</b> The longer guide has maps for cravings, for Friday
+        nights, for the vape, and for what to do after a bad night. It isn't homework and there's no
+        order to it. Ask for it when this part is boring.</p>
+    </div>
+  </section>
+
+  </main>
+
+  <footer>
+    <span>Catch · Name · Turn</span>
+    <span>SAMHSA 1-800-662-4357 · 988 · free, confidential, 24/7</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var KEY = "brainmaps.v1.";
+  var store = (function () {
+    var mem = {}, ok = false;
+    try {
+      window.localStorage.setItem(KEY + "__t", "1");
+      window.localStorage.removeItem(KEY + "__t");
+      ok = true;
+    } catch (e) { ok = false; }
+    return {
+      ok: ok,
+      get: function (k) {
+        try { return ok ? window.localStorage.getItem(KEY + k) : (mem[k] || null); }
+        catch (e) { return mem[k] || null; }
+      },
+      set: function (k, v) {
+        try { if (ok) { window.localStorage.setItem(KEY + k, v); } else { mem[k] = v; return false; } }
+        catch (e) { mem[k] = v; return false; }
+        return true;
+      }
+    };
+  })();
+
+  var warn = document.getElementById("storeWarn");
+  if (warn && !store.ok) {
+    warn.hidden = false;
+    warn.textContent = "Heads up: this viewer won't remember what you type. Save this file to your "
+      + "phone and open it from there, or use \u201cCopy all of this as text\u201d before you leave the page.";
+  }
+
+  var savedFlag = document.getElementById("savedFlag");
+  var flagTimer = null;
+  Array.prototype.slice.call(document.querySelectorAll("[data-save]")).forEach(function (el) {
+    var v = store.get(el.getAttribute("data-save"));
+    if (v !== null) { el.value = v; }
+    el.addEventListener("input", function () {
+      var okw = store.set(el.getAttribute("data-save"), el.value);
+      if (savedFlag) {
+        savedFlag.textContent = okw ? "Saved on this phone" : "Not saved — copy it out before you leave";
+        window.clearTimeout(flagTimer);
+        flagTimer = window.setTimeout(function () { savedFlag.textContent = ""; }, 2200);
+      }
+      fillWallet();
+    });
+  });
+  function val(k) { var el = document.querySelector('[data-save="' + k + '"]'); return el && el.value.trim(); }
+
+  function copyText(text, btn, done) {
+    var revert = btn.textContent;
+    function flash(msg) { btn.textContent = msg; window.setTimeout(function () { btn.textContent = revert; }, 1800); }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { flash(done); }, function () { flash("Couldn't copy — select it by hand"); });
+        return;
+      }
+    } catch (e) { /* fall through */ }
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    var okc = false;
+    try { okc = document.execCommand("copy"); } catch (e2) { okc = false; }
+    document.body.removeChild(ta);
+    flash(okc ? done : "Couldn't copy — select it by hand");
+  }
+
+  var copyMine = document.getElementById("copyMine");
+  if (copyMine) {
+    copyMine.addEventListener("click", function () {
+      var t = "MY PAGE\n\nMy four:\n" + (val("redirects") || "—")
+        + "\n\nPrayer:\n" + (val("prayer") || "—")
+        + "\nSong: " + (val("song") || "—")
+        + "\n\nPeople to call:\n1. " + (val("p1") || "—") + " — " + (val("p1w") || "")
+        + "\n2. " + (val("p2") || "—") + " — " + (val("p2w") || "")
+        + "\n3. " + (val("p3") || "—") + " — " + (val("p3w") || "")
+        + "\n\nHardest hours: " + (val("hours") || "—")
+        + "\nInstead, I will: " + (val("fill") || "—")
+        + "\n\nWhat I'm doing this for:\n" + (val("why") || "—");
+      copyText(t, copyMine, "Copied");
+    });
+  }
+
+  var walletMine = document.getElementById("walletMine");
+  function fillWallet() {
+    if (!walletMine) { return; }
+    var four = (val("redirects") || "").split("\n").map(function (s) {
+      return s.replace(/^\s*\d+[.)]?\s*/, "").trim();
+    }).filter(Boolean).join(" · ");
+    var people = [val("p1"), val("p2"), val("p3")].filter(Boolean).join(" · ");
+    walletMine.innerHTML = "<b>My four:</b> " + (four || "—")
+      + "<br><b>Prayer:</b> " + (val("prayer") ? val("prayer").split("\n")[0] : "—")
+      + "<br><b>Song:</b> " + (val("song") || "—")
+      + "<br><b>Call:</b> " + (people || "—")
+      + "<br><b>I'm doing this for:</b> " + (val("why") ? val("why").split("\n")[0] : "—");
+  }
+  fillWallet();
+
+  var printCard = document.getElementById("printCard");
+  if (printCard) {
+    printCard.addEventListener("click", function () {
+      document.body.classList.add("card-only");
+      window.setTimeout(function () {
+        try { window.print(); } catch (e) { /* nothing to do */ }
+        window.setTimeout(function () { document.body.classList.remove("card-only"); }, 600);
+      }, 60);
+    });
+  }
+  window.addEventListener("afterprint", function () { document.body.classList.remove("card-only"); });
+
+  var rail = document.querySelector(".rail");
+  var links = Array.prototype.slice.call(document.querySelectorAll(".rail a"));
+  var targets = links.map(function (a) { return document.querySelector(a.getAttribute("href")); }).filter(Boolean);
+  var lastId = null;
+  function setCurrent(id) {
+    if (id === lastId) { return; }
+    lastId = id;
+    links.forEach(function (a) {
+      var on = a.getAttribute("href") === "#" + id;
+      a.setAttribute("aria-current", on ? "true" : "false");
+      if (on && rail) {
+        var l = a.offsetLeft, r = l + a.offsetWidth;
+        if (l < rail.scrollLeft || r > rail.scrollLeft + rail.clientWidth) {
+          rail.scrollTo({ left: Math.max(0, l - 16), behavior: "smooth" });
+        }
+      }
+    });
+  }
+  if ("IntersectionObserver" in window && targets.length) {
+    var seen = {};
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { seen[e.target.id] = e.isIntersecting; });
+      for (var k = 0; k < targets.length; k++) { if (seen[targets[k].id]) { setCurrent(targets[k].id); break; } }
+    }, { rootMargin: "-20% 0px -70% 0px", threshold: 0 });
+    targets.forEach(function (t) { io.observe(t); });
+  }
+  setCurrent("map");
+})();
+</script>
+</body>
+</html>
